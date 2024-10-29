@@ -1,1 +1,1 @@
-# today-recipe-spring
+# today-recipe
