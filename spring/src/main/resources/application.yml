@@ -5,6 +5,19 @@ server:
     encoding:
       charset: UTF-8
 
+# logging setting
+logging:
+  file:
+    path: C:/logs/team
+  level:
+    root: info
+    org.springframework.web: info
+    com.zaxxer.hikari: info
+    log4jdbc.log4j2: error
+    jdbc.sqlonly: info
+    jdbc.resultsettable: info
+    jdbc.connection: info
+
 springdoc:
   swagger-ui:
     path: /
