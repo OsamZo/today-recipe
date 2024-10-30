@@ -1,4 +1,4 @@
-package com.today_recipe.spring.security;
+package com.goruna.spring.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.today_recipe.spring.common.exception;
+package com.goruna.spring.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

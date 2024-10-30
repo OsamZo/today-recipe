@@ -1,4 +1,4 @@
-package com.today_recipe.spring.common.exception;
+package com.goruna.spring.common.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.today_recipe.spring.common.response.ApiResponse;
-import com.today_recipe.spring.common.response.ResponseUtil;
+import com.goruna.spring.common.response.ApiResponse;
+import com.goruna.spring.common.response.ResponseUtil;
 
 import java.util.stream.Collectors;
 

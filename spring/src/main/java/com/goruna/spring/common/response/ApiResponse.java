@@ -1,4 +1,4 @@
-package com.today_recipe.spring.common.response;
+package com.goruna.spring.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
