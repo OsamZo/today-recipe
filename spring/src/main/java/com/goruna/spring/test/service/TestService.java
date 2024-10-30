@@ -2,6 +2,7 @@ package com.goruna.spring.test.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.test.dto.TestResponseDTO;
 import com.goruna.spring.test.repository.TestRepository;
 import com.goruna.spring.test.dto.TestRequestDTO;
 import com.goruna.spring.test.entity.Test;
@@ -22,38 +23,36 @@ public class TestService {
 
     // 단일 데이터 조회
     @Transactional
-    public TestRequestDTO getTestById(Long id) {
-        Test test = testRepository.findById(id)
+    public TestResponseDTO getTestById(Long testSeq) {
+        Test test = testRepository.findById(testSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
-        return modelMapper.map(test, TestRequestDTO.class);
+        return modelMapper.map(test, TestResponseDTO.class);
     }
 
     // 전체 데이터 목록 조회
     @Transactional
-    public List<TestRequestDTO> getAllTests() {
+    public List<TestResponseDTO> getAllTests() {
         List<Test> tests = testRepository.findAll();
         return tests.stream()
-                .map(test -> modelMapper.map(test, TestRequestDTO.class))
+                .map(test -> modelMapper.map(test, TestResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
-    /* Test Post 작업 */
+    /* Test 추가 작업 */
     @Transactional
-    public TestRequestDTO createTest(String content) {
-        TestRequestDTO testDTO = new TestRequestDTO(content);
-        Test test = modelMapper.map(testDTO, Test.class);
+    public TestRequestDTO createTest(TestRequestDTO testRequestDTO) {
+        Test test = modelMapper.map(testRequestDTO, Test.class);
         testRepository.save(test);
-        return testDTO;
+        return testRequestDTO;
     }
 
-    /* Test Put 작업 */
     @Transactional
-    public TestRequestDTO updateTest(Long testSeq, String content) {
+    public TestRequestDTO updateTest(Long testSeq, TestRequestDTO testRequestDTO) {
         Test test = testRepository.findById(testSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
 
-        TestRequestDTO testDTO = new TestRequestDTO(content);
-        modelMapper.map(testDTO, test); // 기존 test 객체에 testDTO의 필드만 매핑
+        // 기존 객체에 testRequestDTO의 필드를 매핑
+        modelMapper.map(testRequestDTO, test);
 
         return modelMapper.map(test, TestRequestDTO.class); // 업데이트된 객체를 반환
     }
