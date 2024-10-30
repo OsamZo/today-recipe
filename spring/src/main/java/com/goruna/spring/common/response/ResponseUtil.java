@@ -1,4 +1,4 @@
-package com.today_recipe.spring.common.response;
+package com.goruna.spring.common.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
