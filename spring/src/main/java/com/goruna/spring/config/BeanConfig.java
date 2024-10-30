@@ -1,4 +1,4 @@
-package com.today_recipe.spring.config;
+package com.goruna.spring.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

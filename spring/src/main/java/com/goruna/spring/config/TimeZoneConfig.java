@@ -1,4 +1,4 @@
-package com.today_recipe.spring.config;
+package com.goruna.spring.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;

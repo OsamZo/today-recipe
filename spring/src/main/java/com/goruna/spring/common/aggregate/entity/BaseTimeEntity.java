@@ -1,4 +1,4 @@
-package com.today_recipe.spring.common.aggregate.entity;
+package com.goruna.spring.common.aggregate.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
