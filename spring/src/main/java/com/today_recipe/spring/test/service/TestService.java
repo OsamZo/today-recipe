@@ -1,7 +1,8 @@
 package com.today_recipe.spring.test.service;
 
-import com.today_recipe.spring.common.exception.CustomException;
-import com.today_recipe.spring.common.exception.ErrorCodeType;
+
+import com.goruna.spring.common.exception.CustomException;
+import com.goruna.spring.common.exception.ErrorCodeType;
 import com.today_recipe.spring.test.dto.TestRequestDTO;
 import com.today_recipe.spring.test.entity.Test;
 import com.today_recipe.spring.test.repository.TestRepository;

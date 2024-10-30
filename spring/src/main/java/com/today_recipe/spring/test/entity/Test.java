@@ -1,6 +1,6 @@
 package com.today_recipe.spring.test.entity;
 
-import com.today_recipe.spring.common.aggregate.entity.BaseTimeEntity;
+import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

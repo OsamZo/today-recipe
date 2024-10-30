@@ -1,7 +1,8 @@
 package com.today_recipe.spring.test.controller;
 
-import com.today_recipe.spring.common.response.ApiResponse;
-import com.today_recipe.spring.common.response.ResponseUtil;
+
+import com.goruna.spring.common.response.ApiResponse;
+import com.goruna.spring.common.response.ResponseUtil;
 import com.today_recipe.spring.test.dto.TestRequestDTO;
 import com.today_recipe.spring.test.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
