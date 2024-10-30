@@ -26,6 +26,23 @@ spring:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+cloud:
+  aws:
+    s3:
+      bucket: goruna
+    stack:
+      auto: false
+    region:
+      static: us-west-1
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+
 
 # logging setting
 logging:
@@ -44,6 +61,6 @@ logging:
 springdoc:
   swagger-ui:
     path: /
-    tags-sorter: alpha # ??? ??? ?? ??? ??
-    operations-sorter: method # ??? ??? ??
-    doc-expansion : none # Swagger ????? ?? ?? ??? ??
+    tags-sorter: alpha
+    operations-sorter: method
+    doc-expansion : none
