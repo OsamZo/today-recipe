@@ -1,11 +1,11 @@
-package com.goruna.spring.test.service;
+package com.today_recipe.spring.test.service;
+
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
-import com.goruna.spring.test.dto.TestResponseDTO;
-import com.goruna.spring.test.repository.TestRepository;
-import com.goruna.spring.test.dto.TestRequestDTO;
-import com.goruna.spring.test.entity.Test;
+import com.today_recipe.spring.test.dto.TestRequestDTO;
+import com.today_recipe.spring.test.entity.Test;
+import com.today_recipe.spring.test.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,36 +23,38 @@ public class TestService {
 
     // 단일 데이터 조회
     @Transactional
-    public TestResponseDTO getTestById(Long testSeq) {
-        Test test = testRepository.findById(testSeq)
+    public TestRequestDTO getTestById(Long id) {
+        Test test = testRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
-        return modelMapper.map(test, TestResponseDTO.class);
+        return modelMapper.map(test, TestRequestDTO.class);
     }
 
     // 전체 데이터 목록 조회
     @Transactional
-    public List<TestResponseDTO> getAllTests() {
+    public List<TestRequestDTO> getAllTests() {
         List<Test> tests = testRepository.findAll();
         return tests.stream()
-                .map(test -> modelMapper.map(test, TestResponseDTO.class))
+                .map(test -> modelMapper.map(test, TestRequestDTO.class))
                 .collect(Collectors.toList());
     }
 
-    /* Test 추가 작업 */
+    /* Test Post 작업 */
     @Transactional
-    public TestRequestDTO createTest(TestRequestDTO testRequestDTO) {
-        Test test = modelMapper.map(testRequestDTO, Test.class);
+    public TestRequestDTO createTest(String content) {
+        TestRequestDTO testDTO = new TestRequestDTO(content);
+        Test test = modelMapper.map(testDTO, Test.class);
         testRepository.save(test);
-        return testRequestDTO;
+        return testDTO;
     }
 
+    /* Test Put 작업 */
     @Transactional
-    public TestRequestDTO updateTest(Long testSeq, TestRequestDTO testRequestDTO) {
+    public TestRequestDTO updateTest(Long testSeq, String content) {
         Test test = testRepository.findById(testSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
 
-        // 기존 객체에 testRequestDTO의 필드를 매핑
-        modelMapper.map(testRequestDTO, test);
+        TestRequestDTO testDTO = new TestRequestDTO(content);
+        modelMapper.map(testDTO, test); // 기존 test 객체에 testDTO의 필드만 매핑
 
         return modelMapper.map(test, TestRequestDTO.class); // 업데이트된 객체를 반환
     }
