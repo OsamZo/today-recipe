@@ -27,6 +27,7 @@ public class Users extends BaseTimeEntity {
     @Column(name = "user_status", nullable = false)
     private String userStatus = "active";
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
     private UserRole userRole = UserRole.USER;
 
