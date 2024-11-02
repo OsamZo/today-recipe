@@ -1,12 +1,12 @@
 version: '3'
 services:
-  backend:
-    build: ./spring
-    container_name: goruna_backend
-    ports:
-      - "8100:8080"
-    depends_on:
-      - mysql
+#  backend:
+#    build: ./spring
+#    container_name: goruna_backend
+#    ports:
+#      - "8100:8080"
+#    depends_on:
+#      - mysql
 
   mysql:
     image: mysql:latest
