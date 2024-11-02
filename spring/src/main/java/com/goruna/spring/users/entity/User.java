@@ -1,5 +1,6 @@
 package com.goruna.spring.users.entity;
 
+import com.goruna.spring.common.aggregate.UserRole;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-public class Users extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
