@@ -1,4 +1,4 @@
-package com.goruna.spring.users.entity;
+package com.goruna.spring.common.aggregate;
 
 public enum UserRole {
 
