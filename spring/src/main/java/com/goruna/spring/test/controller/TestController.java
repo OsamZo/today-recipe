@@ -48,14 +48,14 @@ public class TestController {
     @Operation(summary = "테스트용 데이터 생성", description = "테스트 데이터 생성입니다.")
     public ApiResponse<?> createTest(@RequestBody TestRequestDTO testRequestDTO) {
         TestRequestDTO createdTest = testService.createTest(testRequestDTO);
-        return ResponseUtil.successResponse("데이터가 성공적으로 생성되었습니다", createdTest).getBody();
+        return ResponseUtil.successResponse("데이터가 성공적으로 생성되었습니다").getBody();
     }
 
     @PutMapping("/{testSeq}")
     @Operation(summary = "테스트용 데이터 수정", description = "테스트 데이터 수정입니다.")
     public ApiResponse<?> updateTest(@PathVariable Long testSeq, @RequestBody TestRequestDTO testRequestDTO) {
         TestRequestDTO updatedTest = testService.updateTest(testSeq, testRequestDTO);
-        return ResponseUtil.successResponse("데이터가 성공적으로 수정되었습니다", updatedTest).getBody();
+        return ResponseUtil.successResponse("데이터가 성공적으로 수정되었습니다").getBody();
     }
 
     @DeleteMapping("/{testSeq}")
