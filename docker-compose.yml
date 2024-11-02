@@ -1,4 +1,13 @@
+version: '3'
 services:
+#  backend:
+#    build: ./spring
+#    container_name: goruna_backend
+#    ports:
+#      - "8100:8080"
+#    depends_on:
+#      - mysql
+
   mysql:
     image: mysql:latest
     container_name: mysqldb_goruna
@@ -20,11 +29,13 @@ services:
     restart: always
     environment:
       PMA_HOST: ${PMA_HOST}
-      PMA_PORT: ${PMA_PORT}
+      PMA_PORT: 3306
       PMA_USER: ${PMA_USER}
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      PMA_PASSWORD: ${PMA_PASSWORD}
     ports:
       - "8091:80"
+    depends_on:
+      - mysql
     networks:
       - springboot-network
 
