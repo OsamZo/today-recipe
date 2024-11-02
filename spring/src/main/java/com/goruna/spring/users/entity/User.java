@@ -25,8 +25,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_nickname", nullable = false)
     private String userNickname;
 
-    @Column(name = "user_status", nullable = false)
-    private String userStatus = "active";
+    @Column(name = "user_deleted_status", nullable = false)
+    private boolean userDeletedStatus = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
