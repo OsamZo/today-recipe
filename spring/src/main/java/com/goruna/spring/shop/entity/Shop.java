@@ -21,8 +21,9 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "user_seq", nullable = false)
     private long userSeq;
 
-    @Column(name = "category_seq", nullable = false)
-    private long categorySeq;
+    @ManyToOne
+    @JoinColumn(name = "categorySeq")
+    private ShopCategory shopCategory;
 
     @Column(name = "shop_name", nullable = false)
     private String shopName;
@@ -74,5 +75,4 @@ public class Shop extends BaseTimeEntity {
 
     @Column(name = "shop_del_status", nullable = false)
     private boolean shopDelStatus = false;
-
 }
