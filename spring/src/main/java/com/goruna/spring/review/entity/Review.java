@@ -1,5 +1,6 @@
 package com.goruna.spring.review.entity;
 
+import com.goruna.spring.book.entity.Book;
 import com.goruna.spring.common.aggregate.ReviewStatus;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -27,11 +28,11 @@ public class Review extends BaseTimeEntity {
 
     private LocalDateTime delDate;
 
-//    @OneToOne
-//    @JoinColumn(referencedColumnName = "book_seq")
-//    private Book bookSeq;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "book_seq")
+    private Book bookSeq;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "reviewSeq")
     private List<Good> goods;
 
 }
