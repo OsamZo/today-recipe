@@ -17,7 +17,7 @@ public class UserService {
 
     @Transactional
     public SignUpRequestDTO createUser(SignUpRequestDTO signUpRequestDTO) {
-        User user = modelMapper.map(SignUpRequestDTO, User.class);
+        User user = modelMapper.map(signUpRequestDTO, User.class);
         userRepository.save(user);
         return signUpRequestDTO;
     }

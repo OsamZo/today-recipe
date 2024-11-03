@@ -1,5 +1,6 @@
 package com.goruna.spring.users.dto;
 
+import com.goruna.spring.common.aggregate.UserRole;
 import lombok.*;
 
 @Getter
@@ -9,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 public class SignUpRequestDTO {
 
-    private String user_email;
-    private String user_nickname;
+    private String userEmail;
+    private String userNickname;
 }
