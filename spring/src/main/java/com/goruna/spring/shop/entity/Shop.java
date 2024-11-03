@@ -37,7 +37,7 @@ public class Shop extends BaseTimeEntity {
     private String shopAddress;
 
     @Column(name = "shop_appr_status", nullable = false)
-    private boolean shopApprStatus;
+    private boolean shopApprStatus = false;
 
     @Column(name = "shop_today_comment", nullable = true)
     private String shopTodayComment;
@@ -67,6 +67,6 @@ public class Shop extends BaseTimeEntity {
     private String shopProductImgUrl;
 
     @Column(name = "shop_del_status", nullable = false)
-    private boolean shopDelStatus;
+    private boolean shopDelStatus = false;
 
 }
