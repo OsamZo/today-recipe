@@ -2,6 +2,7 @@ package com.goruna.spring.users.service;
 
 import com.goruna.spring.users.dto.SignUpRequestDTO;
 import com.goruna.spring.users.entity.User;
+import com.goruna.spring.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
