@@ -1,5 +1,6 @@
 package com.goruna.spring.users.entity;
 
+import com.goruna.spring.bookmark.entity.BookMark;
 import com.goruna.spring.common.aggregate.UserRole;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.review.entity.Good;
@@ -43,6 +44,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_usage_count", nullable = false)
     private int userUsageCount = 0;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userSeq")
     private List<Good> goods;
+
+    @OneToMany(mappedBy = "userSeq")
+    private List<BookMark> bookMarks;
 }
