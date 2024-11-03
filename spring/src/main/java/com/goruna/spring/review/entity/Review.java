@@ -31,7 +31,7 @@ public class Review extends BaseTimeEntity {
 //    @JoinColumn(referencedColumnName = "book_seq")
 //    private Book bookSeq;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "reviewSeq")
     private List<Good> goods;
 
 }
