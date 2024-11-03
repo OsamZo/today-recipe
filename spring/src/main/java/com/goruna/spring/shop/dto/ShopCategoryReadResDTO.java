@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class ShopCategoryReadResDTO {
 
-    private long categorySeq;
+    private Long categorySeq;
 
     private String categoryName;
 }
