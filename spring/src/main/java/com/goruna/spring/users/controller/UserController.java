@@ -2,6 +2,7 @@ package com.goruna.spring.users.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.users.dto.SignUpRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
