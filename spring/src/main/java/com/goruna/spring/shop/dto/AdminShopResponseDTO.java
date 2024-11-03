@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminSearchResponseDTO {
+public class AdminShopResponseDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
