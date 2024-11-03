@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "review")
@@ -29,5 +30,8 @@ public class Review extends BaseTimeEntity {
 //    @OneToOne
 //    @JoinColumn(referencedColumnName = "book_seq")
 //    private Book bookSeq;
+
+    @OneToMany(mappedBy = "review")
+    private List<Good> goods;
 
 }
