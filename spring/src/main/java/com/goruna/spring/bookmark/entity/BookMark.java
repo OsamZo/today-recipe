@@ -1,5 +1,6 @@
 package com.goruna.spring.bookmark.entity;
 
+import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class BookMark {
     @JoinColumn(nullable = false)
     private User userSeq;
 
-//    @ManyToOne
-//    @JoinColumn(nullable = false)
-//    private Shop shopSeq;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Shop shopSeq;
 }
