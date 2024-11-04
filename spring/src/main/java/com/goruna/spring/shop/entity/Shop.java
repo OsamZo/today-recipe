@@ -4,16 +4,20 @@ import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "shop")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@SQLDelete(sql = "UPDATE shop SET shop_del_status = 'Y' WHERE shop_seq = ?")
 public class Shop extends BaseTimeEntity {
 
     @Id
