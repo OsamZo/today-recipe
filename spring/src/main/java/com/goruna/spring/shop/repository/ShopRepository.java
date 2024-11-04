@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.repository;
 
+import com.goruna.spring.shop.dto.ShopDetailReadResDTO;
 import com.goruna.spring.shop.entity.Shop;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

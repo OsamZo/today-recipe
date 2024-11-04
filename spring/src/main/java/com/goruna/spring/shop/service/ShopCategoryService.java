@@ -2,7 +2,7 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.shop.dto.ShopCategoryReadResDTO;
 import com.goruna.spring.shop.entity.ShopCategory;
-import com.goruna.spring.shop.respository.ShopCategoryRepository;
+import com.goruna.spring.shop.repository.ShopCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

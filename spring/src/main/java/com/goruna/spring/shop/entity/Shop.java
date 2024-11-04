@@ -2,6 +2,7 @@ package com.goruna.spring.shop.entity;
 
 import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
+import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,12 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_seq", nullable = false)
     private Long shopSeq;
 
-    @Column(name = "user_seq", nullable = false)
-    private Long userSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userSeq", nullable = false)
+    private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "categorySeq")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categorySeq", nullable = false)
     private ShopCategory shopCategory;
 
     @Column(name = "shop_name", nullable = false)
@@ -32,9 +34,6 @@ public class Shop extends BaseTimeEntity {
 
     @Column(name = "shop_tel", nullable = false)
     private String shopTel;
-
-    @Column(name = "shop_ceo_name", nullable = false)
-    private String shopCeoName;
 
     @Column(name = "shop_address", nullable = false)
     private String shopAddress;
@@ -82,4 +81,8 @@ public class Shop extends BaseTimeEntity {
 
     @Column(name = "shop_business_img_url", nullable = false)
     private String shopBusinessImgUrl;
+
+    public void addUser(User user) {
+        this.user = user;
+    }
 }
