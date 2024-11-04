@@ -26,6 +26,7 @@ public class OwnerShopService {
         modelMapper.map(updateShopInfoDTO, shopInfo);
     }
 
+    @Transactional
     public void deleteShop(Long shopSeq) {
 
         ownerShopRepository.deleteById(shopSeq);
