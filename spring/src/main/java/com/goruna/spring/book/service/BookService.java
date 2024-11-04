@@ -37,13 +37,19 @@ public class BookService {
         for (Book book : books) {
             totalBookedQty += book.getBookQty();
         }
+
         if (bookQty >totalBookedQty) {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
         }
 
-        Book book = new Book(shop, user, bookQty);
-        book.updateProductOriginalPrice(shop.getShopProductOriginalPrice());
-        book.updateProductSalePrice(shop.getShopProductSalePrice());
+        Book book = Book.builder()
+                .shop(shop)
+                .user(user)
+                .bookQty(bookQty)
+                .productOriginalPrice(shop.getShopProductOriginalPrice())
+                .productSalePrice(shop.getShopProductSalePrice())
+                .build();
+
         bookRepository.save(book);
     }
 }
