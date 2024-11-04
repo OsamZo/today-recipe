@@ -76,7 +76,7 @@ public class Shop extends BaseTimeEntity {
     private String shopProductImgUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "shop_del_status", nullable = true)
+    @Column(name = "shop_del_status", nullable = false)
     private YnType shopDelStatus = YnType.N;
 
     @Column(name = "shop_business_img_url", nullable = false)
