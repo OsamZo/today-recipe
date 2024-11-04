@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "shop")
@@ -67,8 +68,8 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_img_url", nullable = true)
     private String shopImgUrl;
 
-    @Column(name = "shop_deadline", nullable = true)
-    private LocalDateTime shopDeadline;
+    @Column(name = "shop_closed_at", nullable = true)
+    private LocalTime shopClosedAt;
 
     @Column(name = "shop_product_img_url", nullable = true)
     private String shopProductImgUrl;

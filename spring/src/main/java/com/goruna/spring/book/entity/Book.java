@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "shop")
+@Table(name = "book")
 @NoArgsConstructor
 @Getter
 public class Book extends BaseTimeEntity {
