@@ -21,7 +21,7 @@ public class ShopCategoryController {
 
     @GetMapping
     @Operation(summary = "매장 카테고리 데이터 전체 조회", description = "매장 카테고리 데이터 전체를 조회합니다.")
-    public ApiResponse<List<ShopCategoryReadResDTO>> readAllCategories() {
+    public ApiResponse<?> readAllCategories() {
         List<ShopCategoryReadResDTO> shopCategoryReadResDTO = shopCategoryService.readAllCategories();
         return ResponseUtil.successResponse("매장 카테고리 전체 데이터가 성공적으로 조회되었습니다", shopCategoryReadResDTO).getBody();
     }
