@@ -85,4 +85,12 @@ public class Shop extends BaseTimeEntity {
     public void addUser(User user) {
         this.user = user;
     }
+
+    public void approve(){
+        this.shopApprStatus = YnType.Y;
+    }
+
+    public void disapprove(){
+        this.shopApprStatus = YnType.N;
+    }
 }
