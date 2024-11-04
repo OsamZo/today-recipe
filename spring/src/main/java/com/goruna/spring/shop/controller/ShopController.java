@@ -2,24 +2,25 @@ package com.goruna.spring.shop.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.shop.dto.ShopDetailReadResDTO;
 import com.goruna.spring.shop.dto.ShopListReadResDTO;
 import com.goruna.spring.shop.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "shop", description="매장 API")
 @RestController
+@RequestMapping("/api/v1/category/{categorySeq}/shop")
 @RequiredArgsConstructor
 public class ShopController {
 
     private final ShopService shopService;
 
-    @GetMapping("/{categorySeq}/shop")
+    @GetMapping
     @Operation(
             summary = "카테고리 별 매장 목록 데이터 조회",
             description = "카테고리 별 매장 목록 데이터를 조회합니다."
@@ -31,4 +32,18 @@ public class ShopController {
         List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsByCategory(categorySeq, page);
         return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
+
+    @GetMapping("/{shopSeq}")
+    @Operation(
+            summary = "매장 상세 데이터 조회",
+            description = "매장 상세 데이터를 조회합니다."
+    )
+    public ApiResponse<?> readShopsByCategoryAndShop(
+            @PathVariable(value = "categorySeq") Long categorySeq,
+            @PathVariable(value = "shopSeq") Long shopSeq
+    ) {
+        ShopDetailReadResDTO shopDetailReadResDTO = shopService.readShopDetail(shopSeq);
+        return ResponseUtil.successResponse("매장 상세 데이터가 성공적으로 조회되었습니다.", shopDetailReadResDTO).getBody();
+    }
+
 }

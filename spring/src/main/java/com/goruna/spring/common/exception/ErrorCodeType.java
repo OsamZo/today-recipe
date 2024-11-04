@@ -18,16 +18,20 @@ public enum ErrorCodeType {
     USER_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_ERROR_002", "중복된 사용자입니다."),
     USER_LOGIN_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_ERROR_003", "아이디 또는 비밀번호가 일치하지 않습니다."),
 
-    // 매장 관련 오류
-    SHOP_NOT_FOUND(HttpStatus.NOT_FOUND, "SHOP_ERROR_001", "해당 매장을 찾을 수 없습니다."),
+    // shop 관련 오류
+    SHOP_NOT_FOUND(HttpStatus.NOT_FOUND, "SHOP_ERROR_001", "매장을 찾을 수 없습니다."),
+
+    // book 관련 오휴
+    INVALID_QUANTITY(HttpStatus.CONFLICT, "BOOK_ERROR_001", "재고가 부족합니다."),
 
     // 공통 오류
     COMMON_ERROR(HttpStatus.BAD_REQUEST, "COMMON_ERROR", "오류가 발생하였습니다. 관리자에게 문의 바랍니다."),
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_ERROR_002", "데이터가 존재하지 않습니다."),
-    INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다.")
+    INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다."),
+
+    // shop 관련 오류
+    SHOP_NOT_FOUND(HttpStatus.NOT_FOUND, "SHOP_ERROR_001", "매장을 찾을 수 없습니다."),
     ;
-
-
 
     private final HttpStatus httpStatus;
     private final String code;
