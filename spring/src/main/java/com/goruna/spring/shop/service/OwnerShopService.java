@@ -26,4 +26,8 @@ public class OwnerShopService {
         modelMapper.map(updateShopInfoDTO, shopInfo);
     }
 
+    public void deleteShop(Long shopSeq) {
+
+        ownerShopRepository.deleteById(shopSeq);
+    }
 }
