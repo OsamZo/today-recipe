@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.entity;
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,8 +39,9 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_address", nullable = false)
     private String shopAddress;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "shop_appr_status", nullable = false)
-    private boolean shopApprStatus = false;
+    private YnType shopApprStatus = YnType.N;
 
     @Column(name = "shop_open_date", nullable = false)
     private LocalDateTime shopOpenDate;
@@ -54,13 +56,13 @@ public class Shop extends BaseTimeEntity {
     private String shopProductName;
 
     @Column(name = "shop_product_qty", nullable = true)
-    private int shopProductQty;
+    private Integer shopProductQty;
 
     @Column(name = "shop_product_original_price", nullable = true)
-    private int shopProductOriginalPrice;
+    private Integer shopProductOriginalPrice;
 
     @Column(name = "shop_product_sale_price", nullable = true)
-    private int shopProductSalePrice;
+    private Integer shopProductSalePrice;
 
     @Column(name = "shop_product_desc", nullable = true)
     private String shopProductDesc;
@@ -74,8 +76,9 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_product_img_url", nullable = true)
     private String shopProductImgUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "shop_del_status", nullable = false)
-    private boolean shopDelStatus = false;
+    private YnType shopDelStatus = YnType.N;
 
     @Column(name = "shop_business_img_url", nullable = false)
     private String shopBusinessImgUrl;
