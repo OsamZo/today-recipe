@@ -27,7 +27,10 @@ public enum ErrorCodeType {
     // 공통 오류
     COMMON_ERROR(HttpStatus.BAD_REQUEST, "COMMON_ERROR", "오류가 발생하였습니다. 관리자에게 문의 바랍니다."),
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_ERROR_002", "데이터가 존재하지 않습니다."),
-    INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다.")
+    INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다."),
+
+    // shop 관련 오류
+    SHOP_NOT_FOUND(HttpStatus.NOT_FOUND, "SHOP_ERROR_001", "매장을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
