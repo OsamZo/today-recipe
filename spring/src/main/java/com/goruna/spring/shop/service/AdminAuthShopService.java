@@ -24,6 +24,7 @@ public class AdminAuthShopService {
     private final AdminAuthShopDetailRepository adminAuthShopDetailRepository;
     private final ModelMapper modelMapper;
 
+    // 매장 등록 인증 전체 조회
     @Transactional
     public List<AdminAuthShopResponseDTO> getAdminAuthAllShop() {
         List<Shop> Shops = adminAuthShopRepository.findAll();
@@ -32,6 +33,7 @@ public class AdminAuthShopService {
                 .collect(Collectors.toList());
     }
 
+    // 매장 등록 인증 상세 조회
     @Transactional
     public AdminAuthShopDetailResponseDTO getAdminAuthShopDetail(@Valid Long shopSeq) {
         Shop shop = adminAuthShopDetailRepository.findById(shopSeq)
