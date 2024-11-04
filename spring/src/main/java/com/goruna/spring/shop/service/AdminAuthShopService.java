@@ -10,6 +10,9 @@ import com.goruna.spring.shop.repository.AdminAuthShopRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +29,18 @@ public class AdminAuthShopService {
 
     // 매장 등록 인증 전체 조회
     @Transactional
-    public List<AdminAuthShopResponseDTO> getAdminAuthAllShop() {
-        List<Shop> Shops = adminAuthShopRepository.findAll();
+    public List<AdminAuthShopResponseDTO> getAdminAuthAllShop(Integer page, Integer size) {
+
+        if(page < 1 || size < 1){
+            throw new CustomException(ErrorCodeType.INVALID_VALUE);
+        }
+
+        int offset = (page - 1) * size;
+
+        Pageable pageable = PageRequest.of(offset, size);
+        Page<Shop> authShopsPage = adminAuthShopRepository.findAll(pageable);
+        List<Shop> Shops = authShopsPage.getContent();
+
         return Shops.stream()
                 .map(shop -> modelMapper.map(shop, AdminAuthShopResponseDTO.class))
                 .collect(Collectors.toList());
