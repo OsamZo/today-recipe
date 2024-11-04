@@ -16,10 +16,10 @@ public class Shop extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_seq", nullable = false)
-    private long shopSeq;
+    private Long shopSeq;
 
     @Column(name = "user_seq", nullable = false)
-    private long userSeq;
+    private Long userSeq;
 
     @ManyToOne
     @JoinColumn(name = "categorySeq")
@@ -38,7 +38,7 @@ public class Shop extends BaseTimeEntity {
     private String shopAddress;
 
     @Column(name = "shop_appr_status", nullable = false)
-    private boolean shopApprStatus = false;
+    private Boolean shopApprStatus = false;
 
     @Column(name = "shop_open_date", nullable = false)
     private LocalDateTime shopOpenDate;
@@ -53,13 +53,13 @@ public class Shop extends BaseTimeEntity {
     private String shopProductName;
 
     @Column(name = "shop_product_qty", nullable = true)
-    private int shopProductQty;
+    private Integer shopProductQty;
 
     @Column(name = "shop_product_original_price", nullable = true)
-    private int shopProductOriginalPrice;
+    private Integer shopProductOriginalPrice;
 
     @Column(name = "shop_product_sale_price", nullable = true)
-    private int shopProductSalePrice;
+    private Integer shopProductSalePrice;
 
     @Column(name = "shop_product_desc", nullable = true)
     private String shopProductDesc;
@@ -74,7 +74,7 @@ public class Shop extends BaseTimeEntity {
     private String shopProductImgUrl;
 
     @Column(name = "shop_del_status", nullable = false)
-    private boolean shopDelStatus = false;
+    private Boolean shopDelStatus = false;
 
     @Column(name = "shop_business_img_url", nullable = false)
     private String shopBusinessImgUrl;
