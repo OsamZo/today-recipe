@@ -1,4 +1,4 @@
-package com.goruna.spring.shop.respository;
+package com.goruna.spring.shop.repository;
 
 import com.goruna.spring.shop.entity.ShopCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
