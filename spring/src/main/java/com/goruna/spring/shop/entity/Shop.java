@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.entity;
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,10 +17,10 @@ public class Shop extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_seq", nullable = false)
-    private long shopSeq;
+    private Long shopSeq;
 
     @Column(name = "user_seq", nullable = false)
-    private long userSeq;
+    private Long userSeq;
 
     @ManyToOne
     @JoinColumn(name = "categorySeq")
@@ -38,7 +39,7 @@ public class Shop extends BaseTimeEntity {
     private String shopAddress;
 
     @Column(name = "shop_appr_status", nullable = false)
-    private boolean shopApprStatus = false;
+    private YnType shopApprStatus = YnType.N;
 
     @Column(name = "shop_open_date", nullable = false)
     private LocalDateTime shopOpenDate;
@@ -74,7 +75,7 @@ public class Shop extends BaseTimeEntity {
     private String shopProductImgUrl;
 
     @Column(name = "shop_del_status", nullable = false)
-    private boolean shopDelStatus = false;
+    private YnType shopDelStatus = YnType.N;
 
     @Column(name = "shop_business_img_url", nullable = false)
     private String shopBusinessImgUrl;
