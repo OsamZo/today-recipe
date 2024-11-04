@@ -11,8 +11,6 @@ import java.time.LocalTime;
 @ToString
 public class ShopDetailReadResDTO {
 
-    private Long shopSeq;
-
     private String shopName;
 
     private LocalTime shopClosedAt;
