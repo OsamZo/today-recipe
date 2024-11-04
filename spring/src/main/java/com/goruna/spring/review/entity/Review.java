@@ -1,7 +1,7 @@
 package com.goruna.spring.review.entity;
 
 import com.goruna.spring.book.entity.Book;
-import com.goruna.spring.common.aggregate.ReviewStatus;
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,15 +24,18 @@ public class Review extends BaseTimeEntity {
     private String reviewContent;
 
     @Enumerated(EnumType.STRING)
-    private ReviewStatus reviewStatus = ReviewStatus.ACTIVE;
+    private YnType reviewStatus = YnType.Y;
 
     private LocalDateTime delDate;
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "book_seq")
+    @JoinColumn(referencedColumnName = "book_seq", nullable = false)
     private Book bookSeq;
 
     @OneToMany(mappedBy = "reviewSeq")
     private List<Good> goods;
 
+    public void BookSeq(Book bookSeq) {
+        this.bookSeq = bookSeq;
+    }
 }
