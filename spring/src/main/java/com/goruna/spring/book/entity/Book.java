@@ -5,6 +5,7 @@ import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,17 +43,12 @@ public class Book extends BaseTimeEntity {
     @Column(name = "book_status", nullable = false)
     private boolean bookStatus;
 
-    public Book(Shop shop, User user, int bookQty) {
+    @Builder
+    public Book(Shop shop, User user, int bookQty, int productOriginalPrice, int productSalePrice) {
         this.shop = shop;
         this.user = user;
         this.bookQty = bookQty;
-    }
-
-    public void updateProductOriginalPrice(int productOriginalPrice) {
         this.productOriginalPrice = productOriginalPrice;
-    }
-
-    public void updateProductSalePrice(int productSalePrice) {
         this.productSalePrice = productSalePrice;
     }
 }
