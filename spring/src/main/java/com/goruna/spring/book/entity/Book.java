@@ -1,5 +1,6 @@
 package com.goruna.spring.book.entity;
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.users.entity.User;
@@ -31,8 +32,8 @@ public class Book extends BaseTimeEntity {
     @Column(name = "book_qty", nullable = false)
     private int bookQty;
 
-    @Column(name = "book_receipt_status", nullable = false)
-    private boolean bookReceiptStatus = false;
+    @Column(name = "book_is_product_received", nullable = false)
+    private YnType bookIsProductReceived = YnType.N;
 
     @Column(name = "product_original_price", nullable = false)
     private int productOriginalPrice;
@@ -40,8 +41,8 @@ public class Book extends BaseTimeEntity {
     @Column(name = "product_sale_price", nullable = false)
     private int productSalePrice;
 
-    @Column(name = "book_status", nullable = false)
-    private boolean bookStatus;
+    @Column(name = "is_book_cancelled", nullable = false)
+    private YnType isBookCancelled = YnType.N;
 
     @Builder
     public Book(Shop shop, User user, int bookQty, int productOriginalPrice, int productSalePrice) {
