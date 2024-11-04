@@ -4,7 +4,6 @@ import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
-import com.goruna.spring.shop.repository.AdminShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
