@@ -2,12 +2,12 @@ package com.goruna.spring.shop.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.shop.dto.AdminShopAuthImgDTO;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
 import com.goruna.spring.shop.service.AdminShopService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +29,18 @@ public class AdminShopController {
         List<AdminShopResponseDTO> allShops = adminSearchService.getAdminAllSearch(page, size);
         return ResponseUtil.successResponse("전체 매장 데이터가 성공적으로 조회되었습니다.", allShops).getBody();
     }
+
+    // 사업자 등록증 조회
+    @GetMapping("/{shopSeq}/auth/img")
+    @Operation(summary = "사업자 등록증 조회", description = "등록된 사업자 등록증을 조회합니다.")
+    public ApiResponse<?> getAdminAllShop(
+            @RequestParam Long shopSeq){
+        AdminShopAuthImgDTO shopAuthImg = adminSearchService.getShopAuthImg(shopSeq);
+        return ResponseUtil.successResponse("등록된 사업자 등록증이 성공적으로 조회되었습니다.", shopAuthImg).getBody();
+    }
+
+    // 매장 검색
+
+    // 매장 삭제
 
 }
