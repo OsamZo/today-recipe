@@ -30,6 +30,10 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  token:
+    secret: ${TOKEN_SECRET}
+    expiration: 43200000
+
 
 cloud:
   aws:
