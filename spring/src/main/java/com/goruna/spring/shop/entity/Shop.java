@@ -52,7 +52,7 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_today_comment", nullable = true)
     private String shopTodayComment;
 
-    @Column(name = "shop_product_name", nullable = false)
+    @Column(name = "shop_product_name", nullable = true)
     private String shopProductName;
 
     @Column(name = "shop_product_qty", nullable = true)
