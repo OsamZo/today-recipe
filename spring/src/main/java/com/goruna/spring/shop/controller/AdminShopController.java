@@ -25,9 +25,9 @@ public class AdminShopController {
     // 매장 데이터 전체 조회
     @GetMapping
     @Operation(summary = "매장 데이터 전체 조회", description = "매장 데이터 전체를 조회합니다.")
-    public ResponseEntity<ApiResponse<List<AdminShopResponseDTO>>> getAdminAllShop(){
+    public ApiResponse<?> getAdminAllShop(){
         List<AdminShopResponseDTO> allShops = adminSearchService.getAdminAllSearch();
-        return ResponseUtil.successResponse("전체 매장 데이터가 성공적으로 조회되었습니다.", allShops);
+        return ResponseUtil.successResponse("전체 매장 데이터가 성공적으로 조회되었습니다.", allShops).getBody();
     }
 
 }
