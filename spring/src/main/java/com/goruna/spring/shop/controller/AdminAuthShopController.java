@@ -25,9 +25,9 @@ public class AdminAuthShopController {
 
     @GetMapping
     @Operation(summary = "매장 등록 인증 전체 조회", description = "매장 데이터 전체를 조회합니다.")
-    public ResponseEntity<ApiResponse<List<AdminAuthShopResponseDTO>>> getAdminAuthAllShop(){
+    public ApiResponse<?> getAdminAuthAllShop(){
         List<AdminAuthShopResponseDTO> allAuthShops = adminAuthSearchService.getAdminAuthAllShop();
-        return ResponseUtil.successResponse("전체 매장 등록 인증 데이터가 성공적으로 조회되었습니다.", allAuthShops);
+        return ResponseUtil.successResponse("전체 매장 등록 인증 데이터가 성공적으로 조회되었습니다.", allAuthShops).getBody();
     }
 
 }
