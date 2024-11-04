@@ -24,4 +24,11 @@ public class OwnerShopController {
         return ResponseUtil.successResponse("데이터가 성공적으로 수정되었습니다").getBody();
     }
 
+    @DeleteMapping("/shop/{shopSeq}")
+    @Operation(summary = "(사장) 매장 정보 삭제", description = "(사장) 매장 정보를 삭제합니다.")
+    public ApiResponse<?> deleteShop(@PathVariable Long shopSeq) {
+        ownerShopService.deleteShop(shopSeq);
+        return ResponseUtil.successResponse("데이터가 성공적으로 삭제되었습니다.").getBody();
+    }
+
 }
