@@ -1,5 +1,6 @@
 package com.goruna.spring.book.controller;
 
+import com.goruna.spring.book.dto.BookListReadResDTO;
 import com.goruna.spring.book.service.BookService;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
@@ -7,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "book", description = "예약 API")
 @RestController
@@ -26,5 +29,13 @@ public class BookController {
     ) {
         bookService.createBook(categorySeq, shopSeq, bookQty);
         return ResponseUtil.successResponse("예약이 성공적으로 생성되었습니다.").getBody();
+    }
+
+    // 회원 예약 내역 조회
+    @GetMapping("/user/{userSeq}/book")
+    @Operation(summary = "회원 예약 내역 조회", description = "회원 예약 내역을 조회합니다.")
+    public ApiResponse<?> getBookListByUserSeq(@PathVariable(value = "userSeq") Long userSeq) {
+        List<BookListReadResDTO> bookListReadResDTOs = bookService.readBookListByUserSeq(userSeq);
+        return ResponseUtil.successResponse("회원 예약 내역 조회가 성공적으로 완료되었습니다.", bookListReadResDTOs).getBody();
     }
 }

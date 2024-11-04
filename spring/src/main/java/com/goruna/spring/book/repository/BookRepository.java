@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    // shopSeq로 Book 찾기
     List<Book> findByShopShopSeq(Long shopSeq);
+
+    // userSeq로 Book 찾기
+    List<Book> findByUserUserSeq(Long shopSeq);
 }
