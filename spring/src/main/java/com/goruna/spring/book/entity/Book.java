@@ -41,4 +41,18 @@ public class Book extends BaseTimeEntity {
 
     @Column(name = "book_status", nullable = false)
     private boolean bookStatus;
+
+    public Book(Shop shop, User user, int bookQty) {
+        this.shop = shop;
+        this.user = user;
+        this.bookQty = bookQty;
+    }
+
+    public void updateProductOriginalPrice(int productOriginalPrice) {
+        this.productOriginalPrice = productOriginalPrice;
+    }
+
+    public void updateProductSalePrice(int productSalePrice) {
+        this.productSalePrice = productSalePrice;
+    }
 }
