@@ -3,24 +3,33 @@ package com.goruna.spring.bookmark.entity;
 import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.sql.ConnectionBuilder;
 
 @Entity
 @Table(name = "bookmark")
 @NoArgsConstructor
 @Getter
-public class BookMark {
+public class Bookmark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long boomarkSeq;
+    private Long bookmarkSeq;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User userSeq;
+    private User user;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Shop shopSeq;
+    private Shop shop;
+
+    @Builder
+    public Bookmark(User user, Shop shop) {
+        this.user = user;
+        this.shop = shop;
+    }
 }
