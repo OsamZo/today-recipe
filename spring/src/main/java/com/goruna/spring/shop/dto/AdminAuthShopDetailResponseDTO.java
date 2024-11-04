@@ -12,8 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 public class AdminAuthShopDetailResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long shopSeq;
     private String shopName;
     private String shopOpenDate;
