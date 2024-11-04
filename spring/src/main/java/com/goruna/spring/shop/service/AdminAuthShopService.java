@@ -2,9 +2,12 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.shop.dto.AdminAuthShopDetailResponseDTO;
 import com.goruna.spring.shop.dto.AdminAuthShopResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
+import com.goruna.spring.shop.repository.AdminAuthShopDetailRepository;
 import com.goruna.spring.shop.repository.AdminAuthShopRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -21,8 +24,10 @@ import java.util.stream.Collectors;
 public class AdminAuthShopService {
 
     private final AdminAuthShopRepository adminAuthShopRepository;
+    private final AdminAuthShopDetailRepository adminAuthShopDetailRepository;
     private final ModelMapper modelMapper;
 
+    // 매장 등록 인증 전체 조회
     @Transactional
     public List<AdminAuthShopResponseDTO> getAdminAuthAllShop(Integer page, Integer size) {
 
@@ -39,5 +44,13 @@ public class AdminAuthShopService {
         return Shops.stream()
                 .map(shop -> modelMapper.map(shop, AdminAuthShopResponseDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    // 매장 등록 인증 상세 조회
+    @Transactional
+    public AdminAuthShopDetailResponseDTO getAdminAuthShopDetail(@Valid Long shopSeq) {
+        Shop shop = adminAuthShopDetailRepository.findById(shopSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
+        return modelMapper.map(shop, AdminAuthShopDetailResponseDTO.class);
     }
 }
