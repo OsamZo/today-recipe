@@ -39,6 +39,7 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_address", nullable = false)
     private String shopAddress;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "shop_appr_status", nullable = false)
     private YnType shopApprStatus = YnType.N;
 
@@ -55,13 +56,13 @@ public class Shop extends BaseTimeEntity {
     private String shopProductName;
 
     @Column(name = "shop_product_qty", nullable = true)
-    private int shopProductQty;
+    private Integer shopProductQty;
 
     @Column(name = "shop_product_original_price", nullable = true)
-    private int shopProductOriginalPrice;
+    private Integer shopProductOriginalPrice;
 
     @Column(name = "shop_product_sale_price", nullable = true)
-    private int shopProductSalePrice;
+    private Integer shopProductSalePrice;
 
     @Column(name = "shop_product_desc", nullable = true)
     private String shopProductDesc;
@@ -75,6 +76,7 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_product_img_url", nullable = true)
     private String shopProductImgUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "shop_del_status", nullable = false)
     private YnType shopDelStatus = YnType.N;
 
