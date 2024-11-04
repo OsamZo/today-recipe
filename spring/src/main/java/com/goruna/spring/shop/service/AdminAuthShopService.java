@@ -1,12 +1,12 @@
 package com.goruna.spring.shop.service;
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.AdminAuthShopDetailResponseDTO;
 import com.goruna.spring.shop.dto.AdminAuthShopResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
-import com.goruna.spring.shop.repository.AdminAuthShopDetailRepository;
-import com.goruna.spring.shop.repository.AdminAuthShopRepository;
+import com.goruna.spring.shop.repository.ShopRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,9 +23,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminAuthShopService {
 
-    private final AdminAuthShopRepository adminAuthShopRepository;
-    private final AdminAuthShopDetailRepository adminAuthShopDetailRepository;
     private final ModelMapper modelMapper;
+    private final ShopRepository shopRepository;
 
     // 매장 등록 인증 전체 조회
     @Transactional
@@ -38,7 +37,7 @@ public class AdminAuthShopService {
         int offset = (page - 1) * size;
 
         Pageable pageable = PageRequest.of(offset, size);
-        Page<Shop> authShopsPage = adminAuthShopRepository.findAll(pageable);
+        Page<Shop> authShopsPage = shopRepository.findAll(pageable);
         List<Shop> Shops = authShopsPage.getContent();
 
         return Shops.stream()
@@ -49,8 +48,23 @@ public class AdminAuthShopService {
     // 매장 등록 인증 상세 조회
     @Transactional
     public AdminAuthShopDetailResponseDTO getAdminAuthShopDetail(@Valid Long shopSeq) {
-        Shop shop = adminAuthShopDetailRepository.findById(shopSeq)
+        Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
         return modelMapper.map(shop, AdminAuthShopDetailResponseDTO.class);
     }
+
+    // 매장 등록 인증 권한 수정
+    public AdminAuthShopResponseDTO updateAuth(Long shopSeq, YnType shopApprStatus) {
+        Shop shop = shopRepository.findById(shopSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
+
+        if(shopApprStatus == YnType.Y){
+            shop.approve();
+        }else{
+            shop.disapprove();
+        }
+
+        return modelMapper.map(shop, AdminAuthShopResponseDTO.class);
+    }
+
 }
