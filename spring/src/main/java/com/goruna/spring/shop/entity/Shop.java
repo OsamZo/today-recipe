@@ -17,10 +17,10 @@ public class Shop extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_seq", nullable = false)
-    private long shopSeq;
+    private Long shopSeq;
 
     @Column(name = "user_seq", nullable = false)
-    private long userSeq;
+    private Long userSeq;
 
     @ManyToOne
     @JoinColumn(name = "categorySeq")

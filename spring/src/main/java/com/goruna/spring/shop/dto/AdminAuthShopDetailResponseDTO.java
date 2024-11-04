@@ -10,13 +10,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminShopResponseDTO {
+public class AdminAuthShopDetailResponseDTO {
 
     private Long shopSeq;
     private String shopName;
+    private String shopOpenDate;
+    private String shopTel;
+    private String shopAddress;
     private String categorySeq;
     private String categoryName;
-    private String shopAddress;
-    private String shopImgUrl;
-
+    private String shopIntroduction;
 }
