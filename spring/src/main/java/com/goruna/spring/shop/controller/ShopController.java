@@ -23,7 +23,7 @@ public class ShopController {
             summary = "카테고리 별 매장 목록 데이터 조회",
             description = "카테고리 별 매장 목록 데이터를 조회합니다."
     )
-    public ApiResponse<List<ShopListReadResDTO>> readShopsByCategory(@PathVariable(value = "categorySeq") Long categorySeq) {
+    public ApiResponse<?> readShopsByCategory(@PathVariable(value = "categorySeq") Long categorySeq) {
         List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsByCategory(categorySeq);
         return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
