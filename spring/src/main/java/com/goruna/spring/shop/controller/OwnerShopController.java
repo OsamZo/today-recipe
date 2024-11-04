@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/owner")
 @RequiredArgsConstructor
-@Tag(name = "", description = "사장용 api")    // name 설정 해야함
+@Tag(name = "Owner API", description = "사장용 api")    // name 설정 해야함
 public class OwnerShopController {
 
     private final OwnerShopService ownerShopService;
