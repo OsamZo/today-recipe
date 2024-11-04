@@ -38,7 +38,7 @@ public class Shop extends BaseTimeEntity {
     private String shopAddress;
 
     @Column(name = "shop_appr_status", nullable = false)
-    private Boolean shopApprStatus = false;
+    private boolean shopApprStatus = false;
 
     @Column(name = "shop_open_date", nullable = false)
     private LocalDateTime shopOpenDate;
@@ -53,13 +53,13 @@ public class Shop extends BaseTimeEntity {
     private String shopProductName;
 
     @Column(name = "shop_product_qty", nullable = true)
-    private Integer shopProductQty;
+    private int shopProductQty;
 
     @Column(name = "shop_product_original_price", nullable = true)
-    private Integer shopProductOriginalPrice;
+    private int shopProductOriginalPrice;
 
     @Column(name = "shop_product_sale_price", nullable = true)
-    private Integer shopProductSalePrice;
+    private int shopProductSalePrice;
 
     @Column(name = "shop_product_desc", nullable = true)
     private String shopProductDesc;
@@ -74,7 +74,7 @@ public class Shop extends BaseTimeEntity {
     private String shopProductImgUrl;
 
     @Column(name = "shop_del_status", nullable = false)
-    private Boolean shopDelStatus = false;
+    private boolean shopDelStatus = false;
 
     @Column(name = "shop_business_img_url", nullable = false)
     private String shopBusinessImgUrl;
