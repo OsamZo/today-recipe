@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ShopRepository extends JpaRepository<Shop, Long> {
 
-    @Query("SELECT s FROM Shop s WHERE s.shopCategory.categorySeq = :categorySeq AND s.shopApprStatus = true AND s.shopDelStatus = false")
+    @Query("SELECT s FROM Shop s WHERE s.shopCategory.categorySeq = :categorySeq AND s.shopApprStatus = 'Y' AND s.shopDelStatus = 'N'")
     List<Shop> readShopsByCategory(@Param("categorySeq") Long categorySeq, Pageable pageable);
 }
