@@ -76,4 +76,7 @@ public class Shop extends BaseTimeEntity {
 
     @Column(name = "shop_del_status", nullable = false)
     private boolean shopDelStatus = false;
+
+    @Column(name = "shop_business_img_url", nullable = false)
+    private String shopBusinessImgUrl;
 }

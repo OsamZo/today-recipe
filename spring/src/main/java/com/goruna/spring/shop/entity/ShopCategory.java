@@ -14,7 +14,7 @@ public class ShopCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long categorySeq;
+    private Long categorySeq;
 
     @Column(nullable = false)
     private String categoryName;
