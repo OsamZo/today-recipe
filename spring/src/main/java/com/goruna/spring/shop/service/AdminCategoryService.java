@@ -1,5 +1,7 @@
 package com.goruna.spring.shop.service;
 
+import com.goruna.spring.common.exception.CustomException;
+import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.AdminCategoryRequestDTO;
 import com.goruna.spring.shop.dto.AdminCategoryResponseDTO;
 import com.goruna.spring.shop.entity.ShopCategory;
@@ -37,5 +39,14 @@ public class AdminCategoryService {
                 .map(shopCategory -> modelMapper.map(shopCategory, AdminCategoryResponseDTO.class))
                 .collect(Collectors.toList());
 
+    }
+    @Transactional
+    public boolean deleteCategory(Long categorySeq) {
+        if(shopCategoryRepository.existsById(categorySeq)) {
+            shopCategoryRepository.deleteById(categorySeq);
+            return true;
+        } else{
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
     }
 }

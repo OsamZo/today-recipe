@@ -31,12 +31,21 @@ public class AdminCategoryController {
     }
 
     @GetMapping()
-    @Operation(summary = "카테고리 조회", description = "관리자 권하능로 카테고리를 조회합니다.")
+    @Operation(summary = "카테고리 조회", description = "관리자 권한으로 카테고리를 조회합니다.")
     public ApiResponse<?> findAllCategories() {
 
         List<AdminCategoryResponseDTO> allCategorys = adminCategoryService.getAdminAllCategory();
 
         return ResponseUtil.successResponse("카테고리 전체 조회가 성공적으로 조회되었습니다.", allCategorys).getBody();
+    }
+
+    @DeleteMapping("/{categorySeq}")
+    @Operation(summary = "카테고리 삭제", description = "관리자 권한으로 카테고리를 삭제합니다.")
+    public ApiResponse<?> deleteCategory(@PathVariable Long categorySeq) {
+
+        adminCategoryService.deleteCategory(categorySeq);
+
+        return ResponseUtil.successResponse("카테고리가 성공적으로 삭제 되었습니다.").getBody();
     }
 
 }
