@@ -6,7 +6,6 @@ import com.goruna.spring.shop.dto.AdminShopAuthImgDTO;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
 import com.goruna.spring.shop.dto.AdminShopSearchResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
-import com.goruna.spring.shop.repository.AdminShopRepository;
 import com.goruna.spring.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -30,7 +29,7 @@ public class AdminShopService {
     @Transactional
     public List<AdminShopResponseDTO> getAdminAllSearch(Integer page, Integer size) {
 
-        if(page < 1 || size < 1) {
+        if (page < 1 || size < 1) {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
         }
 
@@ -50,7 +49,7 @@ public class AdminShopService {
     @Transactional
     public List<AdminShopSearchResponseDTO> getAdminShop(String shopName, Integer page, Integer size) {
 
-        if(page < 1 || size < 1) {
+        if (page < 1 || size < 1) {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
         }
         int offset = (page - 1) * size;
@@ -62,8 +61,9 @@ public class AdminShopService {
                 .map(shop -> modelMapper.map(shop, AdminShopSearchResponseDTO.class))
                 .collect(Collectors.toList());
 
+    }
     // 사업자 등록증 조회
-    public AdminShopAuthImgDTO getShopAuthImg(Long shopSeq) {
+    public AdminShopAuthImgDTO getShopAuthImg (Long shopSeq){
 
         Shop shopAuthImg = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
