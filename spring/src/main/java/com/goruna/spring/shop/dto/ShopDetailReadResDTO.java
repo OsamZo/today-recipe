@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,17 +13,17 @@ public class ShopDetailReadResDTO {
 
     private String shopName;
 
-    private LocalTime shopClosedAt;
+    private LocalDateTime productClosedAt;
 
     private String shopAddress;
 
     private String shopIntroduction;
 
-    private String shopProductName;
+    private String productName;
 
-    private String shopProductDescription;
+    private String productDescription;
 
-    private int shopProductQty;
+    private int productQty;
 
     private int productOriginalPrice;
 
@@ -31,6 +31,6 @@ public class ShopDetailReadResDTO {
 
     private String shopImgUrl;
 
-    private String shopProductImgUrl;
+    private String productImgUrl;
 }
 
