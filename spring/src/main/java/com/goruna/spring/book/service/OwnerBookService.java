@@ -30,8 +30,8 @@ public class OwnerBookService {
     public List<OwnerShopBooksResDTO> getOwnerShopBooks() {
 
         Long userSeq = 1L;
-        Long shopSeq = ownerShopRepository.findById(userSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND)).getShopSeq();
+//        Long shopSeq = ownerShopRepository.findById(userSeq)
+//                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND)).getShopSeq();
 
         QUser user = QUser.user;
         QShop shop = QShop.shop;
@@ -41,16 +41,20 @@ public class OwnerBookService {
         return jpaQueryFactory
                 .select(Projections.constructor(OwnerShopBooksResDTO.class,
                         user.userNickname,
-                        product.productName,
+                        book.product.productName,
                         book.bookQty,
-                        Expressions.numberTemplate(Integer.class, "{0} * {1}", product.productSalePrice, book.bookQty),    // 두 컬럼을 곱한 값
+                        book.product.productSalePrice.multiply(book.bookQty).as("TotalPrice"),
                         book.bookIsProductReceived
                         ))
                 .from(user)
-                .join(shop).on(user.userSeq.eq(shop.user.userSeq))
-                .join(product).on(shop.shopSeq.eq(product.shop.shopSeq))
-                .join(book).on(product.productSeq.eq(book.bookSeq))
-                .where(shop.shopSeq.eq(shopSeq))
+//                .join(shop).on(user.userSeq.eq(shop.user.userSeq))
+//                .join(product).on(shop.shopSeq.eq(product.shop.shopSeq))
+//                .join(book).on(product.productSeq.eq(book.bookSeq))
+//                .where(shop.user.userSeq.eq(userSeq))
+                .join(user).on(shop.user.userSeq.eq(user.userSeq)) // 사용자와 매장 조인
+                .join(product).on(shop.shopSeq.eq(product.shop.shopSeq)) // 매장과 제품 조인
+                .join(book).on(product.productSeq.eq(book.product.productSeq)) // 제품과 예약 조인
+                .where(shop.user.userSeq.eq(userSeq)) // 특정 유저의 매장
                 .fetch();
     }
 }
