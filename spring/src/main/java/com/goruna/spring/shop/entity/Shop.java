@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "shop")
@@ -45,7 +45,7 @@ public class Shop extends BaseTimeEntity {
     private YnType shopApprStatus = YnType.N;
 
     @Column(name = "shop_open_date", nullable = false)
-    private LocalDateTime shopOpenDate;
+    private LocalDate shopOpenDate;
 
     @Column(name = "shop_introduction", nullable = false)
     private String shopIntroduction;
