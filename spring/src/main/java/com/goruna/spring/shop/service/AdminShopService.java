@@ -2,6 +2,7 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.shop.dto.AdminShopAuthImgDTO;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
 import com.goruna.spring.shop.dto.AdminShopSearchResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
@@ -44,6 +45,7 @@ public class AdminShopService {
                 .collect(Collectors.toList());
     }
 
+
     // 매장 데이터 검색
     @Transactional
     public List<AdminShopSearchResponseDTO> getAdminShop(String shopName, Integer page, Integer size) {
@@ -59,6 +61,15 @@ public class AdminShopService {
         return Shops.stream()
                 .map(shop -> modelMapper.map(shop, AdminShopSearchResponseDTO.class))
                 .collect(Collectors.toList());
+
+    // 사업자 등록증 조회
+    public AdminShopAuthImgDTO getShopAuthImg(Long shopSeq) {
+
+        Shop shopAuthImg = shopRepository.findById(shopSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
+
+        return modelMapper.map(shopAuthImg, AdminShopAuthImgDTO.class);
+
 
     }
 }

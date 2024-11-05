@@ -21,8 +21,11 @@ public enum ErrorCodeType {
     // shop 관련 오류
     SHOP_NOT_FOUND(HttpStatus.NOT_FOUND, "SHOP_ERROR_001", "매장을 찾을 수 없습니다."),
 
-    // book 관련 오휴
+    // book 관련 오류
     INVALID_QUANTITY(HttpStatus.CONFLICT, "BOOK_ERROR_001", "재고가 부족합니다."),
+
+    // product 관련 오류
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_ERROR_001", "상품을 찾을 수 없습니다."),
 
     // 공통 오류
     COMMON_ERROR(HttpStatus.BAD_REQUEST, "COMMON_ERROR", "오류가 발생하였습니다. 관리자에게 문의 바랍니다."),
