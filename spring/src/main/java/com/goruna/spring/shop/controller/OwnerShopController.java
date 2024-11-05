@@ -2,6 +2,7 @@ package com.goruna.spring.shop.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.shop.dto.CreateProductReqDTO;
 import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.service.OwnerShopService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/owner")
 @RequiredArgsConstructor
-@Tag(name = "Owner API", description = "사장용 api")    // name 설정 해야함
+@Tag(name = "OwnerShop API", description = "사장용 매장 api")
 public class OwnerShopController {
 
     private final OwnerShopService ownerShopService;
@@ -39,5 +40,13 @@ public class OwnerShopController {
         return ResponseUtil.successResponse("데이터를 성공적으로 조회하였습니다.", ownerShopInfo).getBody();
     }
 
+    @PostMapping("/shop/{shopSeq}/product")
+    @Operation(summary = "(사장) 상품 등록", description = "(사장) 상품을 등록합니다.")
+    public ApiResponse<?> createProduct(
+            @PathVariable Long shopSeq,
+            @RequestBody CreateProductReqDTO createProductReqDTO) {
+        ownerShopService.createProductInfo(shopSeq, createProductReqDTO);
+        return ResponseUtil.successResponse("데이터를 성공적으로 등록하였습니다.").getBody();
+    }
 
 }
