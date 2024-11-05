@@ -51,8 +51,8 @@ public class ReviewService {
     }
 
     /* 매장 별 리뷰 조회 */
-    public List<ReviewShopReadResDTO> getReviewsByShopId(Long shopId) {
-        List<Review> reviews = reviewRepository.findReviewsByShopId(shopId);
+    public List<ReviewShopReadResDTO> getReviewsByShopId(Long shopSeq) {
+        List<Review> reviews = reviewRepository.findReviewsByShopId(shopSeq);
 
         return reviews.stream()
                 .map(review -> new ReviewShopReadResDTO(
