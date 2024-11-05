@@ -34,35 +34,35 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-//    /* 회원 별 리뷰 조회 */
-//    @Transactional
-//    public List<ReviewUserReadResDTO> getUserReviews(Long userSeq) {
-//        List<Review> reviews = reviewRepository.findReviewsByUserSeq(userSeq);
-//
-//        return reviews.stream()
-//                .map(review -> new ReviewUserReadResDTO(
-//                        review.getBook().getShop().getShopName(),
-//                        review.getBook().getUser().getUserNickname(),
-//                        review.getReviewContent(),
-//                        review.getRegDate(),
-//                        review.getGoods().size()
-//                ))
-//                .collect(Collectors.toList());
-//    }
-//
-//    /* 매장 별 리뷰 조회 */
-//    public List<ReviewShopReadResDTO> getReviewsByShopId(Long shopId) {
-//        List<Review> reviews = reviewRepository.findReviewsByShopId(shopId);
-//
-//        return reviews.stream()
-//                .map(review -> new ReviewShopReadResDTO(
-//                        review.getBook().getShop().getShopImgUrl(), // 매장 사진
-//                        review.getBook().getShop().getShopName(), // 매장 이름
-//                        review.getBook().getUser().getUserNickname(), // 리뷰 남긴 회원 이름
-//                        review.getRegDate(), // 리뷰 등록 날짜
-//                        review.getReviewContent(), // 리뷰 내용
-//                        review.getGoods().size() // 좋아요 개수
-//                ))
-//                .collect(Collectors.toList());
-//    }
+    /* 회원 별 리뷰 조회 */
+    @Transactional
+    public List<ReviewUserReadResDTO> getUserReviews(Long userSeq) {
+        List<Review> reviews = reviewRepository.findReviewsByUserSeq(userSeq);
+
+        return reviews.stream()
+                .map(review -> new ReviewUserReadResDTO(
+                        review.getBook().getProduct().getShop().getShopName(),
+                        review.getBook().getUser().getUserNickname(),
+                        review.getReviewContent(),
+                        review.getRegDate(),
+                        review.getGoods().size()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    /* 매장 별 리뷰 조회 */
+    public List<ReviewShopReadResDTO> getReviewsByShopId(Long shopId) {
+        List<Review> reviews = reviewRepository.findReviewsByShopId(shopId);
+
+        return reviews.stream()
+                .map(review -> new ReviewShopReadResDTO(
+                        review.getBook().getProduct().getShop().getShopImgUrl(),
+                        review.getBook().getProduct().getShop().getShopName(),
+                        review.getBook().getUser().getUserNickname(),
+                        review.getRegDate(),
+                        review.getReviewContent(),
+                        review.getGoods().size()
+                ))
+                .collect(Collectors.toList());
+    }
 }
