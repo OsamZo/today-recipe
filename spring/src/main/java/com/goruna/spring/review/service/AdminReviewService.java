@@ -15,11 +15,6 @@ public class AdminReviewService {
 
     public void deleteReview(Long reviewSeq) {
 
-
-//        Review review = reviewRepository.findById(reviewSeq)
-//                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
-
-
         reviewRepository.deleteById(reviewSeq);
 
     }
