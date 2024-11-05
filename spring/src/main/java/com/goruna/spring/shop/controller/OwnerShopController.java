@@ -2,7 +2,6 @@ package com.goruna.spring.shop.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
-import com.goruna.spring.shop.dto.CreateProductReqDTO;
 import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.service.OwnerShopService;
@@ -39,14 +38,4 @@ public class OwnerShopController {
         OnwerShopInfoResDTO ownerShopInfo = ownerShopService.getOnwerShopInfo();
         return ResponseUtil.successResponse("데이터를 성공적으로 조회하였습니다.", ownerShopInfo).getBody();
     }
-
-    @PostMapping("/shop/{shopSeq}/product")
-    @Operation(summary = "(사장) 상품 등록", description = "(사장) 상품을 등록합니다.")
-    public ApiResponse<?> createProduct(
-            @PathVariable Long shopSeq,
-            @RequestBody CreateProductReqDTO createProductReqDTO) {
-        ownerShopService.createProductInfo(shopSeq, createProductReqDTO);
-        return ResponseUtil.successResponse("데이터를 성공적으로 등록하였습니다.").getBody();
-    }
-
 }

@@ -4,7 +4,9 @@ import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.AdminShopAuthImgDTO;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
+import com.goruna.spring.shop.dto.AdminShopSearchResponseDTO;
 import com.goruna.spring.shop.entity.Shop;
+import com.goruna.spring.shop.repository.AdminShopRepository;
 import com.goruna.spring.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -43,6 +45,23 @@ public class AdminShopService {
                 .collect(Collectors.toList());
     }
 
+
+    // 매장 데이터 검색
+    @Transactional
+    public List<AdminShopSearchResponseDTO> getAdminShop(String shopName, Integer page, Integer size) {
+
+        if(page < 1 || size < 1) {
+            throw new CustomException(ErrorCodeType.INVALID_VALUE);
+        }
+        int offset = (page - 1) * size;
+        Pageable pageable = PageRequest.of(offset, size);
+        Page<Shop> shopsPage = shopRepository.findByShopNameContaining(pageable, shopName);
+        List<Shop> Shops = shopsPage.getContent();
+
+        return Shops.stream()
+                .map(shop -> modelMapper.map(shop, AdminShopSearchResponseDTO.class))
+                .collect(Collectors.toList());
+
     // 사업자 등록증 조회
     public AdminShopAuthImgDTO getShopAuthImg(Long shopSeq) {
 
@@ -50,6 +69,7 @@ public class AdminShopService {
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
         return modelMapper.map(shopAuthImg, AdminShopAuthImgDTO.class);
+
 
     }
 }
