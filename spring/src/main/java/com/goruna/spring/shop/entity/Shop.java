@@ -8,10 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "shop")
@@ -52,32 +50,8 @@ public class Shop extends BaseTimeEntity {
     @Column(name = "shop_introduction", nullable = false)
     private String shopIntroduction;
 
-    @Column(name = "shop_today_comment", nullable = true)
-    private String shopTodayComment;
-
-    @Column(name = "shop_product_name", nullable = true)
-    private String shopProductName;
-
-    @Column(name = "shop_product_qty", nullable = true)
-    private Integer shopProductQty;
-
-    @Column(name = "shop_product_original_price", nullable = true)
-    private Integer shopProductOriginalPrice;
-
-    @Column(name = "shop_product_sale_price", nullable = true)
-    private Integer shopProductSalePrice;
-
-    @Column(name = "shop_product_desc", nullable = true)
-    private String shopProductDesc;
-
     @Column(name = "shop_img_url", nullable = true)
     private String shopImgUrl;
-
-    @Column(name = "shop_closed_at", nullable = true)
-    private LocalTime shopClosedAt;
-
-    @Column(name = "shop_product_img_url", nullable = true)
-    private String shopProductImgUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "shop_del_status", nullable = false)

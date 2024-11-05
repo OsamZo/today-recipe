@@ -2,6 +2,7 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.shop.dto.CreateProductReqDTO;
 import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
@@ -18,6 +19,7 @@ public class OwnerShopService {
     private final OwnerShopRepository ownerShopRepository;
     private final ModelMapper modelMapper;
 
+    // 내 매장 정보 수정
     @Transactional
     public void updateShopInfo(Long shopSeq, UpdateShopInfoDTO updateShopInfoDTO) {
 
@@ -27,12 +29,14 @@ public class OwnerShopService {
         modelMapper.map(updateShopInfoDTO, shopInfo);
     }
 
+    // 내 매장 삭제
     @Transactional
     public void deleteShop(Long shopSeq) {
 
         ownerShopRepository.deleteById(shopSeq);
     }
 
+    // 내 매장 정보 조회
     @Transactional
     public OnwerShopInfoResDTO getOnwerShopInfo() {
 
@@ -41,5 +45,16 @@ public class OwnerShopService {
         Shop shop = ownerShopRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
+    }
+
+    // 상품 등록
+    @Transactional
+    public void createProductInfo(Long shopSeq, CreateProductReqDTO createProductReqDTO) {
+
+        Shop shop = ownerShopRepository.findById(shopSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+
+        modelMapper.map(createProductReqDTO, shop);
+        ownerShopRepository.save(shop);
     }
 }
