@@ -1,8 +1,14 @@
 package com.goruna.spring.security;
 
+import com.goruna.spring.security.dto.JwtAuthenticationEntryPoint;
 import com.goruna.spring.security.filter.CustomAuthenticationFilter;
+import com.goruna.spring.security.filter.JwtFilter;
+import com.goruna.spring.security.handler.JwtAccessDeniedHandler;
 import com.goruna.spring.security.handler.LoginSuccessHandler;
+import com.goruna.spring.security.util.CustomUserDetailsService;
+import com.goruna.spring.security.util.JwtUtil;
 import com.goruna.spring.users.service.UserService;
+import io.jsonwebtoken.Jwt;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +31,8 @@ public class SecurityConfig {
 
     private final UserService userService;
     private final Environment env;
+    private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,22 +48,31 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
+        http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling(
+                exceptionHandling -> {
+                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
+                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+                }
+        );
 
         return http.build();
     }
 
     private Filter getAuthenticationFilter() {
+
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
         customAuthenticationFilter.setAuthenticationManager(getAuthenticationManager());
-        System.out.println("지나가욥");
-        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(env));
+        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(env,jwtUtil,customUserDetailsService));
         return customAuthenticationFilter;
     }
 
     private AuthenticationManager getAuthenticationManager() {
+
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
+        provider.setUserDetailsService(customUserDetailsService);
         return new ProviderManager(provider);
     }
 }
