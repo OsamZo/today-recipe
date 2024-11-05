@@ -19,14 +19,14 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_seq", nullable = false)
     private Long productSeq;
 
-    @Column(name = "user_seq", nullable = false)
-    private Long userSeq;
-
-    @Column(name = "today_comment", nullable = true)
-    private String todayComment;
+    @Column(name = "shop_seq", nullable = false)
+    private Long shopSeq;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
+
+    @Column(name = "product_desc", nullable = true)
+    private String productDesc;
 
     @Column(name = "product_qty", nullable = false)
     private Integer productQty = 0;
@@ -37,10 +37,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_sale_price", nullable = false)
     private Integer productSalePrice;
 
-    @Column(name = "product_desc", nullable = true)
-    private String productDesc;
-
-    @Column(name = "product_closed_at", nullable = true)
+    @Column(name = "product_closed_at", nullable = false)
     private LocalDateTime productClosedAt;
 
     @Column(name = "product_img_url", nullable = true)
