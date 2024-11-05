@@ -1,6 +1,5 @@
 package com.goruna.spring.shop.dto;
 
-import com.goruna.spring.common.aggregate.YnType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,5 +17,4 @@ public class ShopApplyReqDTO {
     private String shopTel;
     private String shopAddress;
     private String shopIntroduction;
-    private YnType shopApprStatus;
 }
