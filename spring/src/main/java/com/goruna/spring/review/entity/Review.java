@@ -31,7 +31,7 @@ public class Review extends BaseTimeEntity {
     private LocalDateTime delDate;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "book_seq", nullable = false)
+    @JoinColumn(name = "book_seq", nullable = false)
     private Book book;
 
     @OneToMany(mappedBy = "review")

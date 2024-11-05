@@ -16,7 +16,7 @@ public class Good {
     private Long goodSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "user_seq", nullable = false)
     private User userSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)

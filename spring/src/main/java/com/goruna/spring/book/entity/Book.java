@@ -32,10 +32,12 @@ public class Book extends BaseTimeEntity {
     @Column(name = "book_qty", nullable = false)
     private int bookQty;
 
-    @Column(name = "book_is_product_received", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_is_product_received", nullable = false, length = 10)
     private YnType bookIsProductReceived = YnType.N;
 
-    @Column(name = "is_book_cancelled", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_book_cancelled", nullable = false, length = 10)
     private YnType isBookCancelled = YnType.N;
 
     @Builder
