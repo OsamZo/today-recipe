@@ -36,8 +36,8 @@ public class OwnerShopService {
     @Transactional
     public OnwerShopInfoResDTO getOnwerShopInfo() {
 
-        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
-
+//        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
+        Long userSeq = 1019L;
         Shop shop = ownerShopRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
