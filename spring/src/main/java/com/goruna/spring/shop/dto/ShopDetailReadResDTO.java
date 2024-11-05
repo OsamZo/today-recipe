@@ -19,17 +19,15 @@ public class ShopDetailReadResDTO {
 
     private String shopIntroduction;
 
-    private String shopTodayComment;
-
     private String shopProductName;
+
+    private String shopProductDescription;
 
     private int shopProductQty;
 
-    private int shopProductOriginalPrice;
+    private int productOriginalPrice;
 
-    private int shopProductSalePrice;
-
-    private String shopProductDesc;
+    private int productSalePrice;
 
     private String shopImgUrl;
 

@@ -17,7 +17,7 @@ public class ShopListReadResDTO {
 
     private String categoryName;
 
-    private int shopProductOriginalPrice;
+    private int productOriginalPrice;
 
-    private int shopProductSalePrice;
+    private int productSalePrice;
 }
