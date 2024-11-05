@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
+
     private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
     private final UserRepository userRepository;
 
@@ -25,15 +26,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginEmail) throws UsernameNotFoundException {
 
         User loginUser = userRepository.findByUserEmail(loginEmail)
-                .orElseThrow(() -> new UsernameNotFoundException(loginEmail));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginEmail));
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + loginUser.getUserRole().name()));
 
 
         return new CustomUserDetails(
+                loginUser.getUserSeq(),
                 loginUser.getUserEmail(),
-                null,
+                "",
                 grantedAuthorities
         );
     }

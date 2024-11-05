@@ -7,7 +7,13 @@ import java.util.List;
 
 public class CustomUserDetails extends User{
 
-    public CustomUserDetails(String email, String passoword, List<GrantedAuthority> grantedAuthorities) {
+    private final Long userSeq;
+
+    public CustomUserDetails(Long userSeq, String email, String passoword, List<GrantedAuthority> grantedAuthorities) {
         super(email, passoword, grantedAuthorities);
+        this.userSeq=userSeq;
+    }
+    public Long getUserSeq() {
+        return userSeq;
     }
 }
