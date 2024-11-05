@@ -1,6 +1,7 @@
 package com.goruna.spring.product.entity;
 
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
+import com.goruna.spring.shop.entity.Shop;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_seq", nullable = false)
     private Long productSeq;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "shop_seq", nullable = false)
     private Shop shop;
 
