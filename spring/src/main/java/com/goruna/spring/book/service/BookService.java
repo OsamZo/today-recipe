@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,49 +29,46 @@ public class BookService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
-//    @Transactional
-//    public void createBook(Long shopSeq, Long userSeq, int bookQty) {
-//        User user = userRepository.findById(userSeq)
-//                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
-//
-//        Shop shop = shopRepository.findById(shopSeq)
-//                .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
-//
-//        Product product = productRepository.findByShopShopSeq(shopSeq);
-//
-//        List<Book> books = bookRepository.findByShopShopSeq(shopSeq);
-//
-//        int totalBookedQty = 0;
-//
-//        for (Book book : books) {
-//            totalBookedQty += book.getBookQty();
-//        }
-//
-//        if (bookQty > totalBookedQty) {
-//            throw new CustomException(ErrorCodeType.INVALID_VALUE);
-//        }
-//
-//        Book book = Book.builder()
-//                .product(product)
-//                .user(user)
-//                .bookQty(bookQty)
-//                .build();
-//
-//        bookRepository.save(book);
-//    }
+    // 예약 생성하기
+    @Transactional
+    public void createBook(Long productSeq, Long userSeq, int bookQty) {
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
-//    // 회원별 예약 리스트 가져오기
-//    public List<BookListReadResDTO> readBookListByUserSeq(Long userSeq) {
-//        List<Book> books = bookRepository.findByUserUserSeq(userSeq);
-//        return books.stream()
-//                .map(book -> {
-//                    BookListReadResDTO bookListReadResDTO = modelMapper.map(book, BookListReadResDTO.class);
-//                    bookListReadResDTO.setShopName(book.getShop().getShopName());
-//                    bookListReadResDTO.setShopAddress(book.getShop().getShopAddress());
-//                    bookListReadResDTO.setShopImgUrl(book.getShop().getShopImgUrl());
-//                    bookListReadResDTO.setIsBookCancelled(book.getIsBookCancelled());
-//                    return bookListReadResDTO;
-//                })
-//                .collect(Collectors.toList());
-//    }
+        Product product = productRepository.findById(productSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.PRODUCT_NOT_FOUND));
+
+        // 해당 상품의 남은 수량
+        int productQty = product.getProductQty();
+
+        // 예약하려는 수량이 남은 수량보다 많다면 에러 발생, 그렇지 않다면 재고 변경
+        if (bookQty <= productQty) {
+            productQty -= bookQty;
+        } else {
+            throw new CustomException(ErrorCodeType.INVALID_VALUE);
+        }
+
+        Book book = Book.builder()
+                .user(user)
+                .product(product)
+                .bookQty(bookQty)
+                .build();
+
+        bookRepository.save(book);
+    }
+
+    // 회원별 예약 리스트 가져오기
+    public List<BookListReadResDTO> readBookListByUserSeq(Long userSeq) {
+        List<Book> books = bookRepository.findByUserUserSeq(userSeq);
+        return books.stream()
+                .map(book -> {
+                    BookListReadResDTO bookListReadResDTO = modelMapper.map(book, BookListReadResDTO.class);
+                    bookListReadResDTO.setShopName(book.getProduct().getShop().getShopName());
+                    bookListReadResDTO.setShopAddress(book.getProduct().getShop().getShopAddress());
+                    bookListReadResDTO.setShopImgUrl(book.getProduct().getShop().getShopImgUrl());
+                    bookListReadResDTO.setIsBookCancelled(book.getIsBookCancelled());
+                    return bookListReadResDTO;
+                })
+                .collect(Collectors.toList());
+    }
 }
