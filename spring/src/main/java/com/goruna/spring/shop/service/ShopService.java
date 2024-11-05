@@ -50,7 +50,7 @@ public class ShopService {
     public ShopDetailReadResDTO readShopDetail(Long shopSeq) {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
-        Product product = productRepository.findFirstByShop_ShopSeqByRegDateDesc(shopSeq);
+        Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
 
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
