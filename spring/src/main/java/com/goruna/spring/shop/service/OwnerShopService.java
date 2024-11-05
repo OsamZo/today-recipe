@@ -2,6 +2,7 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.shop.repository.OwnerShopRepository;
@@ -30,5 +31,15 @@ public class OwnerShopService {
     public void deleteShop(Long shopSeq) {
 
         ownerShopRepository.deleteById(shopSeq);
+    }
+
+    @Transactional
+    public OnwerShopInfoResDTO getOnwerShopInfo() {
+
+//        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출 기능 생기면 수정 예정
+        Long userSeq = 1019L;   // 테스트용 코드
+        Shop shop = ownerShopRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        return modelMapper.map(shop, OnwerShopInfoResDTO.class);
     }
 }
