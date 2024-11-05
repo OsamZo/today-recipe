@@ -30,12 +30,12 @@ public class Review extends BaseTimeEntity {
 
     @OneToOne
     @JoinColumn(referencedColumnName = "book_seq", nullable = false)
-    private Book bookSeq;
+    private Book book;
 
     @OneToMany(mappedBy = "reviewSeq")
     private List<Good> goods;
 
-    public void BookSeq(Book bookSeq) {
-        this.bookSeq = bookSeq;
+    public void Book(Book book) {
+        this.book = book;
     }
 }
