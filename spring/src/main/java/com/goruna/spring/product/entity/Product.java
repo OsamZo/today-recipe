@@ -20,7 +20,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_seq", nullable = false)
     private Long productSeq;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_seq", nullable = false)
     private Shop shop;
 

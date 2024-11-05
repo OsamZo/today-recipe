@@ -35,13 +35,13 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public List<Review> findReviewsByShopId(Long shopId) {
+    public List<Review> findReviewsByShopId(Long shopSeq) {
 
         return jpaQueryFactory
                 .selectFrom(review)
                 .join(review.book.product.shop, shop).fetchJoin()
                 .leftJoin(review.goods, good)
-                .where(shop.shopSeq.eq(shopId))
+                .where(shop.shopSeq.eq(shopSeq))
                 .groupBy(review.reviewSeq)
                 .fetch();
     }

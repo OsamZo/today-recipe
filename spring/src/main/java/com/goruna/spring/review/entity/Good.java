@@ -15,12 +15,12 @@ public class Good {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long goodSeq;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User userSeq;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Review reviewSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_seq", nullable = false)
+    private Review review;
 
 }

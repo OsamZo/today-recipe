@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class GoodRequestDTO {
 
-    private Long shopSeq;
+    private Long userSeq;
     private Long reviewSeq;
 }
