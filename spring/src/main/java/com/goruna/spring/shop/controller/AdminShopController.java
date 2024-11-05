@@ -3,6 +3,7 @@ package com.goruna.spring.shop.controller;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
 import com.goruna.spring.shop.dto.AdminShopResponseDTO;
+import com.goruna.spring.shop.dto.AdminShopSearchResponseDTO;
 import com.goruna.spring.shop.service.AdminShopService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,19 @@ public class AdminShopController {
             @RequestParam(defaultValue = "10") Integer size){
         List<AdminShopResponseDTO> allShops = adminSearchService.getAdminAllSearch(page, size);
         return ResponseUtil.successResponse("전체 매장 데이터가 성공적으로 조회되었습니다.", allShops).getBody();
+    }
+
+    // 관리자 매장 검색
+    @GetMapping("/search")
+    @Operation(summary = "관리자 매장 데이터 조회", description = "매장 데이터를 검색합니다.")
+    public ApiResponse<?> getAdminShop(
+            @RequestParam String shopName,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ){
+        List<AdminShopSearchResponseDTO> getShops = adminSearchService.getAdminShop(shopName, page, size);
+        return ResponseUtil.successResponse("검색한 매장 데이터가 성공적으로 조회되었습니다.", getShops).getBody();
+
     }
 
 }
