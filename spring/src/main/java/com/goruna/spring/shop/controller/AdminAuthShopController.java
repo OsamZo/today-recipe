@@ -1,6 +1,7 @@
 package com.goruna.spring.shop.controller;
 
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
 import com.goruna.spring.shop.dto.AdminAuthShopDetailResponseDTO;
@@ -25,7 +26,7 @@ import java.util.List;
 @Tag(name = "admin", description = "admin 매장 전체 조회")
 public class AdminAuthShopController {
 
-    private final AdminAuthShopService adminAuthSearchService;
+    private final AdminAuthShopService adminAuthShopService;
 
     // 매장 등록 인증 전체 조회
     @GetMapping("/shop/auth")
@@ -34,7 +35,7 @@ public class AdminAuthShopController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ){
-        List<AdminAuthShopResponseDTO> allAuthShops = adminAuthSearchService.getAdminAuthAllShop(page, size);
+        List<AdminAuthShopResponseDTO> allAuthShops = adminAuthShopService.getAdminAuthAllShop(page, size);
         return ResponseUtil.successResponse("전체 매장 등록 인증 데이터가 성공적으로 조회되었습니다.", allAuthShops).getBody();
     }
 
@@ -42,8 +43,19 @@ public class AdminAuthShopController {
     @GetMapping("/shop/{shopSeq}/auth")
     @Operation(summary = "매장 등록 인증 상세 조회")
     public ApiResponse<?> getAdminAuthShopDetail(@PathVariable Long shopSeq){
-        AdminAuthShopDetailResponseDTO AuthShopDetail = adminAuthSearchService.getAdminAuthShopDetail(shopSeq);
+        AdminAuthShopDetailResponseDTO AuthShopDetail = adminAuthShopService.getAdminAuthShopDetail(shopSeq);
         return ResponseUtil.successResponse("매장 등록 인증 상세 데이터가 성공적으로 조회되었습니다.", AuthShopDetail).getBody();
-
     }
+
+    // 매장 등록 인증 수정
+    @PutMapping("/shop/{shopSeq}/auth")
+    @Operation(summary = "매장 등록 인증 수정", description = "매장 등록 인증 여부를 수정합니다.")
+    public ApiResponse<?> updateAdminAuthShop(
+            @PathVariable Long shopSeq,
+            @RequestBody YnType shopApprStatus
+    ){
+        AdminAuthShopResponseDTO updatedShopAuth = adminAuthShopService.updateAuth(shopSeq, shopApprStatus);
+        return ResponseUtil.successResponse("매장 등록 인증이 성공적으로 수정되었습니다.", updatedShopAuth).getBody();
+    }
+
 }
