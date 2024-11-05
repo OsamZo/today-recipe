@@ -18,24 +18,24 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+//
+//    // 예약 신청
+//    @PostMapping("/category/{categorySeq}/shop/{shopSeq}")
+//    @Operation(summary = "예약 신청", description = "예약을 신청합니다.")
+//    public ApiResponse<?> createBook(
+//            @PathVariable(value = "categorySeq") Long categorySeq,
+//            @PathVariable(value = "shopSeq") Long shopSeq,
+//            @RequestParam int bookQty
+//    ) {
+//        bookService.createBook(categorySeq, shopSeq, bookQty);
+//        return ResponseUtil.successResponse("예약이 성공적으로 생성되었습니다.").getBody();
+//    }
 
-    // 예약 신청
-    @PostMapping("/category/{categorySeq}/shop/{shopSeq}")
-    @Operation(summary = "예약 신청", description = "예약을 신청합니다.")
-    public ApiResponse<?> createBook(
-            @PathVariable(value = "categorySeq") Long categorySeq,
-            @PathVariable(value = "shopSeq") Long shopSeq,
-            @RequestParam int bookQty
-    ) {
-        bookService.createBook(categorySeq, shopSeq, bookQty);
-        return ResponseUtil.successResponse("예약이 성공적으로 생성되었습니다.").getBody();
-    }
-
-    // 회원 예약 내역 조회
-    @GetMapping("/user/{userSeq}/book")
-    @Operation(summary = "회원 예약 내역 조회", description = "회원 예약 내역을 조회합니다.")
-    public ApiResponse<?> getBookListByUserSeq(@PathVariable(value = "userSeq") Long userSeq) {
-        List<BookListReadResDTO> bookListReadResDTOs = bookService.readBookListByUserSeq(userSeq);
-        return ResponseUtil.successResponse("회원 예약 내역 조회가 성공적으로 완료되었습니다.", bookListReadResDTOs).getBody();
-    }
+//    // 회원 예약 내역 조회
+//    @GetMapping("/user/{userSeq}/book")
+//    @Operation(summary = "회원 예약 내역 조회", description = "회원 예약 내역을 조회합니다.")
+//    public ApiResponse<?> getBookListByUserSeq(@PathVariable(value = "userSeq") Long userSeq) {
+//        List<BookListReadResDTO> bookListReadResDTOs = bookService.readBookListByUserSeq(userSeq);
+//        return ResponseUtil.successResponse("회원 예약 내역 조회가 성공적으로 완료되었습니다.", bookListReadResDTOs).getBody();
+//    }
 }

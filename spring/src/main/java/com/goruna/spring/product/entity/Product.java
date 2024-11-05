@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -21,15 +20,15 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_seq", nullable = false)
     private Long productSeq;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "shop_seq", nullable = false)
     private Shop shop;
 
-    @Column(name = "today_comment", nullable = true)
-    private String todayComment;
-
     @Column(name = "product_name", nullable = false)
     private String productName;
+
+    @Column(name = "product_description", nullable = true)
+    private String productDescription;
 
     @Column(name = "product_qty", nullable = false)
     private Integer productQty = 0;
