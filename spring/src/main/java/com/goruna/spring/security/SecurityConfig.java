@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers(new AntPathRequestMatcher("/api/v1/join","POST")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/login","POST")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(
