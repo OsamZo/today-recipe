@@ -1,9 +1,7 @@
 package com.goruna.spring.review.repository;
 
-import com.goruna.spring.review.entity.QGood;
-import com.goruna.spring.review.entity.QReview;
+
 import com.goruna.spring.review.entity.Review;
-import com.goruna.spring.shop.entity.QShop;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -41,7 +39,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         return jpaQueryFactory
                 .selectFrom(review)
-                .join(review.book.shop, shop).fetchJoin()
+                .join(review.book.product.shop, shop).fetchJoin()
                 .leftJoin(review.goods, good)
                 .where(shop.shopSeq.eq(shopId))
                 .groupBy(review.reviewSeq)
