@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Product findFirstByShop_ShopSeqByRegDateDesc(Long shopSeq);
+    Product findFirstByShop_ShopSeqOrderByRegDateDesc(Long shopSeq);
     Product findByShopShopSeq(Long shopSeq);
 }
