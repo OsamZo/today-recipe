@@ -33,6 +33,7 @@ public class ShopController {
         return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
 
+    // 매장 상세 정보 조회
     @GetMapping("/{shopSeq}")
     @Operation(
             summary = "매장 상세 데이터 조회",
