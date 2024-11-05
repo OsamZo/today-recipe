@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class CreateProductReqDTO {
 
     private Long shopSeq;
-    private String todayComment;
     private String productName;
+    private String productDescription;
     private Integer productOriginalPrice;
     private Integer productSalePrice;
     private Integer productQty;
