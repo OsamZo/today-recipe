@@ -43,7 +43,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         Long userSeq = ((CustomUserDetails) userDetails).getUserSeq();
         String token = jwtUtil.generateToken(userSeq, loginEmail);
         response.setHeader("Authorization", "Bearer " + token);
-        response.getWriter().write("로그인 성공: " + token);
+        response.getWriter().write("login success: " + token);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

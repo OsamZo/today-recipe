@@ -7,8 +7,6 @@ import com.goruna.spring.security.handler.JwtAccessDeniedHandler;
 import com.goruna.spring.security.handler.LoginSuccessHandler;
 import com.goruna.spring.security.util.CustomUserDetailsService;
 import com.goruna.spring.security.util.JwtUtil;
-import com.goruna.spring.users.service.UserService;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +27,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserService userService;
     private final Environment env;
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
@@ -38,15 +35,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers(new AntPathRequestMatcher("/api/v1/join","POST")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/login","POST")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/join", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/login", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/api/v1/main")  // 성공 시 리디렉션 경로 설정
+                        .failureUrl("/login?error=true")
+                )
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
+                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+                });
 
         http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
