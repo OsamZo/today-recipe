@@ -44,7 +44,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_usage_count", nullable = false)
     private int userUsageCount = 0;
 
-    @OneToMany(mappedBy = "userSeq")
+    @OneToMany(mappedBy = "user")
     private List<Good> goods;
 
     @OneToMany(mappedBy = "user")

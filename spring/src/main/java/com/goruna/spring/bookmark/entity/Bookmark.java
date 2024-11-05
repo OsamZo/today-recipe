@@ -18,11 +18,11 @@ public class Bookmark {
     private Long bookmarkSeq;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "user_seq", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "shop_seq", nullable = false)
     private Shop shop;
 
     @Builder
