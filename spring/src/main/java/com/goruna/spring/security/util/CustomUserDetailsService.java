@@ -35,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(
                 loginUser.getUserSeq(),
                 loginUser.getUserEmail(),
-                "",
+                "{noop}",
                 grantedAuthorities
         );
     }
