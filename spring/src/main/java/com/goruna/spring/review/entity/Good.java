@@ -20,6 +20,7 @@ public class Good {
     @JoinColumn(name = "user_seq", nullable = false)
     private User user;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_seq", nullable = false)
     private Review review;
