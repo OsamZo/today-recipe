@@ -4,7 +4,6 @@ import com.goruna.spring.security.util.CustomUserDetails;
 import com.goruna.spring.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +29,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("로그인 성공 후 security가 관리하는 객체 : {}", authentication);
 
         List<String> authorites = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -41,13 +38,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         claims.put("auth", authorites);
 
         String loginEmail = authentication.getName();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginEmail); // UserDetails 가져오기
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginEmail);
 
-        // UserDetails에서 UserSeq를 가져옵니다.
         Long userSeq = ((CustomUserDetails) userDetails).getUserSeq();
         String token = jwtUtil.generateToken(userSeq, loginEmail);
         response.setHeader("Authorization", "Bearer " + token);
-        response.getWriter().write("로그인 성공: " + token); // 응답 본문에 토큰 추가
+        response.getWriter().write("로그인 성공: " + token);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

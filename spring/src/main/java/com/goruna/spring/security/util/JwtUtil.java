@@ -63,7 +63,6 @@ public class JwtUtil {
     public Long getUserSeq(String token) {
         Claims claims = parseClaims(token);
         Long userSeq = claims.get("userSeq", Long.class); // userSeq를 클레임에서 가져오기
-        log.info("Extracted UserSeq from claims: {}", userSeq); // 추가된 로그
         return userSeq;
     }
 
@@ -73,8 +72,6 @@ public class JwtUtil {
                 .claim("userSeq", userSeq)
                 .signWith(key)
                 .compact();
-
-        log.info("Generated Tokeng하하하하하하하: {}", token); // 추가된 로그
         return token;
     }
 }
