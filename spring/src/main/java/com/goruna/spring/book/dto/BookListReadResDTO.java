@@ -14,7 +14,7 @@ public class BookListReadResDTO {
 
     private String shopName;
 
-    private String shopProductName;
+    private String productName;
 
     private int bookQty;
 
