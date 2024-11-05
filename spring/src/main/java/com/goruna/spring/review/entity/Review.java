@@ -6,6 +6,7 @@ import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "review")
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE review SET review_status = 'N', del_date = NOW() WHERE review_seq = ?")
 public class Review extends BaseTimeEntity {
 
     @Id
@@ -28,7 +30,7 @@ public class Review extends BaseTimeEntity {
 
     private LocalDateTime delDate;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "book_seq", nullable = false)
     private Book book;
 

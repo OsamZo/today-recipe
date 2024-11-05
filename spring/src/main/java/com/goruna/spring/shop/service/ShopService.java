@@ -2,6 +2,8 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
+import com.goruna.spring.product.entity.Product;
+import com.goruna.spring.product.repository.ProductRepository;
 import com.goruna.spring.shop.dto.ShopDetailReadResDTO;
 import com.goruna.spring.shop.dto.ShopListReadResDTO;
 import com.goruna.spring.shop.entity.Shop;
@@ -23,6 +25,7 @@ public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ModelMapper modelMapper;
+    private final ProductRepository productRepository;
 
     // 카테고리 별 매장 목록 조회
     public List<ShopListReadResDTO> readShopsByCategory(Long categorySeq, Integer page) {
@@ -48,7 +51,16 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
+        Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
+
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
+        shopDetailReadResDTO.setProductName(product.getProductName());
+        shopDetailReadResDTO.setProductDescription(product.getProductDescription());
+        shopDetailReadResDTO.setProductQty(product.getProductQty());
+        shopDetailReadResDTO.setProductOriginalPrice(product.getProductOriginalPrice());
+        shopDetailReadResDTO.setProductSalePrice(product.getProductSalePrice());
+        shopDetailReadResDTO.setProductImgUrl(product.getProductImgUrl());
         return shopDetailReadResDTO;
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "admin", description = "admin 매장 전체 조회")
 public class AdminShopController {
 
-    private final AdminShopService adminSearchService;
+    private final AdminShopService adminShopService;
 
     // 매장 데이터 전체 조회
     @GetMapping
@@ -27,10 +27,9 @@ public class AdminShopController {
     public ApiResponse<?> getAdminAllShop(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size){
-        List<AdminShopResponseDTO> allShops = adminSearchService.getAdminAllSearch(page, size);
+        List<AdminShopResponseDTO> allShops = adminShopService.getAdminAllSearch(page, size);
         return ResponseUtil.successResponse("전체 매장 데이터가 성공적으로 조회되었습니다.", allShops).getBody();
     }
-
 
     // 관리자 매장 검색
     @GetMapping("/search")
@@ -40,18 +39,30 @@ public class AdminShopController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ){
-        List<AdminShopSearchResponseDTO> getShops = adminSearchService.getAdminShop(shopName, page, size);
+        List<AdminShopSearchResponseDTO> getShops = adminShopService.getAdminShop(shopName, page, size);
         return ResponseUtil.successResponse("검색한 매장 데이터가 성공적으로 조회되었습니다.", getShops).getBody();
 
     }
-  
+
+    // 매장 삭제
+    @DeleteMapping("/{shopSeq}")
+    @Operation(summary = "관리자 매장 삭제", description = "매장 데이터를 삭제합니다.")
+    public ApiResponse<?> deleteShop(
+            @PathVariable Long shopSeq){
+
+        adminShopService.deleteShop(shopSeq);
+        return ResponseUtil.successResponse("등록된 메장 삭제가 성공적으로 진행되었습니다.", null).getBody();
+    }
+
     // 사업자 등록증 조회
     @GetMapping("/{shopSeq}/auth/img")
     @Operation(summary = "사업자 등록증 조회", description = "등록된 사업자 등록증을 조회합니다.")
     public ApiResponse<?> getAdminAllShop(
             @RequestParam Long shopSeq){
-        AdminShopAuthImgDTO shopAuthImg = adminSearchService.getShopAuthImg(shopSeq);
+        AdminShopAuthImgDTO shopAuthImg = adminShopService.getShopAuthImg(shopSeq);
         return ResponseUtil.successResponse("등록된 사업자 등록증이 성공적으로 조회되었습니다.", shopAuthImg).getBody();
     }
+
+
 
 }

@@ -1,6 +1,5 @@
 package com.goruna.spring.users.service;
 
-import com.goruna.spring.security.util.JwtUtil;
 import com.goruna.spring.users.dto.SignUpRequestDTO;
 
 import com.goruna.spring.users.entity.User;

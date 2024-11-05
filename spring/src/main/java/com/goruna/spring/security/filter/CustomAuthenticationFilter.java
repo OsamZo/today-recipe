@@ -24,7 +24,7 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
         LoginRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 
         return getAuthenticationManager().authenticate(
-                new UsernamePasswordAuthenticationToken(creds.getUserEmail(), "1")
+                new UsernamePasswordAuthenticationToken(creds.getUserEmail(), "")
         );
     }
 }
