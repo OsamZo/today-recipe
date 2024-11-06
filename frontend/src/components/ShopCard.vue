@@ -15,15 +15,16 @@ export default {
 
 <style scoped>
 .page-content {
-  width: 100%;
-  height: 80vh; 
+  width: 80vw;
+  height: auto; 
   background-color: #ffffff;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start; 
-  padding-top: 60px;
-  padding-left: 20px;
-  margin-top: 100px;
+  justify-content: flex-start;
+  padding-top: 5vh;
+  padding-left: 2vw; 
+  margin: 0 auto;
+  margin-top: 20vh;
   box-sizing: border-box;
   position: relative;
 }
@@ -33,11 +34,12 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 150px; /* 카드 너비를 작게 설정 */
+  width: 150px;
   padding: 10px;
-  top: -100px; /* 위로 겹치도록 위치 조정 */
-  left: 50 px; /* 왼쪽으로 겹치도록 위치 조정 */
-  position: absolute;
+  top: -100px;
+  left: 50px;
+  position: relative;
+  align-items: flex-start;
   z-index: 1;
 }
 
@@ -51,6 +53,6 @@ export default {
 .shop-title {
   font-size: 18px;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
 }
 </style>
