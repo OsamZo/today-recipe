@@ -1,12 +1,12 @@
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 import MainRouter from "@/router/MainRouter.js";
-
+import ReviewRouter from "@/router/ReviewRouter.js";
 import AdminRouter from "@/router/AdminRouter.js"
 
 const routes = [
     ...MainRouter,
-
-    ...AdminRouter
+    ...AdminRouter,
+    ...ReviewRouter
 ]
 
 const router = createRouter({

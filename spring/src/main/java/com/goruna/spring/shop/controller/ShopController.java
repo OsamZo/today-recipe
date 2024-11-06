@@ -14,16 +14,28 @@ import java.util.List;
 
 @Tag(name = "shop", description="매장 API")
 @RestController
-@RequestMapping("/api/v1/category/{categorySeq}/shop")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ShopController {
 
     private final ShopService shopService;
 
-    @GetMapping
+    // 오늘의 특가 리스트 조회
+    @GetMapping("/shop")
     @Operation(
-            summary = "카테고리 별 매장 목록 데이터 조회",
-            description = "카테고리 별 매장 목록 데이터를 조회합니다."
+            summary = "오늘의 특가 리스트 조회(최신순 5개)",
+            description = "오늘의 특가 리스트 데이터를 조회합니다."
+    )
+    public ApiResponse<?> readshopsToday() {
+        List<ShopListReadResDTO> shopListReadResDTOS = shopService.readLatest5ShopsToday();
+        return ResponseUtil.successResponse("오늘의 특가 리스트 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
+    }
+
+    // 카테고리별 매장 목록 조회
+    @GetMapping("/category/{categorySeq}/shop")
+    @Operation(
+            summary = "카테고리별 매장 목록 데이터 조회",
+            description = "카테고리별 매장 목록 데이터를 조회합니다."
     )
     public ApiResponse<?> readShopsByCategory(
             @PathVariable(value = "categorySeq") Long categorySeq,
@@ -34,7 +46,7 @@ public class ShopController {
     }
 
     // 매장 상세 정보 조회
-    @GetMapping("/{shopSeq}")
+    @GetMapping("/category/{categorySeq}/shop/{shopSeq}")
     @Operation(
             summary = "매장 상세 데이터 조회",
             description = "매장 상세 데이터를 조회합니다."
@@ -46,5 +58,4 @@ public class ShopController {
         ShopDetailReadResDTO shopDetailReadResDTO = shopService.readShopDetail(shopSeq);
         return ResponseUtil.successResponse("매장 상세 데이터가 성공적으로 조회되었습니다.", shopDetailReadResDTO).getBody();
     }
-
 }

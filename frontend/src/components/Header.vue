@@ -3,13 +3,13 @@
 </script>
 
 <template>
-  <header>
-    <div class="flex" id="content_box">
-      <div class="flex" id="text_box">
-        <div id="title">고루나 :</div>
-        <div id="sub_title"> 고루고루 나누어 주다.</div>
+  <header class="header">
+    <div class="flex content_box">
+      <div class="flex text_box">
+        <div class="title">고루나 :</div>
+        <div class="sub_title"> 고루고루 나누어 주다.</div>
       </div>
-      <div class="flex" id="icon_boxes">
+      <div class="flex icon_boxes">
         <div>
           <svg width="26" height="35" viewBox="0 0 26 35" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2.20656 34.7374C1.28505 35.3951 0 34.7418 0 33.6157V5.98771C0 2.68078 2.70259 0 6.03642 0H19.9636C23.2974 0 26 2.68078 26 5.98771V33.6157C26 34.7418 24.7149 35.3951 23.7935 34.7374L13 27.0346L2.20656 34.7374Z" fill="white"/>
@@ -32,36 +32,31 @@
 </template>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-  font-family: "Gowun Dodum";
-}
-
 .flex {
   display: flex;
 }
 
-header {
+.header {
   height: 115px;
   background-color: #633A02;
   color: #FFFFFF;
 }
 
-#content_box {
-  padding: 36px 45px 36px 92px;
+.content_box {
+  padding: 39px 45px 39px 92px;
   justify-content: space-between;
 }
 
-#text_box {
+.text_box {
   align-items: baseline;
 }
 
-#title {
+.title {
   font-size: 30px;
   margin-right: 7px;
 }
 
-#sub_title {
+.sub_title {
   font-size: 15px;
 }
 

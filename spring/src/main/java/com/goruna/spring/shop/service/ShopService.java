@@ -9,23 +9,43 @@ import com.goruna.spring.shop.dto.ShopListReadResDTO;
 import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequestMapping("/api/v1/category")
 @RequiredArgsConstructor
+@Slf4j
 public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
+
+    // 오늘의 특가 리스트 조회
+    public List<ShopListReadResDTO> readLatest5ShopsToday() {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        List<Product> shops = shopRepository.readLatest5ShopsToday(startOfDay, endOfDay);
+        return shops.stream()
+                .map(shop -> {
+                    ShopListReadResDTO shopListReadResDTO = modelMapper.map(shop, ShopListReadResDTO.class);
+                    shopListReadResDTO.setCategoryName(shop.getShop().getShopCategory().getCategoryName());
+                    return shopListReadResDTO;
+                })
+                .collect(Collectors.toList());
+    }
 
     // 카테고리 별 매장 목록 조회
     public List<ShopListReadResDTO> readShopsByCategory(Long categorySeq, Integer page) {
@@ -36,12 +56,10 @@ public class ShopService {
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        List<Shop> shops = shopRepository.readShopsByCategory(categorySeq, pageable);
+        List<Product> shops = shopRepository.readShopByCategorySeq(categorySeq, pageable);
         return shops.stream()
                 .map(shop -> {
-                    ShopListReadResDTO shopListReadResDTO = modelMapper.map(shop, ShopListReadResDTO.class);
-                    shopListReadResDTO.setCategoryName(shop.getShopCategory().getCategoryName()); // 카테고리 이름 추가
-                    return shopListReadResDTO;
+                    return modelMapper.map(shop, ShopListReadResDTO.class);
                 })
                 .collect(Collectors.toList());
     }
@@ -53,7 +71,11 @@ public class ShopService {
 
         Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
 
+        // 해당 매장의 리뷰 개수
+        int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
+
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
         shopDetailReadResDTO.setProductName(product.getProductName());
         shopDetailReadResDTO.setProductDescription(product.getProductDescription());
