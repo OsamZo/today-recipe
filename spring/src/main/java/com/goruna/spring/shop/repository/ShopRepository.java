@@ -1,6 +1,5 @@
 package com.goruna.spring.shop.repository;
 
-import com.goruna.spring.shop.dto.ShopDetailReadResDTO;
 import com.goruna.spring.shop.entity.Shop;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ShopRepository extends JpaRepository<Shop, Long> {
+public interface ShopRepository extends JpaRepository<Shop, Long>, ShopRepositoryCustom {
 
     @Query("SELECT s FROM Shop s WHERE s.shopCategory.categorySeq = :categorySeq AND s.shopApprStatus = 'Y' AND s.shopDelStatus = 'N'")
     List<Shop> readShopsByCategory(@Param("categorySeq") Long categorySeq, Pageable pageable);
