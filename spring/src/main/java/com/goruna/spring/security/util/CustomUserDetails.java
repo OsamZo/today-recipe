@@ -5,11 +5,11 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
-public class CustomUserDetails extends User{
+public class CustomSecurityUserDetails extends User{
 
     private final Long userSeq;
 
-    public CustomUserDetails(Long userSeq, String email, String passoword, List<GrantedAuthority> grantedAuthorities) {
+    public CustomSecurityUserDetails(Long userSeq, String email, String passoword, List<GrantedAuthority> grantedAuthorities) {
         super(email, passoword, grantedAuthorities);
         this.userSeq=userSeq;
     }
