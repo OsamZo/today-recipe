@@ -18,24 +18,26 @@ public class Book extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "book_seq", nullable = false)
+    @Column(name = "book_seq")
     private Long bookSeq;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userSeq", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_seq", nullable = false)
     private Product product;
 
     @Column(name = "book_qty", nullable = false)
     private int bookQty;
 
-    @Column(name = "book_is_product_received", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_is_product_received", nullable = false, length = 10)
     private YnType bookIsProductReceived = YnType.N;
 
-    @Column(name = "is_book_cancelled", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "is_book_cancelled", nullable = false, length = 10)
     private YnType isBookCancelled = YnType.N;
 
     @Builder

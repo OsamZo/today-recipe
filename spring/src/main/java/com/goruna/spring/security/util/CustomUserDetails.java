@@ -13,6 +13,7 @@ public class CustomUserDetails extends User{
         super(email, passoword, grantedAuthorities);
         this.userSeq=userSeq;
     }
+
     public Long getUserSeq() {
         return userSeq;
     }

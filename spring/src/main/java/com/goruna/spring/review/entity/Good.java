@@ -2,6 +2,7 @@ package com.goruna.spring.review.entity;
 
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,12 +16,19 @@ public class Good {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long goodSeq;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private User userSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq", nullable = false)
+    private User user;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Review reviewSeq;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_seq", nullable = false)
+    private Review review;
+
+    @Builder
+    public Good(User user, Review review){
+        this.user = user;
+        this.review = review;
+    }
 
 }

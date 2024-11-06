@@ -9,4 +9,6 @@ public interface ReviewRepositoryCustom {
     List<Review> findReviewsByUserSeq(Long userSeq);
 
     List<Review> findReviewsByShopId(Long shopId);
+
+    List<Review> findByShopSeq(Long shopSeq);
 }

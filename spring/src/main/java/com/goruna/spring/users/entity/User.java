@@ -2,6 +2,7 @@ package com.goruna.spring.users.entity;
 
 import com.goruna.spring.bookmark.entity.Bookmark;
 import com.goruna.spring.common.aggregate.UserRole;
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.review.entity.Good;
 import jakarta.persistence.*;
@@ -25,14 +26,15 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_email", nullable = false)
     private String userEmail;
 
-    @Column(name = "user_nickname", nullable = false)
+    @Column(name = "user_nickname", nullable = true)
     private String userNickname;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_deleted_status", nullable = false)
-    private boolean userDeletedStatus = false;
+    private YnType userDeletedStatus = YnType.N;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false)
+    @Column(name = "user_role", nullable = false, length = 10)
     private UserRole userRole = UserRole.USER;
 
     @Column(name = "user_deleted_time", nullable = true)
@@ -44,7 +46,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_usage_count", nullable = false)
     private int userUsageCount = 0;
 
-    @OneToMany(mappedBy = "userSeq")
+    @OneToMany(mappedBy = "user")
     private List<Good> goods;
 
     @OneToMany(mappedBy = "user")
