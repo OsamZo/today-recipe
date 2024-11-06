@@ -26,7 +26,6 @@ public class LoginService {
         if (!user.isPresent()) {
             UserRequestDto userRequestDto = new UserRequestDto();
             userRequestDto.setUserEmail(userEmail);
-            userRequestDto.setUserNickname("unKnown");
 
             User newUser = modelMapper.map(userRequestDto, User.class);
             userRepository.save(newUser);
