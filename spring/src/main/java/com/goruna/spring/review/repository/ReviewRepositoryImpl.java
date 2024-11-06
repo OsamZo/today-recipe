@@ -52,4 +52,18 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .groupBy(review.reviewSeq)
                 .fetch();
     }
+    @Override
+    public List<Review> findByShopSeq(Long shopSeq) {
+
+        List<Review> reviews = jpaQueryFactory
+                .selectFrom(review)
+                .join(review.book, book).fetchJoin()  // review.book에 접근이 가능한지 확인
+                .join(book.user, user).fetchJoin()    // 다음 단계에서 user에 접근이 가능한지 확인
+                .join(book.product, product).fetchJoin()
+                .join(product.shop, shop).fetchJoin()
+                .where(shop.shopSeq.eq(shopSeq))
+                .fetch();
+
+        return reviews;
+    }
 }
