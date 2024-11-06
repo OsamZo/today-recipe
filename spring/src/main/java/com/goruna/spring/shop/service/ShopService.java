@@ -36,12 +36,10 @@ public class ShopService {
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        List<Shop> shops = shopRepository.readShopsByCategory(categorySeq, pageable);
+        List<Product> shops = shopRepository.readShopByCategorySeq(categorySeq, pageable);
         return shops.stream()
                 .map(shop -> {
-                    ShopListReadResDTO shopListReadResDTO = modelMapper.map(shop, ShopListReadResDTO.class);
-                    shopListReadResDTO.setCategoryName(shop.getShopCategory().getCategoryName()); // 카테고리 이름 추가
-                    return shopListReadResDTO;
+                    return modelMapper.map(shop, ShopListReadResDTO.class);
                 })
                 .collect(Collectors.toList());
     }
