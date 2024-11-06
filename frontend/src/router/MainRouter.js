@@ -2,7 +2,7 @@ import MainPage from "@/views/main/MainPage.vue";
 
 export default [
     {
-        path: '/main',
+        path: '/',
         component: MainPage
     }
 ];
