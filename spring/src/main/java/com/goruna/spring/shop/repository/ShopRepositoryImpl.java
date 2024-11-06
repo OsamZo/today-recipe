@@ -86,4 +86,12 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .where(shop.user.userSeq.eq(currentUserSeq))
                 .fetchOne();
     }
+
+    @Override
+    public Shop findShopByUserSeq(Long userSeq) {
+        return jpaQueryFactory
+                .selectFrom(shop)
+                .where(shop.user.userSeq.eq(userSeq))
+                .fetchOne();
+    }
 }
