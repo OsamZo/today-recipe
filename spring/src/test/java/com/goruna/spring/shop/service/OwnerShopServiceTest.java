@@ -4,7 +4,6 @@ import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
-import com.goruna.spring.shop.repository.OwnerShopRepository;
 import com.goruna.spring.shop.repository.ShopRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
