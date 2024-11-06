@@ -36,12 +36,10 @@ public class ShopService {
         int pageSize = 6;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        List<Shop> shops = shopRepository.readShopsByCategory(categorySeq, pageable);
+        List<Product> shops = shopRepository.readShopByCategorySeq(categorySeq, pageable);
         return shops.stream()
                 .map(shop -> {
-                    ShopListReadResDTO shopListReadResDTO = modelMapper.map(shop, ShopListReadResDTO.class);
-                    shopListReadResDTO.setCategoryName(shop.getShopCategory().getCategoryName()); // 카테고리 이름 추가
-                    return shopListReadResDTO;
+                    return modelMapper.map(shop, ShopListReadResDTO.class);
                 })
                 .collect(Collectors.toList());
     }
@@ -53,7 +51,11 @@ public class ShopService {
 
         Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
 
+        // 해당 매장의 리뷰 개수
+        int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
+
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
         shopDetailReadResDTO.setProductName(product.getProductName());
         shopDetailReadResDTO.setProductDescription(product.getProductDescription());

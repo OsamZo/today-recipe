@@ -1,13 +1,14 @@
 <script setup>
+import './assets/css/reset.css';
 import Header from "@/components/Header.vue";
-import MainPage from "@/views/main/MainPage.vue";
 </script>
 
 <template>
-  <Header/>
-  <MainPage/>
+  <div>
+    <Header />
+    <router-view />
+  </div>
 </template>
 
 <style scoped>
-
 </style>
