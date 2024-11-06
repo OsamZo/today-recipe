@@ -7,7 +7,6 @@ import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.product.entity.Product;
 import com.goruna.spring.product.repository.ProductRepository;
-import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.shop.repository.ShopRepository;
 import com.goruna.spring.users.entity.User;
 import com.goruna.spring.users.repository.UserRepository;
