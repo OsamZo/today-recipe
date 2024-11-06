@@ -1,7 +1,12 @@
+import {createRouter, createWebHistory} from "vue-router";
 import MainRouter from "@/router/MainRouter.js";
 
+import AdminRouter from "@/router/AdminRouter.js"
+
 const routes = [
-    ...MainRouter
+    ...MainRouter,
+
+    ...AdminRouter
 ]
 
 const router = createRouter({
