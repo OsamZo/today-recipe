@@ -3,11 +3,11 @@ package com.goruna.spring.users.controller;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
 import com.goruna.spring.users.dto.NickNameRequestDto;
+import com.goruna.spring.users.dto.UserInfoRequestDto;
 import com.goruna.spring.users.dto.UserInfoResponse;
 import com.goruna.spring.users.service.UserInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +30,13 @@ public class UserController {
     @Operation(summary = "회원 정보 조회", description = "회원의 정보를 조회합니다.")
     public ApiResponse<?> getUserInfo(@PathVariable Long userSeq) {
         UserInfoResponse userInfoResponse = userInfoService.getUserInfo(userSeq);
-        return ResponseUtil.successResponse("회원이 성공적으로  조회되었습니다.",userInfoResponse).getBody();
+        return ResponseUtil.successResponse("회원이 성공적으로 조회되었습니다.",userInfoResponse).getBody();
+    }
+
+    @PutMapping("/{userSeq}/info")
+    @Operation(summary = "회원 정보 수정", description = "회원의 정보를 수정합니다.")
+    public ApiResponse<?> updateUserInfo(@PathVariable Long userSeq, @RequestBody UserInfoRequestDto userInfoRequestDto) {
+         userInfoService.updateUserInfo(userInfoRequestDto);
+        return ResponseUtil.successResponse("회원이 성공적으로 수정되었습니다.",userInfoRequestDto).getBody();
     }
 }
