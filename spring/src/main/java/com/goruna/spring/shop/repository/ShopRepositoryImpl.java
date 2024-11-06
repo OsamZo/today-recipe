@@ -45,5 +45,12 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(product.shop, shop).fetchJoin()
                 .where(shop.shopSeq.eq(shopSeq))
                 .fetchCount();
+      
+    @Override
+    public Shop getUserShopStatus(Long currentUserSeq) {
+        return jpaQueryFactory
+                .selectFrom(shop)
+                .where(shop.user.userSeq.eq(currentUserSeq))
+                .fetchOne();
     }
 }
