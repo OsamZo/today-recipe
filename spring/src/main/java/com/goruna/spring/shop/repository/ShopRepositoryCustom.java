@@ -13,4 +13,6 @@ public interface ShopRepositoryCustom {
     Long countReviewsByShopSeq(Long shopSeq);
   
     Shop getUserShopStatus(Long currentUserSeq);
+
+    Shop findShopByUserSeq(Long userSeq);
 }
