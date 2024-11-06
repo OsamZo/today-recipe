@@ -50,10 +50,6 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .orderBy(product.regDate.desc())
                 .limit(5)
                 .fetch();
-
-
-
-
     }
 
     // 카테고리별 매장 리스트 조회
@@ -73,7 +69,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 
     // 매장별 리뷰 개수 카운트
     @Override
-    public Long countReviewsByShopSeq(Long shopSeq){
+    public Long countReviewsByShopSeq(Long shopSeq) {
         return jpaQueryFactory
                 .selectFrom(review)
                 .join(review.book, book).fetchJoin()
@@ -81,5 +77,13 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(product.shop, shop).fetchJoin()
                 .where(shop.shopSeq.eq(shopSeq))
                 .fetchCount();
+    }
+      
+    @Override
+    public Shop getUserShopStatus(Long currentUserSeq) {
+        return jpaQueryFactory
+                .selectFrom(shop)
+                .where(shop.user.userSeq.eq(currentUserSeq))
+                .fetchOne();
     }
 }
