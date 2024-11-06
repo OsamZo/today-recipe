@@ -27,7 +27,7 @@
               <div class="category_name">베이커리</div>
             </div>
             <div>
-              <img src="@/assets/example.png">
+              <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg">
             </div>
             <div class="price_box">
               <div class="sale_price_title">할인가</div>
@@ -48,7 +48,7 @@
               <div class="category_name">베이커리</div>
             </div>
             <div>
-              <img src="@/assets/example.png">
+              <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg">
             </div>
             <div class="price_box">
               <div class="sale_price_title">할인가</div>
@@ -69,7 +69,7 @@
               <div class="category_name">베이커리</div>
             </div>
             <div>
-              <img src="@/assets/example.png">
+              <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg">
             </div>
             <div class="price_box">
               <div class="sale_price_title">할인가</div>
@@ -90,7 +90,7 @@
               <div class="category_name">베이커리</div>
             </div>
             <div>
-              <img src="@/assets/example.png">
+              <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg">
             </div>
             <div class="price_box">
               <div class="sale_price_title">할인가</div>
@@ -111,7 +111,7 @@
               <div class="category_name">베이커리</div>
             </div>
             <div>
-              <img src="@/assets/example.png">
+              <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg">
             </div>
             <div class="price_box">
               <div class="sale_price_title">할인가</div>
