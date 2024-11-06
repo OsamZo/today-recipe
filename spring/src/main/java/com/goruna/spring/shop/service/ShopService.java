@@ -51,7 +51,11 @@ public class ShopService {
 
         Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
 
+        // 해당 매장의 리뷰 개수
+        int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
+
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
         shopDetailReadResDTO.setProductName(product.getProductName());
         shopDetailReadResDTO.setProductDescription(product.getProductDescription());

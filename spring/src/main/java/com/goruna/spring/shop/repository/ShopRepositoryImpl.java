@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.goruna.spring.book.entity.QBook.book;
 import static com.goruna.spring.product.entity.QProduct.product;
+import static com.goruna.spring.review.entity.QReview.review;
 import static com.goruna.spring.shop.entity.QShop.shop;
 import static com.goruna.spring.shop.entity.QShopCategory.shopCategory;
 
@@ -26,5 +28,16 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(shop.shopCategory, shopCategory).fetchJoin()
                 .where(shopCategory.categorySeq.eq(categorySeq))
                 .fetch();
+    }
+
+    @Override
+    public Long countReviewsByShopSeq(Long shopSeq){
+        return jpaQueryFactory
+                .selectFrom(review)
+                .join(review.book, book).fetchJoin()
+                .join(book.product, product).fetchJoin()
+                .join(product.shop, shop).fetchJoin()
+                .where(shop.shopSeq.eq(shopSeq))
+                .fetchCount();
     }
 }

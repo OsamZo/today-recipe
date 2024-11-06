@@ -13,6 +13,8 @@ public class ShopDetailReadResDTO {
 
     private String shopName;
 
+    private int shopReviewCount;
+
     private LocalDateTime productClosedAt;
 
     private String shopAddress;

@@ -8,4 +8,6 @@ import java.util.List;
 public interface ShopRepositoryCustom {
 
     List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable);
+
+    Long countReviewsByShopSeq(Long shopSeq);
 }
