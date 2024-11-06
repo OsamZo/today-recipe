@@ -1,4 +1,5 @@
 <script setup>
+import './assets/css/reset.css';
 import Header from "@/components/Header.vue";
 import MainPage from "@/views/main/MainPage.vue";
 </script>
@@ -9,5 +10,4 @@ import MainPage from "@/views/main/MainPage.vue";
 </template>
 
 <style scoped>
-
 </style>
