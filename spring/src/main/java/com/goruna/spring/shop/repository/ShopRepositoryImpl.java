@@ -2,6 +2,7 @@ package com.goruna.spring.shop.repository;
 
 import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.product.entity.Product;
+import com.goruna.spring.shop.entity.Shop;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
     }
 
     @Override
-    public Long countReviewsByShopSeq(Long shopSeq){
+    public Long countReviewsByShopSeq(Long shopSeq) {
         return jpaQueryFactory
                 .selectFrom(review)
                 .join(review.book, book).fetchJoin()
@@ -45,6 +46,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(product.shop, shop).fetchJoin()
                 .where(shop.shopSeq.eq(shopSeq))
                 .fetchCount();
+    }
       
     @Override
     public Shop getUserShopStatus(Long currentUserSeq) {
