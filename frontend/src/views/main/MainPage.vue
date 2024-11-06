@@ -188,7 +188,6 @@ import '@/assets/css/reset.css';
   font-size: 20px;
   width: 158px;
   margin: 15px auto;
-
 }
 
 .price_text_box {
