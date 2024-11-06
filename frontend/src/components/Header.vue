@@ -32,11 +32,6 @@
 </template>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-  font-family: "Gowun Dodum";
-}
-
 .flex {
   display: flex;
 }
@@ -48,7 +43,7 @@ header {
 }
 
 #content_box {
-  padding: 36px 45px 36px 92px;
+  padding: 39px 45px 39px 92px;
   justify-content: space-between;
 }
 
