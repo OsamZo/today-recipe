@@ -5,6 +5,7 @@ import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
 import com.goruna.spring.shop.repository.OwnerShopRepository;
+import com.goruna.spring.shop.repository.ShopRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ class OwnerShopServiceTest {
     private OwnerShopService ownerShopService;
 
     @Autowired
-    private OwnerShopRepository ownerShopRepository;
+    private ShopRepository shopRepository;
 
     @Transactional
     @DisplayName("(사장) 매장 수정 테스트")
@@ -39,7 +40,7 @@ class OwnerShopServiceTest {
         ownerShopService.updateShopInfo(shopSeq, updateShopInfoDTO);
 
         // then
-        Shop updatedShop = ownerShopRepository.findById(shopSeq)
+        Shop updatedShop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new AssertionError("Shop not found"));
 
         assertEquals("업데이트된 맛집", updatedShop.getShopName());
