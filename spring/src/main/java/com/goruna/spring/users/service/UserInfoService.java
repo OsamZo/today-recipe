@@ -26,6 +26,7 @@ public class UserInfoService {
         userRepository.save(user);
     }
 
+    @Transactional
     public UserInfoResponse getUserInfo(Long userSeq) {
         User user = userRepository.getUserInfo(CustomUserUtils.getCurrentUserSeq());
         return modelMapper.map(user, UserInfoResponse.class);
