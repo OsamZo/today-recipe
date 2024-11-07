@@ -1,5 +1,31 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import '@/assets/css/reset.css';
+
+const { VITE_KAKAO_MAP_KEY } = import.meta.env;
+const map = ref(null);
+
+onMounted(() => {
+  loadKakaoMap(map.value);
+})
+
+const loadKakaoMap = (container) => {
+  const script = document.createElement('script');
+  script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${VITE_KAKAO_MAP_KEY}&autoload=false`;
+  document.head.appendChild(script);
+
+  script.onload = () => {
+    window.kakao.maps.load(() => {
+      const options = {
+        center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3,
+        maxLevel: 5,
+      }
+
+      const mapInstance = new window.kakao.maps.Map(container, options);
+    })
+  }
+}
 </script>
 
 <template>
@@ -128,7 +154,7 @@ import '@/assets/css/reset.css';
       </div>
       <div>
         <div class="section_title">가까운 매장 찾기</div>
-        <div class="map"></div>
+        <div class="map" ref="map"></div>
       </div>
     </div>
   </article>
@@ -222,7 +248,8 @@ import '@/assets/css/reset.css';
 }
 
 .map {
-  width: 1193px;
-  height: 500px;
+  width: 100%;
+  height: 560px;
+  margin-top: 36px;
 }
 </style>
