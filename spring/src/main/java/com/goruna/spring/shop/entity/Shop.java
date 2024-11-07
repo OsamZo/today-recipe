@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "shop")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SQLDelete(sql = "UPDATE shop SET shop_del_status = 'N', mod_date = NOW() WHERE shop_seq = ?")
+@SQLDelete(sql = "UPDATE shop SET shop_del_status = 'Y', mod_date = NOW() WHERE shop_seq = ?")
 public class Shop extends BaseTimeEntity {
 
     @Id
@@ -24,11 +24,11 @@ public class Shop extends BaseTimeEntity {
     private Long shopSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userSeq", nullable = false)
+    @JoinColumn(name = "user_seq", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categorySeq", nullable = false)
+    @JoinColumn(name = "category_seq", nullable = false)
     private ShopCategory shopCategory;
 
     @Column(name = "shop_name", nullable = false)
