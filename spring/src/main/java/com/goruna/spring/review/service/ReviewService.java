@@ -47,7 +47,6 @@ public class ReviewService {
         return reviews.stream()
                 .map(review -> new ReviewUserReadResDTO(
                         review.getBook().getProduct().getShop().getShopName(),
-                        review.getBook().getBookSeq(),
                         review.getBook().getUser().getUserNickname(),
                         review.getReviewContent(),
                         review.getRegDate(),
@@ -67,7 +66,8 @@ public class ReviewService {
                         review.getBook().getUser().getUserNickname(),
                         review.getRegDate(),
                         review.getReviewContent(),
-                        review.getGoods().size()
+                        review.getGoods().size(),
+                        review.getBook().getBookSeq()
                 ))
                 .collect(Collectors.toList());
     }
