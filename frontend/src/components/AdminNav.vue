@@ -13,7 +13,7 @@
         리뷰 관리
       </router-link>
       <br><br>
-      <router-link to="/category" class="category">
+      <router-link to="/admin/shopCategory" class="category">
         카테고리 관리
       </router-link>
     </div>
