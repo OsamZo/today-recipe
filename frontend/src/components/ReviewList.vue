@@ -7,9 +7,9 @@
                     <span class="review-date">{{ review.regDate }}</span>
                 </div>
                 <div class="review-actions">
-                    <button class="action-btn gray-btn">수정</button>
-                    <button class="action-btn gray-btn">삭제</button>
-                    <button class="action-btn like-btn">
+                    <!-- <button class="action-btn gray-btn">수정</button>
+                    <button class="action-btn gray-btn">삭제</button> -->
+                    <button @click="toggleLike(review)" class="action-btn like-btn">
                         ❤️ <span class="like-count">{{ review.likeCount }}</span>
                     </button>
                 </div>
@@ -20,12 +20,29 @@
 </template>
 
 <script>
+import { useReviewStore } from '@/store/ReviewStore';
+
 export default {
     props: {
         reviews: {
             type: Array,
             required: true
         }
+    },
+    setup() {
+        const reviewStore = useReviewStore();
+
+        const toggleLike = (review) => {
+            if (review.isLiked) {
+                reviewStore.deleteLike(review.shopSeq, review.goodSeq, review.reviewSeq);
+            } else {
+                reviewStore.addLike(review.userSeq, review.reviewSeq, review.shopSeq);
+            }
+        };
+
+        return {
+            toggleLike
+        };
     }
 };
 </script>
