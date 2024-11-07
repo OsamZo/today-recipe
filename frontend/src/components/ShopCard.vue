@@ -38,7 +38,7 @@ export default {
 
 .shop-image {
   width: 200px; /* 이미지의 고정 크기 */
-  height: auto;
+  height: 200px;
   border-radius: 8px;
   margin-bottom: 10px;
 }
@@ -50,6 +50,7 @@ export default {
   flex-wrap: nowrap; /* 줄바꿈 방지 */
   width: 100%; /* 컨테이너 전체 너비 */
   margin-top: 10px;
+  padding-bottom: 50px;
 }
 
 .shop-title {
