@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { fetchReviewsByShopSeq, createReview } from '@/api/review/ReviewApi';
+import { fetchShopCardBySeq } from '@/api/shop/ShopReadApi';
 
 export const useReviewStore = defineStore('reviewStore', {
     state: () => ({
@@ -11,18 +12,29 @@ export const useReviewStore = defineStore('reviewStore', {
         bookSeq: null // bookSeq 상태 추가
     }),
     actions: {
+        async loadShopData(shopSeq) {
+            try {
+                const shopInfo = await fetchShopCardBySeq(shopSeq);
+                this.shopData = shopInfo;
+
+                // 로컬 스토리지에 저장
+                localStorage.setItem('shopData', JSON.stringify(this.shopData));
+            } catch (error) {
+                console.error('스토어에서 매장 데이터를 로드하는 중 오류 발생:', error);
+            }
+        },
         async loadReviews(shopSeq) {
             try {
                 const response = await fetchReviewsByShopSeq(shopSeq);
                 this.reviews = response;
 
-                if (this.reviews.length > 0) {
-                    const { shopImgUrl, shopName, bookSeq } = this.reviews[0];
-                    this.shopData = { shopImgUrl, shopName };
-                    this.bookSeq = bookSeq; // bookSeq 저장
-
-                    localStorage.setItem('shopData', JSON.stringify(this.shopData));
+                if (response.length > 0) {
+                    const { bookSeq } = response[0];
+                    this.bookSeq = bookSeq;
                 }
+
+                // 로컬 스토리지에 저장
+                localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
                 console.error('스토어에서 리뷰 데이터를 로드하는 중 오류 발생:', error);
             }
@@ -36,12 +48,10 @@ export const useReviewStore = defineStore('reviewStore', {
                     throw new Error('bookSeq가 설정되지 않았습니다.');
                 }
 
-                // 리뷰 데이터를 준비
                 const reviewData = {
                     reviewContent
                 };
 
-                // 리뷰 추가 API 호출
                 const response = await createReview(userSeq, this.bookSeq, reviewData);
                 console.log('리뷰가 성공적으로 추가되었습니다:', response);
 
@@ -55,6 +65,9 @@ export const useReviewStore = defineStore('reviewStore', {
                     likeCount: 0,
                     bookSeq: this.bookSeq
                 });
+
+                // 로컬 스토리지에 업데이트된 리뷰 저장
+                localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
                 console.error('리뷰 추가 중 오류 발생:', error);
             }
