@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReviewShopReadResDTO {
 
-    private String shopImgUrl;
-    private String shopName;
     private String userNickname;
     private LocalDateTime regDate;
     private String reviewContent;
