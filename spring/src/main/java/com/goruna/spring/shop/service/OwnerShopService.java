@@ -6,7 +6,7 @@ import com.goruna.spring.common.util.CustomUserUtils;
 import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
-import com.goruna.spring.shop.repository.OwnerShopRepository;
+import com.goruna.spring.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OwnerShopService {
 
-    private final OwnerShopRepository ownerShopRepository;
+    private final ShopRepository ShopRepository;
     private final ModelMapper modelMapper;
 
     // 내 매장 정보 수정
     @Transactional
     public void updateShopInfo(Long shopSeq, UpdateShopInfoDTO updateShopInfoDTO) {
 
-        Shop shopInfo = ownerShopRepository.findById(shopSeq)
+        Shop shopInfo = ShopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
 
         modelMapper.map(updateShopInfoDTO, shopInfo);
@@ -33,7 +33,7 @@ public class OwnerShopService {
     @Transactional
     public void deleteShop(Long shopSeq) {
 
-        ownerShopRepository.deleteById(shopSeq);
+        ShopRepository.deleteById(shopSeq);
     }
 
     // 내 매장 정보 조회
@@ -41,7 +41,7 @@ public class OwnerShopService {
     public OnwerShopInfoResDTO getOnwerShopInfo() {
 
         Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
-        Shop shop = ownerShopRepository.findById(userSeq)
+        Shop shop = ShopRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
     }

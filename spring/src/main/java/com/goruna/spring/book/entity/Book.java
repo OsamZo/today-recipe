@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Book extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "book_seq")
     private Long bookSeq;
 

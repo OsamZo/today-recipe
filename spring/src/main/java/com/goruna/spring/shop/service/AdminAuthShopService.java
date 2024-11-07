@@ -54,7 +54,9 @@ public class AdminAuthShopService {
     }
 
     // 매장 등록 인증 권한 수정
+    @Transactional
     public AdminAuthShopResponseDTO updateAuth(Long shopSeq, ShopApprStatus shopApprStatus) {
+
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
