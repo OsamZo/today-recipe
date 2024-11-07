@@ -1,8 +1,8 @@
 <template>
   <div class="shop-card">
-      <img src="https://goruna.s3.us-west-1.amazonaws.com/94ed28ca-02d8-4793-9b08-765e355b0fd2_%EB%A3%A8%ED%94%BC.jpg" alt="가게 사진" class="shop-image" />
+      <img :src="shopImgUrl" alt="가게 사진" class="shop-image" />
       <div class="title-container">
-        <p class="shop-title">쿠키집</p>
+        <p class="shop-title">{{ shopName }}</p>
         <slot name="action"></slot> <!-- 액션 슬롯 -->
       </div>
   </div>
@@ -10,7 +10,17 @@
 
 <script>
 export default {
-  name: 'ShopCard'
+  name: 'ShopCard',
+  props: {
+    shopImgUrl: {
+      type: String,
+      required: true
+    },
+    shopName: {
+      type: String,
+      required: true
+    }
+  }
 };
 </script>
 
