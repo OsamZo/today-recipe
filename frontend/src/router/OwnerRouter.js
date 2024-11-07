@@ -4,5 +4,5 @@ export default [
     {
         path: '/owner',
         component: OwnerMyPage
-    },
+    }
 ];
