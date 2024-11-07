@@ -2,7 +2,7 @@
 import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
 import {ref} from "vue";
-import ReviewPage from "@/views/reivew/ReviewPage.vue";
+import ReviewPage from "@/views/review/ReviewReadPage.vue";
 
 const selectedMenu = ref('userInfo');
 

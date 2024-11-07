@@ -13,4 +13,5 @@ public class ReviewShopReadResDTO {
     private LocalDateTime regDate;
     private String reviewContent;
     private int likeCount;
+    private Long bookSeq;
 }

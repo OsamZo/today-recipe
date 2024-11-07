@@ -2,7 +2,7 @@
 import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
 import {ref} from "vue";
-import ReviewPage from "@/views/reivew/ReviewPage.vue";
+import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 
