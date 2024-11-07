@@ -5,7 +5,7 @@
       :shopName="shopData.shopName"
     >
       <template v-slot:action>
-        <button class="review-button">리뷰 작성</button>
+        <button class="review-button" @click="goToReviewAdd">리뷰 작성</button>
       </template>
     </ShopCard>
     <div class="separator"></div>
@@ -16,6 +16,7 @@
 <script>
 import { useReviewStore } from '@/store/ReviewStore';
 import { onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import ShopCard from '@/components/ShopCard.vue';
 import ReviewList from '@/components/ReviewList.vue';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
@@ -28,6 +29,7 @@ export default {
   },
   setup() {
     const reviewStore = useReviewStore();
+    const router = useRouter(); // Vue Router 사용
 
     onMounted(() => {
       reviewStore.loadReviews(1);
@@ -47,9 +49,15 @@ export default {
       };
     });
 
+    // 리뷰 작성 페이지로 이동하는 함수
+    const goToReviewAdd = () => {
+      router.push('/review/add');
+    };
+
     return {
       reviews,
-      shopData
+      shopData,
+      goToReviewAdd
     };
   }
 };
