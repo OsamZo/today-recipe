@@ -1,7 +1,8 @@
 package com.goruna.spring.review.service;
 
+import com.goruna.spring.review.dto.GoodDeleteResDTO;
 import com.goruna.spring.review.dto.GoodRequestDTO;
-import com.goruna.spring.review.dto.GoodResponseDTO;
+import com.goruna.spring.review.dto.GoodCreateResDTO;
 import com.goruna.spring.review.entity.Good;
 import com.goruna.spring.review.entity.Review;
 import com.goruna.spring.review.repository.GoodRepository;
@@ -24,7 +25,7 @@ public class GoodService {
 
     /* 좋아요 추가 */
     @Transactional
-    public GoodResponseDTO createGood(GoodRequestDTO requestDTO) {
+    public GoodCreateResDTO createGood(GoodRequestDTO requestDTO) {
 
         Review review = reviewRepository.findById(requestDTO.getReviewSeq())
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
@@ -38,13 +39,17 @@ public class GoodService {
                 .build();
         goodRepository.save(good);
 
-        return modelMapper.map(good, GoodResponseDTO.class);
+        return modelMapper.map(good, GoodCreateResDTO.class);
     }
 
     /* 좋아요 삭제 */
     @Transactional
-    public void deleteGood(Long goodSeq) {
+    public GoodDeleteResDTO deleteGood(Long goodSeq) {
+        Good good = goodRepository.findById(goodSeq)
+                .orElseThrow(() -> new IllegalArgumentException("Good not found"));
 
-        goodRepository.deleteById(goodSeq);
+        goodRepository.delete(good);
+
+        return new GoodDeleteResDTO(good.getIsClicked());
     }
 }
