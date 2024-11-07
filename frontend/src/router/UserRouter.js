@@ -1,5 +1,6 @@
 import UserMyPage from "@/views/user/UserMyPage.vue";
 import LoginPage from "@/views/user/LoginPage.vue";
+import LoginUserNickName from "@/views/user/LoginUserNickName.vue";
 
 export default [
     {
@@ -9,5 +10,9 @@ export default [
     {
         path: '/login',
         component: LoginPage
+    },
+    {
+        path: '/nickname',
+        component: LoginUserNickName
     }
 ];
