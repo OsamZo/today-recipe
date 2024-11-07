@@ -3,18 +3,17 @@
         <ShopCard
             :shopImgUrl="shopData.shopImgUrl"
             :shopName="shopData.shopName"
-        >
-        </ShopCard>
+        />
         <div class="review-input-container">
-            <textarea class="review-textarea" placeholder="리뷰를 작성해주세요..."></textarea>
+            <textarea v-model="reviewContent" class="review-textarea" placeholder="리뷰를 작성해주세요..."></textarea>
         </div>
-        <button class="save-button">저장하기</button>
+        <button class="save-button" @click="saveReview">저장하기</button>
     </ReviewPageContent>
 </template>
 
 <script>
 import { useReviewStore } from '@/store/ReviewStore';
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
 import ShopCard from '@/components/ShopCard.vue';
 
@@ -25,16 +24,36 @@ export default {
     },
     setup() {
         const reviewStore = useReviewStore();
+        const reviewContent = ref(''); // 리뷰 내용을 바인딩할 변수
 
         onMounted(() => {
-            reviewStore.loadShopData(1); // 가게 정보를 가져오는 새로운 메서드
+            reviewStore.loadShopData(1); // 가게 정보를 가져오는 메서드 호출
         });
 
-        // 스토어에서 가져온 shopData를 사용
         const shopData = computed(() => reviewStore.shopData || { shopImgUrl: '', shopName: '' });
 
+        const saveReview = () => {
+            const userSeq = 1; // 예제 사용자 ID, 실제 앱에서는 로그인된 사용자 ID를 가져와야 함
+            if (reviewContent.value.trim() === '') {
+                alert('리뷰 내용을 입력해주세요.');
+                return;
+            }
+            // ReviewStore의 createReview 액션 호출
+            reviewStore.createReview(userSeq, reviewContent.value)
+                .then(() => {
+                    alert('리뷰가 성공적으로 등록되었습니다.');
+                    reviewContent.value = ''; // 입력 필드 초기화
+                })
+                .catch((error) => {
+                    console.error('리뷰 저장 중 오류 발생:', error);
+                    alert('리뷰 저장 중 문제가 발생했습니다.');
+                });
+        };
+
         return {
-            shopData
+            shopData,
+            reviewContent,
+            saveReview
         };
     }
 };
