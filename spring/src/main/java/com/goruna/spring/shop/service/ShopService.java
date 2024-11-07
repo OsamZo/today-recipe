@@ -69,7 +69,10 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
-        Product product = productRepository.findFirstByShop_ShopSeqOrderByRegDateDesc(shopSeq);
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        Product product = productRepository.readLatestProductToday(shopSeq, startOfDay, endOfDay);
 
         // 해당 매장의 리뷰 개수
         int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
