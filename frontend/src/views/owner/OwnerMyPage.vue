@@ -3,6 +3,7 @@ import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
 import {ref} from "vue";
 import ReviewPage from "@/views/reivew/ReviewPage.vue";
+import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 
 const selectedMenu = ref('userInfo');
 
@@ -29,14 +30,21 @@ const selectMenu = (menu) => {
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'ReviewPage' }"
-              @click="selectMenu('friends')">
+              @click="selectMenu('ReviewPage')">
             예약 내역
+          </div>
+          <div
+              class="menu-button"
+              :class="{ 'active': selectedMenu === 'OwnerBookList' }"
+              @click="selectMenu('OwnerBookList')">
+            예약 정보 확인
           </div>
         </div>
 
         <div class="menu-content">
           <UserInfo v-if="selectedMenu === 'userInfo'" />
           <ReviewPage v-else-if="selectedMenu === 'ReviewPage'" />
+          <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'" />
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>
       </div>
