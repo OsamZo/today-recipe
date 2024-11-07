@@ -1,5 +1,6 @@
 package com.goruna.spring.review.entity;
 
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.users.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -24,6 +25,10 @@ public class Good {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_seq", nullable = false)
     private Review review;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private YnType isClicked = YnType.N;
 
     @Builder
     public Good(User user, Review review){
