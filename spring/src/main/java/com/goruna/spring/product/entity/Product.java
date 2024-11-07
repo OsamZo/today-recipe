@@ -45,4 +45,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_img_url", nullable = true)
     private String productImgUrl;
 
+    public void updateProductQty(int productQty) {
+        this.productQty = productQty;
+    }
 }
