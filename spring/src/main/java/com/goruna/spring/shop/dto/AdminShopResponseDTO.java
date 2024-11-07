@@ -1,8 +1,7 @@
 package com.goruna.spring.shop.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.goruna.spring.common.aggregate.ShopApprStatus;
+import com.goruna.spring.common.aggregate.YnType;
 import lombok.*;
 
 @Getter
@@ -18,5 +17,6 @@ public class AdminShopResponseDTO {
     private String categoryName;
     private String shopAddress;
     private String shopImgUrl;
-
+    private ShopApprStatus shopApprStatus;
+    private YnType shopDelStatus;
 }
