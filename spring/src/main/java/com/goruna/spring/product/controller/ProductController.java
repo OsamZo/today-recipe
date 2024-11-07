@@ -2,6 +2,7 @@ package com.goruna.spring.product.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.product.dto.CurrentProductResDTO;
 import com.goruna.spring.product.service.ProductService;
 import com.goruna.spring.product.dto.CreateProductReqDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,5 +23,12 @@ public class ProductController {
     public ApiResponse<?> createProduct(@RequestBody CreateProductReqDTO createProductReqDTO) {
         productService.createProductInfo(createProductReqDTO);
         return ResponseUtil.successResponse("데이터를 성공적으로 등록하였습니다.").getBody();
+    }
+
+    @GetMapping("/product")
+    @Operation(summary = "(사장) 상품 정보 조회", description = "(사장) 상품 정보를 조회합니다.")
+    public ApiResponse<?> getCurrentProduct() {
+        CurrentProductResDTO currentProductResDTO = productService.getCurrentProduct();
+        return ResponseUtil.successResponse("데이터를 성공적으로 조회하였습니다.", currentProductResDTO).getBody();
     }
 }

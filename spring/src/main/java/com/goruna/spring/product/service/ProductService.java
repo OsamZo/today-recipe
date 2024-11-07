@@ -2,6 +2,7 @@ package com.goruna.spring.product.service;
 
 import com.goruna.spring.common.util.CustomUserUtils;
 import com.goruna.spring.product.dto.CreateProductReqDTO;
+import com.goruna.spring.product.dto.CurrentProductResDTO;
 import com.goruna.spring.product.entity.Product;
 import com.goruna.spring.product.repository.ProductRepository;
 import com.goruna.spring.shop.entity.Shop;
@@ -31,5 +32,14 @@ public class ProductService {
         Product product = modelMapper.map(createProductReqDTO, Product.class);
 
         productRepository.save(product);
+    }
+
+    public CurrentProductResDTO getCurrentProduct() {
+
+        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
+        Product currentProduct = productRepository.findCurrentProductByUserSeq(userSeq);
+
+        CurrentProductResDTO productResDTO = modelMapper.map(currentProduct, CurrentProductResDTO.class);
+        return productResDTO;
     }
 }
