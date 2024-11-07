@@ -30,15 +30,12 @@ export default {
     const reviewStore = useReviewStore();
 
     onMounted(() => {
-      reviewStore.loadReviews(1); // shopSeq 값이 올바른지 확인
-      console.log('Reviews after loading:', reviews.value); // 데이터 확인
+      reviewStore.loadReviews(1);
     });
 
-    // 스토어에서 데이터를 가져오기
     const reviews = computed(() => reviewStore.reviews);
     const shopData = computed(() => {
       if (reviews.value.length > 0) {
-        // 첫 번째 리뷰에서 가게 정보를 가져온다고 가정
         return {
           shopImgUrl: reviews.value[0].shopImgUrl,
           shopName: reviews.value[0].shopName
@@ -60,25 +57,25 @@ export default {
 
 <style scoped>
 .review-button {
-  background-color: #8B4513; /* 갈색 배경 */
+  background-color: #8B4513; 
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 5px 15px; /* 패딩 조정 */
+  padding: 5px 15px; 
   cursor: pointer;
-  margin-left: 40px; /* 위치 조정 */
-  font-size: 20px; /* 가게 이름의 크기와 동일하게 설정 */
+  margin-left: 40px;
+  font-size: 20px; 
 }
 
 .review-button:hover {
-  background-color: #a0522d; /* hover 시 색상 변경 */
+  background-color: #a0522d;
 }
 
 .separator {
   width: 100%; 
   height: 5px;
   background-color: #8B4513;
-  margin-top: 150px; 
+  margin-top: 200px; 
   margin-bottom: 20px; 
   border-radius: 5px;
 }

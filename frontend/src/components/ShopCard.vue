@@ -30,14 +30,14 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  width: auto; /* 너비 제한 해제 */
+  width: auto; 
   top: -100px;
   position: absolute;
   z-index: 1;
 }
 
 .shop-image {
-  width: 200px; /* 이미지의 고정 크기 */
+  width: 200px; 
   height: 200px;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -45,24 +45,23 @@ export default {
 
 .title-container {
   display: flex;
-  align-items: center; /* 가로로 정렬 */
+  align-items: center; 
   justify-content: space-between;
-  flex-wrap: nowrap; /* 줄바꿈 방지 */
-  width: 100%; /* 컨테이너 전체 너비 */
+  flex-wrap: nowrap; 
+  width: 100%; 
   margin-top: 10px;
-  padding-bottom: 50px;
 }
 
 .shop-title {
-  font-size: 40px; /* 가게 이름 크기 */
+  font-size: 40px; 
   text-align: left;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  margin-right: 10px; /* 버튼과 간격 조정 */
+  white-space: nowrap; 
+  margin-right: 10px;
 }
 
 .review-button {
-  font-size: 40px; /* 가게 이름 크기와 동일하게 설정 */
-  background-color: #8B4513; /* 갈색 배경 */
+  font-size: 40px;
+  background-color: #8B4513;
   color: white;
   border: none;
   border-radius: 5px;
@@ -71,6 +70,6 @@ export default {
 }
 
 .review-button:hover {
-  background-color: #a0522d; /* hover 시 색상 변경 */
+  background-color: #a0522d; 
 }
 </style>

@@ -74,16 +74,16 @@ export default {
     text-decoration: underline;
 }
 .gray-btn {
-    color: #888; /* 회색 */
+    color: #888; 
 }
 .like-btn {
-    color: #e63946; /* 하트 모양의 빨간색 */
+    color: #e63946; 
     display: flex;
     align-items: center;
     text-decoration: none;
 }
 .like-btn:hover {
-    text-decoration: none; /* 좋아요 버튼에 언더라인 제거 */
+    text-decoration: none; 
 }
 .like-count {
     margin-left: 5px;
