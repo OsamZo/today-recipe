@@ -118,7 +118,8 @@ onMounted(() => {
 }
 
 .main_article {
-  width: 1193px;
+  width: 90%;
+  max-width: 1193px;
   margin: 126px auto;
 }
 
@@ -173,11 +174,13 @@ onMounted(() => {
   color: var(--text-red);
   font-size: 20px;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .original_price_box {
   position: relative;
   top: -8px;
+  white-space: nowrap;
 }
 
 .original_price_box * {
@@ -187,7 +190,6 @@ onMounted(() => {
 .original_price {
   font-size: 15px;
   width: 48px;
-
   margin-left: 10px;
 }
 
