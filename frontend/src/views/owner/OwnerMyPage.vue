@@ -4,6 +4,7 @@ import UserInfo from "@/views/user/UserInfo.vue";
 import {ref} from "vue";
 import ReviewPage from "@/views/reivew/ReviewPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
+import ShopInfo from "@/views/owner/ShopInfo.vue";
 
 const selectedMenu = ref('userInfo');
 
@@ -25,26 +26,49 @@ const selectMenu = (menu) => {
               class="menu-button"
               :class="{ 'active': selectedMenu === 'userInfo' }"
               @click="selectMenu('userInfo')">
-            개인 정보 조회
+            회원 정보 조회
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === 'ReviewPage' }"
-              @click="selectMenu('ReviewPage')">
+              :class="{ 'active': selectedMenu === '예약 내역' }"
+              @click="selectMenu('예약 내역')">
             예약 내역
           </div>
+          <div
+              class="menu-button"
+              :class="{ 'active': selectedMenu === '나의 이용 내역' }"
+              @click="selectMenu('나의 이용 내역')">
+            나의 이용 내역
+          </div>
+
+          <br>
+
+          <div class="user-info">내 정보</div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerBookList' }"
               @click="selectMenu('OwnerBookList')">
             예약 정보 확인
           </div>
+          <div
+              class="menu-button"
+              :class="{ 'active': selectedMenu === 'ShopInfo' }"
+              @click="selectMenu('ShopInfo')">
+            매장 정보
+          </div>
+          <div
+              class="menu-button"
+              :class="{ 'active': selectedMenu === '매장 관리' }"
+              @click="selectMenu('매장 관리')">
+            매장 관리
+          </div>
         </div>
 
         <div class="menu-content">
-          <UserInfo v-if="selectedMenu === 'userInfo'" />
-          <ReviewPage v-else-if="selectedMenu === 'ReviewPage'" />
-          <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'" />
+          <UserInfo v-if="selectedMenu === 'userInfo'"/>
+          <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
+          <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'"/>
+          <ShopInfo v-else-if="selectedMenu === 'ShopInfo'"/>
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>
       </div>
@@ -53,39 +77,46 @@ const selectMenu = (menu) => {
 </template>
 
 <style scoped>
-.left-menu{
+.left-menu {
   margin-right: 70px;
 }
-.user-info{
+
+.user-info {
   font-size: 30px;
   color: var(--text-black);
   margin-bottom: 15px;
 }
-.page{
+
+.page {
   flex-direction: column;
   align-items: center;
   display: flex;
   width: 100%;
 }
-.page-title{
+
+.page-title {
   font-size: 40px;
   color: var(--text-black);
   margin: 80px 0px 40px 0px;
 }
-.white-container{
+
+.white-container {
   border-radius: 43px;
   background: #FFF;
   box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.13) inset;
   padding: 70px;
   width: 80%;
 }
+
 .menu-content {
   width: 100%;
 }
-.menu-container{
+
+.menu-container {
   display: flex;
 }
-.menu-button{
+
+.menu-button {
   margin-left: 45px;
   font-size: 25px;
   white-space: nowrap;
