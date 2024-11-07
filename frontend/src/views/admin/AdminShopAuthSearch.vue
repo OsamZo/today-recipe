@@ -176,19 +176,4 @@
     cursor: pointer;
   }
 
-  .status-N {
-    color: white;
-    background-color: #633A02;
-  }
-
-  .status-N:hover {
-    background-color: #FFFFFF;
-    border: 1px solid #633A02;
-    color: #633A02;
-  }
-
-  .status-Y {
-    color: black;
-    cursor: default;
-  }
   </style>
