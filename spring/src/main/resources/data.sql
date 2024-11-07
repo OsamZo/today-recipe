@@ -25,8 +25,8 @@ INSERT INTO `shop`(
 ) VALUES (
              1, '2024-11-06 15:00:00', '2024-11-01 08:30:00', '2024-11-10 07:00:00',
              1, 1, '서울특별시 마포구 맛있는길 45', 'https://example.com/bakery_license.jpg',
-             'https://example.com/bakery.jpg', '신선한 빵을 매일 구워내는 제과점입니다!', '행복한 빵집', '02-9876-5432',
-             'Y', 'N'
+             'https://goruna.s3.us-west-1.amazonaws.com/50b8097d-2e86-4097-81a5-b0290dfe3ba9_%EB%8F%84%EB%8B%B4%EC%9D%B4%EC%82%AC%EC%A7%84.png', '신선한 빵을 매일 구워내는 제과점입니다!', '행복한 빵집', '02-9876-5432',
+             'APPROVE', 'N'
          );
 
 -- 상품 정보 추가 (빵 예시)
