@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.repository;
 
+import com.goruna.spring.common.aggregate.ShopApprStatus;
 import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.product.entity.Product;
 import com.goruna.spring.shop.entity.Shop;
@@ -10,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import static com.goruna.spring.book.entity.QBook.book;
@@ -45,7 +44,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(product.shop, shop).fetchJoin()
                 .join(shop.shopCategory, shopCategory).fetchJoin()
                 .where(product.productSeq.in(latestProductSubquery))
-                .where(shop.shopApprStatus.eq(YnType.Y))
+                .where(shop.shopApprStatus.eq(ShopApprStatus.APPROVE))
                 .where(shop.shopDelStatus.eq(YnType.N))
                 .orderBy(product.regDate.desc())
                 .limit(5)
@@ -60,7 +59,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .join(product.shop, shop).fetchJoin()
                 .join(shop.shopCategory, shopCategory).fetchJoin()
                 .where(shopCategory.categorySeq.eq(categorySeq))
-                .where(shop.shopApprStatus.eq(YnType.Y))
+                .where(shop.shopApprStatus.eq(ShopApprStatus.APPROVE))
                 .where(shop.shopDelStatus.eq(YnType.N))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

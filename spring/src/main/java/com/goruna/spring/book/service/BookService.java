@@ -42,7 +42,8 @@ public class BookService {
 
         // 예약하려는 수량이 남은 수량보다 많다면 에러 발생, 그렇지 않다면 재고 변경
         if (bookQty <= productQty) {
-            productQty -= bookQty;
+            product.updateProductQty(productQty - bookQty);
+            productRepository.save(product);
         } else {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
         }

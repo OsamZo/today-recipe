@@ -2,11 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 import MainRouter from "@/router/MainRouter.js";
 import ReviewRouter from "@/router/ReviewRouter.js";
 import AdminRouter from "@/router/AdminRouter.js"
+import UserRouter from "@/router/UserRouter.js";
+import OwnerRouter from "@/router/OwnerRouter.js";
 
 const routes = [
     ...MainRouter,
+    ...ReviewRouter,
     ...AdminRouter,
-    ...ReviewRouter
+    ...UserRouter,
+    ...OwnerRouter
 ]
 
 const router = createRouter({

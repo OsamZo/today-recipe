@@ -49,10 +49,10 @@
   </script>
 
   <template>
+    <div class="main-header">
+      <p class="title">관리자 페이지</p>
+    </div>
     <div class="admin-container">
-      <div class="header">
-        <p class="title">관리자 페이지</p>
-      </div>
       <div class="content-box">
         <AdminNav class="nav" />
         <div class="main-content">
@@ -91,9 +91,9 @@
 
   }
 
-  .header {
+  .main-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin: 100px 0 0 0;
   }
 
   .title {
@@ -135,9 +135,7 @@
     display: flex;
     align-items: center;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   }
 
   .store-image {
@@ -178,19 +176,4 @@
     cursor: pointer;
   }
 
-  .status-N {
-    color: white;
-    background-color: #633A02;
-  }
-
-  .status-N:hover {
-    background-color: #FFFFFF;
-    border: 1px solid #633A02;
-    color: #633A02;
-  }
-
-  .status-Y {
-    color: black;
-    cursor: default;
-  }
   </style>
