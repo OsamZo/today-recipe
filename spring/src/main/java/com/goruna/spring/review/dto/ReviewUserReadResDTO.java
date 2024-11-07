@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ReviewUserReadResDTO {
 
     private String shopName;
+    private Long bookSeq;
     private String userNickname;
     private String reviewContent;
     private LocalDateTime regDate;
