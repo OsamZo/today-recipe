@@ -29,7 +29,7 @@ public class ReviewController {
             @PathVariable Long bookSeq,
             @RequestBody ReviewCreateRequestDTO reviewCreateRequestDTO) {
 
-        reviewService.createReview(bookSeq, reviewCreateRequestDTO);
+        reviewService.createReview(userSeq, bookSeq, reviewCreateRequestDTO);
         return ResponseUtil.successResponse("리뷰가 성공적으로 등록되었습니다.").getBody();
     }
 
