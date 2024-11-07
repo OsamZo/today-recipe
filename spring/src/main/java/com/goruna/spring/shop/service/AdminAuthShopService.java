@@ -1,6 +1,6 @@
 package com.goruna.spring.shop.service;
 
-import com.goruna.spring.common.aggregate.YnType;
+import com.goruna.spring.common.aggregate.ShopApprStatus;
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.shop.dto.AdminAuthShopDetailResponseDTO;
@@ -54,11 +54,11 @@ public class AdminAuthShopService {
     }
 
     // 매장 등록 인증 권한 수정
-    public AdminAuthShopResponseDTO updateAuth(Long shopSeq, YnType shopApprStatus) {
+    public AdminAuthShopResponseDTO updateAuth(Long shopSeq, ShopApprStatus shopApprStatus) {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
-        if(shopApprStatus == YnType.Y){
+        if(shopApprStatus == ShopApprStatus.APPROVE){
             shop.approve();
         }else{
             shop.disapprove();
