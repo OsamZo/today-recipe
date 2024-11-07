@@ -2,15 +2,22 @@
 import AdminNav from "@/components/AdminNav.vue";
 import AdminSearchBodyTitle from "@/components/AdminSearchBodyTitle.vue";
 import {ref, onMounted} from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
+
+const router = useRouter();
+
+const goToShopReview = (shopSeq) => {
+  router.push(`/admin/shopList/review/${shopSeq}`);
+};
 
 const shopList = ref([]);
 const page = 1;
 const size = 10;
 const searchQuery = ref("");
 let allShops = ref([]);
-const showModal = ref(false);  // 모달 표시 상태
-const shopSeqToDelete = ref(null); // 삭제할 매장 ID
+const showModal = ref(false);
+const shopSeqToDelete = ref(null);
 
 const fetchShops = async () => {
   try {
@@ -85,7 +92,7 @@ const handleSearchKeyPress = (event) => {
         </div>
 
         <div class="content">
-          <div class="shop-item" v-for="shop in shopList" :key="shop.shopSeq">
+          <div class="shop-item" v-for="shop in shopList" :key="shop.shopSeq" @click="goToShopReview(shop.shopSeq)">
             <img :src="shop.shopImgUrl" alt="매장 이미지" class="store-image"/>
             <div class="shop-info">
               <p class="shop-name">{{ shop.shopName }}</p>
