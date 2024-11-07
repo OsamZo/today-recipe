@@ -1,4 +1,4 @@
-import ReviewPage from "@/views/reivew/ReviewPage.vue";
+import ReviewPage from "@/views/reivew/ReviewReadPage.vue";
 
 export default [
     {
