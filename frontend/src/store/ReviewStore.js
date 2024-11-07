@@ -71,6 +71,42 @@ export const useReviewStore = defineStore('reviewStore', {
             } catch (error) {
                 console.error('리뷰 추가 중 오류 발생:', error);
             }
+        },
+        async addLike(userSeq, reviewSeq, shopSeq) {
+            try {
+                const response = await addLike(shopSeq, userSeq, reviewSeq);
+                console.log('좋아요가 성공적으로 추가되었습니다:', response);
+
+                // 좋아요 추가 후 해당 리뷰의 likeCount 업데이트
+                const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
+                if (review) {
+                    review.likeCount += 1;
+                    review.isLiked = true; // UI 상태 업데이트
+                }
+
+                // 로컬 스토리지에 업데이트된 리뷰 저장
+                localStorage.setItem('reviews', JSON.stringify(this.reviews));
+            } catch (error) {
+                console.error('좋아요 추가 중 오류 발생:', error);
+            }
+        },
+        async deleteLike(shopSeq, goodSeq, reviewSeq) {
+            try {
+                const response = await deleteLike(shopSeq, goodSeq);
+                console.log('좋아요가 성공적으로 삭제되었습니다:', response);
+
+                // 좋아요 삭제 후 해당 리뷰의 likeCount 업데이트
+                const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
+                if (review) {
+                    review.likeCount -= 1;
+                    review.isLiked = false; // UI 상태 업데이트
+                }
+
+                // 로컬 스토리지에 업데이트된 리뷰 저장
+                localStorage.setItem('reviews', JSON.stringify(this.reviews));
+            } catch (error) {
+                console.error('좋아요 삭제 중 오류 발생:', error);
+            }
         }
     }
 });
