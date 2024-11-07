@@ -2,6 +2,10 @@
 :root {
     --text-red: #EB4335;
     --ivory-background: #F3F0ED;
+    --text-black: #121212;
+    --text-gray: #999;
+    --button-brown:#633A02;
+    --text-white:#FCFCFC;
 }
 
 *{

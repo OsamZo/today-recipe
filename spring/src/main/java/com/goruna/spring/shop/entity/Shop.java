@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.entity;
 
+import com.goruna.spring.common.aggregate.ShopApprStatus;
 import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.users.entity.User;
@@ -42,7 +43,7 @@ public class Shop extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "shop_appr_status", nullable = false)
-    private YnType shopApprStatus = YnType.N;
+    private ShopApprStatus shopApprStatus = ShopApprStatus.PENDING;
 
     @Column(name = "shop_open_date", nullable = false)
     private LocalDateTime shopOpenDate;
@@ -65,10 +66,10 @@ public class Shop extends BaseTimeEntity {
     }
 
     public void approve(){
-        this.shopApprStatus = YnType.Y;
+        this.shopApprStatus = ShopApprStatus.APPROVE;
     }
 
     public void disapprove(){
-        this.shopApprStatus = YnType.N;
+        this.shopApprStatus = ShopApprStatus.REJECT;
     }
 }

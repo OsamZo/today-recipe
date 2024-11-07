@@ -1,7 +1,7 @@
 package com.goruna.spring.shop.controller;
 
 
-import com.goruna.spring.common.aggregate.YnType;
+import com.goruna.spring.common.aggregate.ShopApprStatus;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
 import com.goruna.spring.shop.dto.AdminAuthShopDetailResponseDTO;
@@ -10,7 +10,6 @@ import com.goruna.spring.shop.service.AdminAuthShopService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +51,7 @@ public class AdminAuthShopController {
     @Operation(summary = "매장 등록 인증 수정", description = "매장 등록 인증 여부를 수정합니다.")
     public ApiResponse<?> updateAdminAuthShop(
             @PathVariable Long shopSeq,
-            @RequestBody YnType shopApprStatus
+            @RequestBody ShopApprStatus shopApprStatus
     ){
         AdminAuthShopResponseDTO updatedShopAuth = adminAuthShopService.updateAuth(shopSeq, shopApprStatus);
         return ResponseUtil.successResponse("매장 등록 인증이 성공적으로 수정되었습니다.", updatedShopAuth).getBody();
