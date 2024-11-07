@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchReviewsByShopSeq } from '@/api/review/ReviewReadApi';
+import { fetchReviewsByShopSeq } from '@/api/review/ReviewApi';
 
 export const useReviewStore = defineStore('reviewStore', {
     state: () => ({
