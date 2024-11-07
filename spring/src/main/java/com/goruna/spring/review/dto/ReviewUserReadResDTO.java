@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReviewUserReadResDTO {
 
-    private String shopName;
-    private Long bookSeq;
     private String userNickname;
     private String reviewContent;
     private LocalDateTime regDate;

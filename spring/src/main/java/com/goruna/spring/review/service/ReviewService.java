@@ -24,6 +24,7 @@ public class ReviewService {
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
 
+    /* 리뷰 추가 API */
     @Transactional
     public void createReview(Long userSeq, Long bookSeq, ReviewCreateRequestDTO reviewCreateRequestDTO) {
         Book book = bookRepository.findById(bookSeq)
@@ -46,8 +47,6 @@ public class ReviewService {
 
         return reviews.stream()
                 .map(review -> new ReviewUserReadResDTO(
-                        review.getBook().getProduct().getShop().getShopName(),
-                        review.getBook().getBookSeq(),
                         review.getBook().getUser().getUserNickname(),
                         review.getReviewContent(),
                         review.getRegDate(),
@@ -62,8 +61,6 @@ public class ReviewService {
 
         return reviews.stream()
                 .map(review -> new ReviewShopReadResDTO(
-                        review.getBook().getProduct().getShop().getShopImgUrl(),
-                        review.getBook().getProduct().getShop().getShopName(),
                         review.getBook().getUser().getUserNickname(),
                         review.getRegDate(),
                         review.getReviewContent(),
