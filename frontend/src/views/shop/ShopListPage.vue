@@ -53,8 +53,6 @@ const fetchCategoryList = async() => {
 // 카테고리 버튼 클릭 시 변경
 const changeCategory = (categorySeq) => {
   selectedCategory.value = categorySeq;
-  console.log(categorySeq);
-  console.log(selectedCategory.value);
   routeByCategory(selectedCategory.value);
   fetchShopList(categorySeq);
 }
