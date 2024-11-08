@@ -79,6 +79,15 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .limit(5)
                 .collect(Collectors.toList());
     }
+
+    // 전체 매장 리스트 조회
+    @Override
+    public List<Product> readShopsAllToday(LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        SubQueryExpression<Long> latestProductSubquery = getLatestProductSubquery(startOfDay, endOfDay, null);
+
+        return getProductsWithShopJoin(latestProductSubquery, null); // 전체 조회 시 페이지네이션이 필요 없으면 null
+    }
+
     // 카테고리별 매장 리스트 조회
     @Override
     public List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay) {
