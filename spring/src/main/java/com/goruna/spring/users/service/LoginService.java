@@ -29,10 +29,10 @@ public class LoginService {
 
             User newUser = modelMapper.map(userRequestDto, User.class);
             userRepository.save(newUser);
-            return "회원가입 완료: " + userEmail;
+            return "signup";
         } else {
             String token = jwtUtil.generateToken(user.get().getUserSeq(), userEmail);
-            return "로그인 성공: " + userEmail + ", Token: " + token;
+            return "login";
         }
     }
 }
