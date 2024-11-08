@@ -204,7 +204,7 @@ onMounted(async() => {
             </RouterLink>
           </div>
         </div>
-        <ul class="flex sale_list">
+        <ul class="sale_list">
           <li v-for="product in todaySaleProducts">
             <RouterLink :to="`/category/${product.categorySeq}/shop/${product.shopSeq}`">
               <div class="product_title_box">
@@ -267,7 +267,10 @@ onMounted(async() => {
 }
 
 .sale_list {
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 220px 220px 220px 220px 220px;
+  grid-template-rows: 343px;
+  grid-column-gap: 23px;
   margin-top: 15px;
 }
 
