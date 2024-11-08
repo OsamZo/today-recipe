@@ -8,64 +8,54 @@ import '@/assets/css/reset.css';
       <div class="menu-title">메뉴 수정</div>
     </div>
 
-
     <div class="content-container">
       <div class="product-info">
         <div class="image-container">
-          <img src="#" alt="상품 이미지" class="product-image">
+          <img src="/favicon.ico" alt="상품 이미지" class="product-image"/>
         </div>
 
         <div class="input-group-product">
           <input class="product-name" placeholder="랜덤 박스">
-          <textarea rows="4" placeholder="상품 설명을 입력해주세요."></textarea>
+          <textarea class="product-desc" placeholder="상품 설명을 입력해주세요"/>
         </div>
 
         <div class="input-group-price">
-          <div class="button-sold-out">품절</div>
-
+          <button class="button-sold-out">품절</button>
           <div class="input-original-price">
-            <label>원가 : </label>
-            <input type="text" placeholder="원가 입력">
+            원가 : <input type="text" placeholder="원가 입력">
           </div>
-
           <div class="input-sale-price">
-            <label>판매가 : </label>
-            <input type="text" placeholder="판매가 입력">
+            판매가 : <input type="text" placeholder="판매가 입력">
           </div>
         </div>
       </div>
 
-      <div class="saveImgButton">이미지 저장</div>
+      <button class="saveImgButton">이미지 저장</button>
 
       <div class="set-close-time">
-        <label>마감 시간</label>
-        <div class="quantity">
-          <input type="number" placeholder="시 입력">
-          <span>:</span>
-          <input type="number" placeholder="분 입력">
-        </div>
+        마감 시간 <input class="close-time-hour" type="text" placeholder=""/> 시
+        <input class="close-time-min" type="text" placeholder=""/> 분
       </div>
 
       <div class="set-quantity">
-        <label>판매 수량</label>
-        <div class="quantity">
-          <button class="decrement">-</button>
-          <input type="number" id="quantity" value="1">
-          <button class="increment">+</button>
-        </div>
+        판매 수량 <button class="decrement">-</button>
+        <input type="text" id="quantity" value=""/>
+        <button class="increment">+</button>
       </div>
-
-      <div class="button">저장하기</div>
 
     </div>
 
+
   </div>
+
+
+
 </template>
 
 <style scoped>
-.content-container{
-  display: flex;
-  flex-direction: column;
+.content-container *{
+  margin-bottom: 5px;
+  font-family: "Gowun Dodum";
 }
 .page-content-title{
   display: flex;
@@ -79,76 +69,125 @@ import '@/assets/css/reset.css';
   font-size: 30px;
 }
 
-.product-image {
-  width: 133px;
-  height: 133px;
+.product-info{
+  display: flex;
+  justify-content: space-between;
+}
+.product-image{
+  width: 160px;
+  height: 160px;
   object-fit: cover;
   border-radius: 8px;
   margin-right: 20px;
 }
-.product-info{
-
-}
-
-.input-group-product input, textarea{
+.product-info input, textarea {
   border-radius: 8px;
+  margin-bottom: 5px;
 }
-
-.product-name {
+.product-name{
+  color: var(--text-black);
+  background-color: var(--button-brown2);
   border: none;
-  outline: none;
-  resize: none;
-  font-size: 16px;
+  width: 150px;
+  height: 30px;
+  margin-top: 5px;
 }
+.product-desc{
+  display: block;
+  border: 1px solid var(--button-brown);
+  width: 500px;
+  height: 90px;
+}
+
 .input-group-price{
-}
-
-
-
-.quantity {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-items: center;
+  align-items: flex-end;
+  font-size: 17px;
+  margin-top: 5px;
 }
-.quantity input {
-  width: 50px;
+.input-group-price *{
+  margin-bottom: 5px;
   text-align: center;
-  margin: 0 5px;
 }
-.quantity button {
-  margin-left: 5px;
-  padding: 5px;
+.button-sold-out{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 30px;
+  color: var(--text-white);
+  border-radius: 8px;
+  background: #ff8c00;
+  border: none;
+  cursor: pointer;
+}
+.input-group-price input{
+  border: 1px solid var(--button-brown);
+  width: 100px;
+  height: 35px;
 }
 
 .saveImgButton{
-  margin-right: 10px;
   width: 116px;
   height: 30px;
   color: var(--text-white);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--button-brown);
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
-.button-sold-out{
-  width: 116px;
-  height: 42px;
-  color: var(--text-white);
-  border-radius: 10px;
-  background: #ff8c00;
+.set-close-time{
+  margin-left: 55px;
+}
+.set-close-time *{
+  background-color: var(--button-brown2);
+  border: none;
+  border-radius: 8px;
+  width: 70px;
+  height: 30px;
+  text-align: center;
+}
+.close-time-hour{
+  margin-left: 10px;
+}
+.close-time-min{
+  margin-left: 20px;
+}
+
+.set-quantity{
+  margin-left: 55px;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
-.button{
-  margin-right: 10px;
-  width: 116px;
-  height: 42px;
-  color: var(--text-white);
-  border-radius: 10px;
-  background: var(--button-brown);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.set-quantity *{
+  background-color: white;
+  border: 1px solid var(--button-brown);
+  margin-bottom: 0;
 }
+.set-quantity button{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+#quantity{
+  text-align: center;
+  width: 45px;
+  height: 26px;
+}
+.decrement{
+  border-radius: 8px 0 0 8px;
+  margin-left: 13px;
+}
+.increment{
+  border-radius: 0 8px 8px 0;
+}
+
+
+
 </style>
