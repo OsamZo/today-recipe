@@ -32,16 +32,16 @@ export default {
   setup() {
     const bookmarkStore = useBookmarkStore();
     const { bookmarks } = storeToRefs(bookmarkStore);
-    const isLoading = ref(true); // 로딩 상태
+    const isLoading = ref(true); 
 
     onMounted(async () => {
-      const userSeq = 1; // 사용자 시퀀스 (예시)
+      const userSeq = 1; 
       try {
         await bookmarkStore.loadBookmarks(userSeq);
       } catch (error) {
         console.error('북마크 로드 중 오류:', error);
       } finally {
-        isLoading.value = false; // 로딩이 완료되면 상태 변경
+        isLoading.value = false; 
       }
     });
 
@@ -68,7 +68,7 @@ export default {
 }
 
 .separator {
-  height: 0.4vw;
+  height: 0.3vw;
   background-color: #8B4513; 
   margin-bottom: 3vw;
 }
