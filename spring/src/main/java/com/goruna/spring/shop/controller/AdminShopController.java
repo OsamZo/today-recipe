@@ -58,7 +58,7 @@ public class AdminShopController {
     @GetMapping("/{shopSeq}/auth/img")
     @Operation(summary = "사업자 등록증 조회", description = "등록된 사업자 등록증을 조회합니다.")
     public ApiResponse<?> getAdminAllShop(
-            @RequestParam Long shopSeq){
+            @PathVariable Long shopSeq){
         AdminShopAuthImgDTO shopAuthImg = adminShopService.getShopAuthImg(shopSeq);
         return ResponseUtil.successResponse("등록된 사업자 등록증이 성공적으로 조회되었습니다.", shopAuthImg).getBody();
     }
