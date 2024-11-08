@@ -91,7 +91,6 @@ import '@/assets/css/reset.css';
   justify-content: space-between;
   align-items: center;
   margin-bottom: 130px;
-
 }
 .menu-title{
   font-size: 30px;
