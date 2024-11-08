@@ -2,6 +2,7 @@ package com.goruna.spring.shop.controller;
 
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.shop.dto.ShopCardReadResDTO;
 import com.goruna.spring.shop.dto.ShopDetailReadResDTO;
 import com.goruna.spring.shop.dto.ShopListReadResDTO;
 import com.goruna.spring.shop.service.ShopService;
@@ -69,5 +70,17 @@ public class ShopController {
     ) {
         ShopDetailReadResDTO shopDetailReadResDTO = shopService.readShopDetail(shopSeq);
         return ResponseUtil.successResponse("매장 상세 데이터가 성공적으로 조회되었습니다.", shopDetailReadResDTO).getBody();
+    }
+
+    /* 매장 이미지, 매장 이름 조회 API */
+    @GetMapping("/shop/{shopSeq}")
+    @Operation(
+            summary = "매장 이미지, 매장 이름 조회 API",
+            description = "매장 이미지, 매장 이름을 조회합니다."
+    )
+    public ApiResponse<?> readShopImgAndName(@PathVariable Long shopSeq){
+
+        ShopCardReadResDTO shopCardReadResDTO = shopService.shopCardRead(shopSeq);
+        return ResponseUtil.successResponse("매장 카드 데이터가 성공적으로 조회되었습니다.", shopCardReadResDTO).getBody();
     }
 }

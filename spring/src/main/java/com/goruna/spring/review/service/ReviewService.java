@@ -24,10 +24,15 @@ public class ReviewService {
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
 
+    /* 리뷰 추가 API */
     @Transactional
-    public void createReview(Long bookSeq, ReviewCreateRequestDTO reviewCreateRequestDTO) {
+    public void createReview(Long userSeq, Long bookSeq, ReviewCreateRequestDTO reviewCreateRequestDTO) {
         Book book = bookRepository.findById(bookSeq)
                 .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+
+        if (book.getUser().getUserSeq() != userSeq) {
+            throw new IllegalArgumentException("리뷰를 작성할 수 있는 권한이 없습니다.");
+        }
 
         Review review = modelMapper.map(reviewCreateRequestDTO, Review.class);
         review.Book(book);
@@ -42,7 +47,6 @@ public class ReviewService {
 
         return reviews.stream()
                 .map(review -> new ReviewUserReadResDTO(
-                        review.getBook().getProduct().getShop().getShopName(),
                         review.getBook().getUser().getUserNickname(),
                         review.getReviewContent(),
                         review.getRegDate(),
@@ -57,12 +61,11 @@ public class ReviewService {
 
         return reviews.stream()
                 .map(review -> new ReviewShopReadResDTO(
-                        review.getBook().getProduct().getShop().getShopImgUrl(),
-                        review.getBook().getProduct().getShop().getShopName(),
                         review.getBook().getUser().getUserNickname(),
                         review.getRegDate(),
                         review.getReviewContent(),
-                        review.getGoods().size()
+                        review.getGoods().size(),
+                        review.getBook().getBookSeq()
                 ))
                 .collect(Collectors.toList());
     }
