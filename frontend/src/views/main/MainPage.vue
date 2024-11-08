@@ -78,8 +78,8 @@ const addCurrentLocationMarker = (coords, mapInstance) => {
   marker.setMap(mapInstance);
 
   const markerImage = new window.kakao.maps.MarkerImage(
-      'https://goruna.s3.us-west-1.amazonaws.com/46ef7c04-0939-4f2d-b7b7-eed2fd38eb81_user-solid.png',
-      new window.kakao.maps.Size(32, 38), // 마커 크기
+      'https://goruna.s3.us-west-1.amazonaws.com/a1ea413a-b2f8-4ba6-891d-eb5a0b493316_current-location.png',
+      new window.kakao.maps.Size(38, 38), // 마커 크기
       { offset: new window.kakao.maps.Point(16, 32) }
   );
   marker.setImage(markerImage);
