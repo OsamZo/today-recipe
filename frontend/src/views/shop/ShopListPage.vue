@@ -76,7 +76,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="content">
+  <div class="content flex">
     <!--검색바, 정렬기준 추가 예정-->
     <aside></aside>
     <article>
@@ -126,7 +126,6 @@ onMounted(() => {
 }
 
 .content {
-  display: flex;
   justify-content: center;
   max_width: 1903px;
   width: 100%;
