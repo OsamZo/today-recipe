@@ -2,17 +2,20 @@
 :root {
     --text-red: #EB4335;
     --ivory-background: #F3F0ED;
+    --white-background: #F5F5F5;
     --text-black: #121212;
     --text-gray: #999;
     --button-brown:#633A02;
     --button-brown2:#F5F5DC;
     --text-white:#FCFCFC;
     --button-gray:#F4F4F4;
+    --yellow: #FAF3B4;
 }
 
 *{
     margin: 0 auto;
     user-select: none;
+    box-sizing: border-box;
 }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -102,6 +105,7 @@ textarea {
     resize: vertical;
 }
 a{
+    color: inherit;
     text-decoration: none;
 }
 a:focus,
