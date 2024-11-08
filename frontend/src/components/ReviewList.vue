@@ -19,15 +19,13 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        reviews: {
-            type: Array,
-            required: true
-        }
+<script setup>
+defineProps({
+    reviews: {
+        type: Array,
+        required: true
     }
-};
+});
 </script>
 
 <style scoped>

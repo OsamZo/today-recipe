@@ -59,6 +59,7 @@ public class BookmarkService {
                 .map(bookmark -> {
                     var shop = bookmark.getShop();
                     return new BookmarkReadResDTO(
+                            bookmark.getBookmarkSeq(),
                             shop.getShopImgUrl(),
                             shop.getShopName(),
                             shop.getShopCategory().getCategoryName(),
