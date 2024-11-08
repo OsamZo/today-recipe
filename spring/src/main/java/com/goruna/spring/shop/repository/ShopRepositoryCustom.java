@@ -11,7 +11,9 @@ public interface ShopRepositoryCustom {
 
     List<Product> readLatest5ShopsToday(LocalDateTime startOfDay, LocalDateTime endOfDay);
 
-    List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable);
+    List<Product> readShopsAllToday(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
     Long countReviewsByShopSeq(Long shopSeq);
   
