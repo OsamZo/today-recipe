@@ -2,7 +2,7 @@
 import {ref, onMounted, reactive} from 'vue';
 import axios from "axios";
 import '@/assets/css/reset.css';
-import {RouterLink} from "vue-router";
+import router from "@/router/index.js";
 
 // ========= 지도 관련 기능 =========
 const { VITE_KAKAO_MAP_KEY } = import.meta.env;
@@ -97,7 +97,7 @@ const getCoordinatesFromAddress = async(address) => {
         }
     );
     const data = await response.json();
-    console.log(data.documents);
+
     if (data.documents && data.documents.length > 0) {
       const { x: longitude, y: latitude } = data.documents[0].address;
 
@@ -111,8 +111,7 @@ const getCoordinatesFromAddress = async(address) => {
 // 지도 반경에 있는 가게에 마커 표시
 const displayShopMarkers = async(mapInstance) => {
   try {
-    const categorySeq = 1;
-    const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop`);
+    const response = await axios.get(`http://localhost:8100/api/v1/shop`);
     shops.value = response.data.data;
 
     for (const shop of shops.value) {
@@ -125,11 +124,56 @@ const displayShopMarkers = async(mapInstance) => {
             markerImageByCategory[shop.categorySeq], new window.kakao.maps.Size(38, 38),
             {offset: new window.kakao.maps.Point(16, 32)}
         )
+
+        // 마커 생성
         const marker = new window.kakao.maps.Marker({
           position: shopLocation,
           image:markerImage,
           map: mapInstance,
         })
+
+        // 마커에 hover할 시 띄어줄 infoWindow
+        const overlayContent = `
+          <div class="custom_overlay" style="background-color: var(--ivory-background); border: 1px solid var(--button-brown)">
+            <div class="custom_overlay_content" style="padding: 10px;">
+                <p style="font-weight: bold; margin: 0 0 10px 0">${shop.shopName}</p>
+                <p>${shop.shopAddress}</p>
+                <div class="flex" style="margin-top: 8px;">
+                    <button id="more_button" @click="seeMore()" style="background-color: var(--yellow); border: none; border-radius: 10px; font-family: 'Gowun Dodum'; cursor: pointer">더보기</button>
+                    <button id="close_button" style="background-color: var(--button-brown); border: none; border-radius: 10px; color: var(--text-white); font-family: 'Gowun Dodum'; cursor: pointer">닫기</button>
+                </div>
+            </div>
+          </div>
+        `;
+
+        // 마커에 hover할 시 띄어줄 infoWindow 생성
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: shopLocation,
+          content: overlayContent,
+          map: mapInstance,
+          yAnchor: 1.5,  // 마커 상단을 기준으로 CustomOverlay 위치 설정
+          clickable: true
+        })
+        customOverlay.setMap(null);
+
+        // 마커에 hover시 infoWindow 열리도록 이벤트 등록
+        window.kakao.maps.event.addListener(marker, 'mouseover', () => {
+          customOverlay.setMap(mapInstance);
+        });
+
+
+        document.addEventListener('click', (event) => {
+          // 닫기 버튼을 누르면 infoWindow 닫히도록 이벤트 등록
+          if (event.target.id === 'close_button') {
+            customOverlay.setMap(null);
+          }
+
+          // 더보기 버튼을 누르면 해당 매장 상세 페이지로 라우팅되도록 이벤트 등록
+          if(event.target.id === 'more_button') {
+              router.push(`/category/${shop.categorySeq}/shop/${shop.shopSeq}`);
+
+          }
+        });
       }
     }
   } catch(error) {
@@ -179,8 +223,6 @@ onMounted(async() => {
   } catch (error) {
     console.log("현재 위치를 가져오는 데 실패했습니다.", error);
   }
-
-
 })
 </script>
 
