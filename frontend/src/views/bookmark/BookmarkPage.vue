@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { useBookmarkStore } from '@/store/bookmarkStore';
+import { useBookmarkStore } from '@/store/BookmarkStore';
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
