@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class LoginController {
     }
 
     @RequestMapping(value="/oauth2/google", method = RequestMethod.GET)
-    public String loginGoogle(@RequestParam(value = "code") String authCode){
+    public RedirectView loginGoogle(@RequestParam(value = "code") String authCode){
         System.out.println("Received auth code: " + authCode);
         RestTemplate restTemplate = new RestTemplate();
         GoogleRequest googleOAuthRequestParam = GoogleRequest
@@ -62,6 +63,11 @@ public class LoginController {
         );
 
         String email = resultEntity2.getBody().getEmail();
-        return loginService.socialLogin(email);
+        String result = loginService.socialLogin(email);
+        if ("signup".equals(result)) {
+            return new RedirectView("http://localhost:5173/login");
+        } else {
+            return new RedirectView("http://localhost:5173/nickName");
+        }
     }
 }
