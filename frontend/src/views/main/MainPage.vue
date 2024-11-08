@@ -97,7 +97,7 @@ const getCoordinatesFromAddress = async(address) => {
         }
     );
     const data = await response.json();
-    console.log(data.documents);
+
     if (data.documents && data.documents.length > 0) {
       const { x: longitude, y: latitude } = data.documents[0].address;
 
@@ -111,10 +111,8 @@ const getCoordinatesFromAddress = async(address) => {
 // 지도 반경에 있는 가게에 마커 표시
 const displayShopMarkers = async(mapInstance) => {
   try {
-    const categorySeq = 1;
-    const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop`);
+    const response = await axios.get(`http://localhost:8100/api/v1/shop`);
     shops.value = response.data.data;
-    console.log(shops)
 
     for (const shop of shops.value) {
       const coords = await getCoordinatesFromAddress(shop.shopAddress);
