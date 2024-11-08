@@ -1,36 +1,53 @@
 <template>
-  <div class="store-list-container">
-    <h1 class="header-content">저장한 매장 리스트</h1>
-    <div class="separator"></div>
-    <div v-for="(store, index) in stores" :key="index" class="store-item">
-      <img :src="store.image" alt="store image" class="store-image" />
-      <div class="store-info">
-        <h2>{{ store.name }}</h2>
-        <p class="store-type">{{ store.type }}</p>
-        <p class="store-phone">전화번호 | {{ store.phone }}</p>
-        <p>매장 주소 | {{ store.address }}</p>
-      </div>
-      <button class="bookmark-button">
-        <font-awesome-icon icon="bookmark" />
-      </button>
+  <div>
+    <div v-if="isLoading" class="loading-message">
+      데이터를 불러오는 중입니다...
     </div>
+    <div v-else-if="bookmarks.length > 0" class="store-list-container">
+      <h1 class="header-content">저장한 매장 리스트</h1>
+      <div class="separator"></div>
+      <div v-for="(store, index) in bookmarks" :key="index" class="store-item">
+        <img :src="store.shopImgUrl" alt="store image" class="store-image" />
+        <div class="store-info">
+          <h2>{{ store.shopName }}</h2>
+          <p class="store-type">{{ store.categoryName }}</p>
+          <p class="store-phone">전화번호 | {{ store.shopTel }}</p>
+          <p>매장 주소 | {{ store.shopAddress }}</p>
+        </div>
+        <button class="bookmark-button">
+          <font-awesome-icon icon="bookmark" />
+        </button>
+      </div>
+    </div>
+    <p v-else>저장된 북마크가 없습니다.</p>
   </div>
 </template>
 
 <script>
+import { useBookmarkStore } from '@/store/bookmarkStore';
+import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+
 export default {
-  data() {
+  setup() {
+    const bookmarkStore = useBookmarkStore();
+    const { bookmarks } = storeToRefs(bookmarkStore);
+    const isLoading = ref(true); // 로딩 상태
+
+    onMounted(async () => {
+      const userSeq = 1; // 사용자 시퀀스 (예시)
+      try {
+        await bookmarkStore.loadBookmarks(userSeq);
+      } catch (error) {
+        console.error('북마크 로드 중 오류:', error);
+      } finally {
+        isLoading.value = false; // 로딩이 완료되면 상태 변경
+      }
+    });
+
     return {
-      stores: [
-        {
-          image: 'https://goruna.s3.us-west-1.amazonaws.com/480a8f33-beff-475f-8fd2-cc8173ede065_%EB%A3%A8%ED%94%BC.jpg',
-          name: '볼피노',
-          type: '양식',
-          phone: '02-000-0000',
-          address: '서울특별시 강남구 도산대로45길 10-7 신사동 K빌딩 1층'
-        },
-        // 여러 매장 데이터 추가 가능
-      ]
+      bookmarks,
+      isLoading
     };
   }
 };
@@ -38,7 +55,7 @@ export default {
 
 <style scoped>
 .store-list-container {
-  width: 80%; /* 반응형 비율 조정 */
+  width: 80%;  
   max-width: 1200px;
   margin: 0 auto;
   margin-top: 5vw;
@@ -47,12 +64,12 @@ export default {
 
 .header-content {
   margin-bottom: 2vw;
-  font-size: 2.5vw; /* 반응형 폰트 크기 */
+  font-size: 2.5vw; 
 }
 
 .separator {
   height: 0.4vw;
-  background-color: #8B4513; /* 갈색 바 */
+  background-color: #8B4513; 
   margin-bottom: 3vw;
 }
 
@@ -78,7 +95,7 @@ export default {
 }
 
 .store-info h2 {
-  font-size: 2vw; /* 반응형 폰트 크기 */
+  font-size: 2vw; 
   margin-bottom: 1vw;
 }
 
@@ -95,12 +112,18 @@ export default {
   border: none;
   cursor: pointer;
   margin-right: 2vw;
-  font-size: 2.5vw; /* 반응형 아이콘 크기 */
+  font-size: 2.5vw; 
+}
+
+.loading-message {
+  text-align: center;
+  font-size: 1.5vw;
+  margin-top: 5vw;
 }
 
 @media (max-width: 768px) {
   .store-list-container {
-    width: 90%; /* 모바일에서 더 넓게 */
+    width: 90%; 
   }
   .store-item {
     flex-direction: column;
