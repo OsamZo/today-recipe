@@ -5,6 +5,7 @@ import {ref} from "vue";
 import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
+import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 
 const selectedMenu = ref('userInfo');
 
@@ -58,8 +59,8 @@ const selectMenu = (menu) => {
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === '매장 관리' }"
-              @click="selectMenu('매장 관리')">
+              :class="{ 'active': selectedMenu === 'OwnerProduct' }"
+              @click="selectMenu('OwnerProduct')">
             매장 관리
           </div>
         </div>
@@ -69,6 +70,7 @@ const selectMenu = (menu) => {
           <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
           <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'"/>
           <ShopInfo v-else-if="selectedMenu === 'ShopInfo'"/>
+          <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>
       </div>
