@@ -16,7 +16,7 @@ import '@/assets/css/reset.css';
         </div>
 
         <div class="input-group-product">
-          <input class="product-name" type="text" placeholder="랜덤 박스">
+          <input class="product-name" placeholder="랜덤 박스">
           <textarea rows="4" placeholder="상품 설명을 입력해주세요."></textarea>
         </div>
 
@@ -49,9 +49,9 @@ import '@/assets/css/reset.css';
       <div class="set-quantity">
         <label>판매 수량</label>
         <div class="quantity">
-          <button>-</button>
-          <input type="number" value="1">
-          <button>+</button>
+          <button class="decrement">-</button>
+          <input type="number" id="quantity" value="1">
+          <button class="increment">+</button>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ import '@/assets/css/reset.css';
   border-bottom: 1px solid var(--button-brown);
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 130px;
+  margin-bottom: 30px;
 }
 .menu-title{
   font-size: 30px;
@@ -87,19 +87,20 @@ import '@/assets/css/reset.css';
   margin-right: 20px;
 }
 .product-info{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+
 }
 
 .input-group-product input, textarea{
   border-radius: 8px;
 }
-.product-name{
-  display: block;
+
+.product-name {
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 16px;
 }
 .input-group-price{
-  justify-items: flex-end;
 }
 
 
