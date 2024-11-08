@@ -21,7 +21,7 @@ public class ShopController {
     private final ShopService shopService;
 
     // 오늘의 특가 리스트 조회
-    @GetMapping("/shop")
+    @GetMapping("/shop/today")
     @Operation(
             summary = "오늘의 특가 리스트 조회(최신순 5개)",
             description = "오늘의 특가 리스트 데이터를 조회합니다."
@@ -29,6 +29,17 @@ public class ShopController {
     public ApiResponse<?> readshopsToday() {
         List<ShopListReadResDTO> shopListReadResDTOS = shopService.readLatest5ShopsToday();
         return ResponseUtil.successResponse("오늘의 특가 리스트 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
+    }
+
+    // 전체 매장 리스트 조회
+    @GetMapping("/shop")
+    @Operation(
+            summary = "(오늘 등록된 상품이 있는)전체 매장 목록 데이터 조회",
+            description = "(오늘 등록된 상품이 있는)전체 매장 목록 데이터를 조회합니다."
+    )
+    public ApiResponse<?> readShopsAlToday() {
+        List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsAllToday();
+        return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
 
     // 카테고리별 매장 목록 조회
@@ -42,6 +53,7 @@ public class ShopController {
             @RequestParam(defaultValue = "1") Integer page
     ) {
         List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsByCategory(categorySeq, page);
+
         return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
 
