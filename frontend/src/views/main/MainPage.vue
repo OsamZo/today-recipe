@@ -141,14 +141,16 @@ const displayShopMarkers = async(mapInstance) => {
 const todaySaleProducts = reactive([]);
 const fetchTodaySaleList = async() => {
   try {
-    const response = await axios.get(`http://localhost:8100/api/v1/shop`);
+    const response = await axios.get(`http://localhost:8100/api/v1/shop/today`);
     const todaySaleList = response.data.data;
 
     todaySaleList.forEach(product => {
       todaySaleProducts.push({
+        shopSeq: product.shopSeq,
         shopName: product.shopName,
         shopImgUrl: product.shopImgUrl,
         shopAddress: product.shopAddress,
+        categorySeq: product.categorySeq,
         categoryName:product.categoryName,
         productOriginalPrice: product.productOriginalPrice,
         productSalePrice: product.productSalePrice
