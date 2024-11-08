@@ -13,7 +13,7 @@
   </ReviewPageContent>
 </template>
 
-<script>
+<script setup>
 import { useReviewStore } from '@/store/ReviewStore';
 import { onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -21,36 +21,19 @@ import ShopCard from '@/components/ShopCard.vue';
 import ReviewList from '@/components/ReviewList.vue';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
 
-export default {
-  components: {
-    ShopCard,
-    ReviewList,
-    ReviewPageContent
-  },
-  setup() {
-    const reviewStore = useReviewStore();
-    const router = useRouter(); // Vue Router 사용
+const router = useRouter();
+const reviewStore = useReviewStore();
 
-    onMounted(() => {
-      reviewStore.loadShopData(1); // 상점 정보 로드
-      reviewStore.loadReviews(1); // 리뷰 데이터 로드
-    });
+onMounted(() => {
+  reviewStore.loadShopData(1);
+  reviewStore.loadReviews(1);
+});
 
-    // 스토어에서 상태를 가져오기
-    const reviews = computed(() => reviewStore.reviews);
-    const shopData = computed(() => reviewStore.shopData);
+const reviews = computed(() => reviewStore.reviews);
+const shopData = computed(() => reviewStore.shopData);
 
-    // 리뷰 작성 페이지로 이동하는 함수
-    const goToReviewAdd = () => {
-      router.push('/review/add');
-    };
-
-    return {
-      reviews,
-      shopData,
-      goToReviewAdd
-    };
-  }
+const goToReviewAdd = () => {
+  router.push('/review/add');
 };
 </script>
 
