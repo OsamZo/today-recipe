@@ -20,8 +20,8 @@ public class UserInfoService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createNickname(NickNameRequestDto nickNameRequestDto) {
-        User user = userRepository.findById(CustomUserUtils.getCurrentUserSeq())
+    public void createNickname(Long userSeq, NickNameRequestDto nickNameRequestDto) {
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(EntityNotFoundException::new);
         modelMapper.map(nickNameRequestDto, user);
         userRepository.save(user);
