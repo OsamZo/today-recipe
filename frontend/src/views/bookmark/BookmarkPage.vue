@@ -6,7 +6,7 @@
     <div v-else-if="bookmarks.length > 0" class="store-list-container">
       <h1 class="header-content">저장한 매장 리스트</h1>
       <div class="separator"></div>
-      <div v-for="(store, index) in bookmarks" :key="index" class="store-item">
+      <div v-for="store in bookmarks" :key="store.bookmarkSeq" class="store-item">
         <img :src="store.shopImgUrl" alt="store image" class="store-image" />
         <div class="store-info">
           <h2>{{ store.shopName }}</h2>
@@ -14,7 +14,7 @@
           <p class="store-phone">전화번호 | {{ store.shopTel }}</p>
           <p>매장 주소 | {{ store.shopAddress }}</p>
         </div>
-        <button class="bookmark-button">
+        <button @click="handleDeleteBookmark(store.bookmarkSeq)" class="bookmark-button">
           <font-awesome-icon icon="bookmark" />
         </button>
       </div>
@@ -23,32 +23,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useBookmarkStore } from '@/store/bookmarkStore';
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
-export default {
-  setup() {
-    const bookmarkStore = useBookmarkStore();
-    const { bookmarks } = storeToRefs(bookmarkStore);
-    const isLoading = ref(true); 
+const bookmarkStore = useBookmarkStore();
+const { bookmarks } = storeToRefs(bookmarkStore);
+const isLoading = ref(true);
+const isDeleting = ref(false); 
 
-    onMounted(async () => {
-      const userSeq = 1; 
-      try {
-        await bookmarkStore.loadBookmarks(userSeq);
-      } catch (error) {
-        console.error('북마크 로드 중 오류:', error);
-      } finally {
-        isLoading.value = false; 
-      }
-    });
+onMounted(async () => {
+  const userSeq = 1;
+  try {
+    await bookmarkStore.loadBookmarks(userSeq);
+  } catch (error) {
+    console.error('북마크 로드 중 오류:', error);
+  } finally {
+    isLoading.value = false;
+  }
+});
 
-    return {
-      bookmarks,
-      isLoading
-    };
+const handleDeleteBookmark = async (bookmarkSeq) => {
+  const userSeq = 1; 
+  isDeleting.value = true; 
+  try {
+    await bookmarkStore.removeBookmark(userSeq, bookmarkSeq);
+    console.log('북마크가 성공적으로 삭제되었습니다.');
+  } catch (error) {
+    console.error('북마크 삭제 중 오류:', error);
+  } finally {
+    isDeleting.value = false; 
   }
 };
 </script>
