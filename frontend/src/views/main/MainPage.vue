@@ -5,7 +5,16 @@ import '@/assets/css/reset.css';
 
 // ========= 지도 관련 기능 =========
 const { VITE_KAKAO_MAP_KEY } = import.meta.env;
+const { VITE_KAKAO_MAP_KEY_ALL } = import.meta.env;
 const map = ref(null);
+const currentLocation = ref([]);
+const shops = ref([]);
+const markerImageByCategory = {
+  1: 'https://goruna.s3.us-west-1.amazonaws.com/a190bcce-1f8b-4216-9248-3e0782fbf9df_icons8-location-48.png',
+  2: 'https://goruna.s3.us-west-1.amazonaws.com/1db52cc6-c91a-46e0-829a-413640a7e39f_icons8-location-48%20%283%29.png',
+  3: 'https://goruna.s3.us-west-1.amazonaws.com/7ba60c36-0a8a-4dd5-9843-ac35769ddd77_icons8-location-48%20%282%29.png',
+  4: 'https://goruna.s3.us-west-1.amazonaws.com/bbbf6a31-9231-4595-a16d-69f8c297eeab_icons8-location-48%20%281%29.png'
+}
 
 const loadKakaoMap = (container, userCoords) => {
   const script = document.createElement('script');
@@ -21,11 +30,13 @@ const loadKakaoMap = (container, userCoords) => {
       }
 
       const mapInstance = new window.kakao.maps.Map(container, options);
-    })
       map.value = mapInstance;  // map에 생성된 지도 인스턴스 저장
 
       // 현재 위치에 마커 추가
       addCurrentLocationMarker(userCoords, mapInstance);
+
+      // 지도에 매장 표시
+      displayShopMarkers(mapInstance);
     })
   }
 }
@@ -72,10 +83,60 @@ const addCurrentLocationMarker = (coords, mapInstance) => {
   );
   marker.setImage(markerImage);
 }
+
+// 주소를 위도/경도로 변환하는 함수
+const getCoordinatesFromAddress = async(address) => {
+  try {
+    const response = await fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
+        {
+          headers: {
+            Authorization: `KakaoAK ${VITE_KAKAO_MAP_KEY_ALL}`,
+          },
+        }
+    );
+    const data = await response.json();
+    console.log(data.documents);
+    if (data.documents && data.documents.length > 0) {
+      const { x: longitude, y: latitude } = data.documents[0].address;
+
+      return { latitude, longitude };
+    }
+  } catch (error) {
+    console.log("주소 변환 도중 오류 발생", error)
   }
 }
 
-// 오늘의 특가 리스트 가져오기
+// 지도 반경에 있는 가게에 마커 표시
+const displayShopMarkers = async(mapInstance) => {
+  try {
+    const categorySeq = 1;
+    const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop`);
+    shops.value = response.data.data;
+
+    for (const shop of shops.value) {
+      const coords = await getCoordinatesFromAddress(shop.shopAddress);
+      if (coords) {
+        const shopLocation = new window.kakao.maps.LatLng(coords.latitude, coords.longitude);
+
+        // 카테고리 별로 마커 이미지 선택
+        const markerImage = new window.kakao.maps.MarkerImage(
+            markerImageByCategory[shop.categorySeq], new window.kakao.maps.Size(38, 38),
+            {offset: new window.kakao.maps.Point(16, 32)}
+        )
+        const marker = new window.kakao.maps.Marker({
+          position: shopLocation,
+          image:markerImage,
+          map: mapInstance,
+        })
+      }
+    }
+  } catch(error) {
+    console.log("매장 조회 실패", error);
+  }
+}
+
+// ========= 오늘의 특가 리스트 가져오기 =========
 const todaySaleProducts = reactive([]);
 const fetchTodaySaleList = async() => {
   try {
@@ -86,6 +147,7 @@ const fetchTodaySaleList = async() => {
       todaySaleProducts.push({
         shopName: product.shopName,
         shopImgUrl: product.shopImgUrl,
+        shopAddress: product.shopAddress,
         categoryName:product.categoryName,
         productOriginalPrice: product.productOriginalPrice,
         productSalePrice: product.productSalePrice
@@ -104,9 +166,6 @@ const formatPrice = (price) => {
   return price.toLocaleString();
 }
 
-onMounted(() => {
-  fetchTodaySaleList();
-  loadKakaoMap(map.value);
 onMounted(async() => {
   try {
     fetchTodaySaleList();
