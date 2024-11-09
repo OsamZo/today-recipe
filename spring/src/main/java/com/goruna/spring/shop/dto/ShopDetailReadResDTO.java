@@ -21,6 +21,8 @@ public class ShopDetailReadResDTO {
 
     private String shopIntroduction;
 
+    private Long productSeq;
+
     private String productName;
 
     private String productDescription;

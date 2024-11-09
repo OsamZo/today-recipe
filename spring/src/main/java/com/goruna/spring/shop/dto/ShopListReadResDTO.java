@@ -21,6 +21,8 @@ public class ShopListReadResDTO {
 
     private String categoryName;
 
+    private Long productSeq;
+
     private int productOriginalPrice;
 
     private int productSalePrice;
