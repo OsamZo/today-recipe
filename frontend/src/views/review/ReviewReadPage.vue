@@ -15,19 +15,43 @@
 
 <script setup>
 import { useReviewStore } from '@/store/ReviewStore';
-import { onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/UserStore';
+import { onMounted, computed, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import ShopCard from '@/components/ShopCard.vue';
 import ReviewList from '@/components/ReviewList.vue';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
 
 const router = useRouter();
+const route = useRoute();
 const reviewStore = useReviewStore();
+const userStore = useUserStore();
+
+const shopSeq = route.params.shopSeq;
 
 onMounted(() => {
-  reviewStore.loadShopData(1);
-  reviewStore.loadReviews(1);
+  if (shopSeq) {
+    reviewStore.loadShopData(shopSeq);
+    reviewStore.loadReviews(shopSeq);
+  } else {
+    console.error('shopSeq가 없습니다. URL을 확인하세요.');
+  }
 });
+
+watch(
+  () => userStore.userSeq,
+  async (newSeq) => {
+    if (newSeq) {
+      for (let review of reviewStore.reviews) {
+        try {
+          await reviewStore.checkLikeStatus(newSeq, review.reviewSeq);
+        } catch (error) {
+          console.error(`리뷰 ${review.reviewSeq}의 좋아요 상태 확인 중 오류 발생:`, error);
+        }
+      }
+    }
+  }
+);
 
 const reviews = computed(() => reviewStore.reviews);
 const shopData = computed(() => reviewStore.shopData);
