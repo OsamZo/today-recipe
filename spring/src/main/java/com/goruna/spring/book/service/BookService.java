@@ -71,4 +71,13 @@ public class BookService {
                 })
                 .collect(Collectors.toList());
     }
+
+    // 예약 취소하기
+    @Transactional
+    public void cancelBook(Long bookSeq) {
+        Book book = bookRepository.findById(bookSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        book.cancelBook();
+        bookRepository.save(book);
+    }
 }
