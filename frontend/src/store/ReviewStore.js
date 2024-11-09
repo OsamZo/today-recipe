@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { fetchReviewsByShopSeq, createReview } from '@/api/review/ReviewApi';
 import { fetchShopCardBySeq } from '@/api/shop/ShopReadApi';
+import { addLike, deleteLike, checkLikeStatus } from '@/api/review/GoodApi'; // 조회 API 추가
 
 export const useReviewStore = defineStore('reviewStore', {
     state: () => ({
@@ -9,15 +10,14 @@ export const useReviewStore = defineStore('reviewStore', {
             shopImgUrl: '',
             shopName: ''
         },
-        bookSeq: null // bookSeq 상태 추가
+        bookSeq: null,
+        currentShopSeq: null,
     }),
     actions: {
         async loadShopData(shopSeq) {
             try {
                 const shopInfo = await fetchShopCardBySeq(shopSeq);
                 this.shopData = shopInfo;
-
-                // 로컬 스토리지에 저장
                 localStorage.setItem('shopData', JSON.stringify(this.shopData));
             } catch (error) {
                 console.error('스토어에서 매장 데이터를 로드하는 중 오류 발생:', error);
@@ -27,86 +27,76 @@ export const useReviewStore = defineStore('reviewStore', {
             try {
                 const response = await fetchReviewsByShopSeq(shopSeq);
                 this.reviews = response;
+                this.currentShopSeq = shopSeq;
 
                 if (response.length > 0) {
                     const { bookSeq } = response[0];
                     this.bookSeq = bookSeq;
                 }
 
-                // 로컬 스토리지에 저장
                 localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
                 console.error('스토어에서 리뷰 데이터를 로드하는 중 오류 발생:', error);
             }
         },
-        setBookSeq(bookSeq) {
-            this.bookSeq = bookSeq;
-        },
-        async createReview(userSeq, reviewContent) {
+        async checkLikeStatus(userSeq, reviewSeq) {
             try {
-                if (!this.bookSeq) {
-                    throw new Error('bookSeq가 설정되지 않았습니다.');
+                const response = await checkLikeStatus(this.currentShopSeq, userSeq, reviewSeq);
+                const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
+                if (review) {
+                    review.isClicked = response.isClicked;
+                    review.isLiked = response.isClicked === 'Y';
                 }
-
-                const reviewData = {
-                    reviewContent
-                };
-
-                const response = await createReview(userSeq, this.bookSeq, reviewData);
-                console.log('리뷰가 성공적으로 추가되었습니다:', response);
-
-                // 리뷰 추가 후 스토어 상태 업데이트 (옵션)
-                this.reviews.push({
-                    shopImgUrl: this.shopData.shopImgUrl,
-                    shopName: this.shopData.shopName,
-                    userNickname: '현재 사용자', // 실제 사용자 정보를 바인딩할 수 있습니다.
-                    regDate: new Date().toISOString(),
-                    reviewContent: reviewContent,
-                    likeCount: 0,
-                    bookSeq: this.bookSeq
-                });
-
-                // 로컬 스토리지에 업데이트된 리뷰 저장
                 localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
-                console.error('리뷰 추가 중 오류 발생:', error);
+                console.error('좋아요 상태 조회 중 오류 발생:', error);
             }
         },
-        async addLike(userSeq, reviewSeq, shopSeq) {
+        async addLike(userSeq, reviewSeq) {
             try {
-                const response = await addLike(shopSeq, userSeq, reviewSeq);
+                if (!this.currentShopSeq) {
+                    throw new Error('shopSeq가 설정되지 않았습니다.');
+                }
+
+                console.log('addLike 호출:', { userSeq, reviewSeq, shopSeq: this.currentShopSeq });
+
+                const response = await addLike(this.currentShopSeq, userSeq, reviewSeq);
                 console.log('좋아요가 성공적으로 추가되었습니다:', response);
 
-                // 좋아요 추가 후 해당 리뷰의 likeCount 업데이트
                 const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
                 if (review) {
                     review.likeCount += 1;
-                    review.isLiked = true; // UI 상태 업데이트
+                    review.isLiked = true;
+                    review.isClicked = 'Y';
                 }
 
-                // 로컬 스토리지에 업데이트된 리뷰 저장
                 localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
                 console.error('좋아요 추가 중 오류 발생:', error);
             }
         },
-        async deleteLike(shopSeq, goodSeq, reviewSeq) {
+        async deleteLike(goodSeq, reviewSeq) {
             try {
-                const response = await deleteLike(shopSeq, goodSeq);
-                console.log('좋아요가 성공적으로 삭제되었습니다:', response);
-
-                // 좋아요 삭제 후 해당 리뷰의 likeCount 업데이트
-                const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
-                if (review) {
-                    review.likeCount -= 1;
-                    review.isLiked = false; // UI 상태 업데이트
+                if (!this.currentShopSeq) {
+                    throw new Error('shopSeq가 설정되지 않았습니다.');
                 }
 
-                // 로컬 스토리지에 업데이트된 리뷰 저장
+                const review = this.reviews.find(r => r.reviewSeq === reviewSeq);
+                if (review && review.isClicked === 'Y') {
+                    const response = await deleteLike(this.currentShopSeq, goodSeq);
+                    console.log('좋아요가 성공적으로 삭제되었습니다:', response);
+
+                    review.likeCount -= 1;
+                    review.isLiked = false;
+                    review.isClicked = 'N';
+                } else {
+                    console.warn('좋아요가 추가되지 않았거나 isClicked가 Y가 아닙니다.');
+                }
+
                 localStorage.setItem('reviews', JSON.stringify(this.reviews));
             } catch (error) {
                 console.error('좋아요 삭제 중 오류 발생:', error);
             }
-        }
+        },
     }
 });
