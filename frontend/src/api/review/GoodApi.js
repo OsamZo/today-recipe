@@ -9,7 +9,7 @@ export async function checkLikeStatus(shopSeq, userSeq, reviewSeq) {
                 reviewSeq
             }
         });
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error('좋아요 상태 조회 중 오류 발생:', error);
         throw error;
@@ -29,9 +29,13 @@ export async function addLike(shopSeq, userSeq, reviewSeq) {
     }
 }
 
-export async function deleteLike(shopSeq, goodSeq) {
+export async function deleteLike(shopSeq, goodSeq, userSeq) {
     try {
-        const response = await axios.delete(`http://localhost:8100/api/v1/shop/${shopSeq}/review/good/${goodSeq}`);
+        const response = await axios.delete(`http://localhost:8100/api/v1/shop/${shopSeq}/review/good/${goodSeq}`, {
+            params: {
+                userSeq: userSeq
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('좋아요 삭제 중 오류 발생:', error);
