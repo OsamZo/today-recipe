@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchBookmarks, deleteBookmark } from '@/api/bookmark/bookmarkApi'; 
+import {fetchBookmarks, deleteBookmark, addBookmark} from '@/api/bookmark/bookmarkApi';
 
 export const useBookmarkStore = defineStore('bookmark', {
   state: () => ({
@@ -8,12 +8,39 @@ export const useBookmarkStore = defineStore('bookmark', {
   actions: {
     async loadBookmarks(userSeq) {
       try {
-        const response = await fetchBookmarks(userSeq);
-        this.bookmarks = response.data; 
+        const response = await fetchBookmarks(1);
+        console.log(response.data)
+        this.bookmarks = response.data;
+        return response;
       } catch (error) {
         console.error('북마크 데이터를 불러오는 중 오류:', error);
       }
     },
+
+    async addBookmark(userSeq, shopSeq, shopInfo){
+      try {
+        console.log(shopInfo)
+        const response = await addBookmark(userSeq, shopSeq);
+        console.log(response.data);
+        const bookmarkSeq = response.data.data.bookmarkSeq;
+        const {categoryName, shopAddress, shopImgUrl, shopName, shopTel } = shopInfo;
+        // const bookmarkSeq = response.data.bookmarkSeq;
+        this.bookmarks.push({
+          bookmarkSeq,
+          shopSeq,
+          shopImgUrl,
+          shopName,
+          categoryName,
+          shopTel,
+          shopAddress,
+        });
+        console.log('북마크가 등록되었습니다.');
+        console.log(this.bookmarks)
+      } catch(error) {
+        console.error('북마크 추가 중 오류: ', error);
+      }
+    },
+
     async removeBookmark(userSeq, bookmarkSeq) {
       try {
         await deleteBookmark(userSeq, bookmarkSeq); 
