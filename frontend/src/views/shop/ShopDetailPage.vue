@@ -1,7 +1,8 @@
 <script setup>
 import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
-import {onMounted, reactive} from "vue";
+import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
+import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
 
@@ -20,6 +21,7 @@ const fetchShopDetail = async(categorySeq, shopSeq) => {
     shopDetail.productClosedAt = data.productClosedAt;
     shopDetail.shopAddress = data.shopAddress;
     shopDetail.shopIntroduction = data.shopIntroduction;
+    shopDetail.productSeq = data.productSeq;
     shopDetail.productName = data.productName;
     shopDetail.productDescription = data.productDescription;
     shopDetail.productQty = data.productQty;
@@ -42,9 +44,12 @@ const formatPrice = (price) => {
 
 // 리뷰 목록으로 라우팅
 const routeToReviewList = () => {
-  const shopSeq = route.params.shopSeq;
   router.push(`/review`);
 }
+
+// 예약하기 누를 시 모달
+const isModalOpen = ref(false);
+
 
 onMounted(() => {
   const { categorySeq, shopSeq } = route.params;
@@ -53,6 +58,11 @@ onMounted(() => {
 </script>
 
 <template>
+  <BookQuantityModal
+      v-if="isModalOpen"
+      :product-seq="shopDetail.productSeq"
+      :productQty="shopDetail.productQty"
+      @close="isModalOpen=false"/>
   <WhiteContentBox>
     <ShopCard
         :shopImgUrl="shopDetail.shopImgUrl"
@@ -89,7 +99,7 @@ onMounted(() => {
             <div class="product_qty">남은 수량: {{ shopDetail.productQty }}개</div>
           </div>
           <div>
-            <button class="book_button">예약하기</button>
+            <button class="book_button" @click="isModalOpen = true">예약하기</button>
           </div>
         </div>
       </div>

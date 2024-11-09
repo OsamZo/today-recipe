@@ -1,70 +1,16 @@
-<script>
-import axios from 'axios';
+<script setup>
+import { onMounted } from "vue";
+import { ShopReviewApi } from "@/api/Admin/ShopReviewApi.js";
 
-export default {
-  name: 'ReviewPage',
-  data() {
-    return {
-      restaurant: null,
-      reviews: []
-    };
-  },
-  mounted() {
-    this.fetchReviews();
-  },
-  methods: {
-    async fetchReviews() {
-      const shopSeq = this.$route.params.shopSeq;
-      try {
-        const response = await axios.get(`http://localhost:8100/api/v1/admin/${shopSeq}/review`);
-        if (response.data.success) {
-          const data = response.data.data;
+const { restaurant, reviews, fetchReviews, deleteReview } = ShopReviewApi();
 
-          if (data.length > 0) {
-            // 가게 정보 가져오기
-            this.restaurant = {
-              name: data[0].shopName,
-              image: data[0].shopImgUrl
-            };
-
-            // 리뷰 리스트 설정 (리뷰 상태가 "Y"인 경우만 표시)
-            this.reviews = data
-                .filter(review => review.reviewStatus === 'Y')
-                .map(review => ({
-                  reviewSeq: review.reviewSeq,
-                  userNickname: review.userNickname,
-                  reviewContent: review.reviewContent
-                }));
-          }
-        } else {
-          console.error("리뷰 데이터를 불러오는 데 실패했습니다:", response.data.message);
-        }
-      } catch (error) {
-        console.error("리뷰 데이터를 불러오는 중 오류가 발생했습니다:", error);
-      }
-    },
-    // async 추가
-    async deleteReview(index) {
-      const reviewSeq = this.reviews[index].reviewSeq;
-      try {
-        const response = await axios.delete(`http://localhost:8100/api/v1/admin/review/${reviewSeq}`);
-        if (response.data.success) {
-          this.reviews.splice(index, 1);
-          alert("삭제가 완료되었습니다!");
-        } else {
-          console.error("리뷰 삭제에 실패했습니다.", response.data.message);
-        }
-      } catch (error) {
-        console.error("리뷰 삭제 중 오류가 발생했습니다:", error);
-      }
-    }
-  }
-};
+onMounted(() => {
+  fetchReviews();
+});
 </script>
 
 <template>
   <div>
-    <!-- 리뷰 컨텐츠 -->
     <div class="content">
       <div class="review-container">
         <!-- restaurant이 있을 때만 보여줌 -->
@@ -87,8 +33,8 @@ export default {
   </div>
 </template>
 
+
 <style scoped>
-/* 기본 레이아웃 */
 body {
   font-family: Arial, sans-serif;
   background-color: #f6f4f2;
@@ -99,7 +45,6 @@ body {
   font-size: 18px;
 }
 
-/* 컨텐츠 영역 */
 .content {
   display: flex;
   justify-content: center;

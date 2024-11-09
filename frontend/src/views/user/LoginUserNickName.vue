@@ -1,42 +1,47 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
+import { useUserStore } from '@/store/UserStore';
+import { ref, onMounted } from 'vue';
 
+const userStore = useUserStore();
 const nickname = ref('');
 const nicknameError = ref(false);
-const userSeq = 1;
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  if (token) {
+    userStore.storeJwtToken(token);
+  }
+});
 
 const submitNickname = async () => {
   if (nicknameError.value || !nickname.value.trim()) {
     alert('닉네임을 올바르게 입력해주세요.');
     return;
   }
-  console.log('닉네임 값:', nickname.value);
   try {
-
-    console.log('닉네임 값:', nickname.value);
-    const response = await axios.post(`http://localhost:8100/api/v1/user/${userSeq}/nickname`, {
-      userNickname: nickname.value
-    });
-  } catch (e) {
-    console.log('닉네임 추가 실패', e);
-    alert('닉네임 추가 실패');
+    if (userStore.userSeq) {
+      await userStore.addNickname(userStore.userSeq, nickname.value);
+      alert('닉네임이 성공적으로 추가되었습니다.');
+      window.location.href = '/'; 
+    } else {
+      alert('유효하지 않은 사용자 정보입니다.');
+    }
+  } catch (error) {
+    alert('닉네임 추가 중 오류가 발생했습니다.');
   }
 };
-
 
 const checkNicknameError = () => {
   nicknameError.value = nickname.value.trim() === '';
 };
 </script>
 
-
 <template>
   <div class="content-box">
     <div class="login-title">닉네임 설정</div>
     <input type="text" class="input-text" v-model="nickname" @input="checkNicknameError" placeholder="닉네임을 입력하세요">
     <div v-if="nicknameError" class="error-message">닉네임에 공백만 입력할 수 없습니다.</div>
-
     <div class="submit-button" @click="submitNickname">확인</div>
   </div>
 </template>

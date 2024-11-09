@@ -4,6 +4,7 @@ import com.goruna.spring.book.dto.BookListReadResDTO;
 import com.goruna.spring.book.service.BookService;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
+import com.goruna.spring.common.util.CustomUserUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,19 @@ public class BookController {
     @Operation(summary = "예약 신청", description = "예약을 신청합니다.")
     public ApiResponse<?> createBook(
             @PathVariable(value = "productSeq") Long productSeq,
-            @RequestParam Long userSeq,
             @RequestParam int bookQty
     ) {
-        bookService.createBook(productSeq, userSeq, bookQty);
+        Long userSeq = CustomUserUtils.getCurrentUserSeq();
+        bookService.createBook(productSeq, 1L, bookQty);
         return ResponseUtil.successResponse("예약이 성공적으로 생성되었습니다.").getBody();
+    }
+
+    // 예약 취소
+    @PutMapping("/book/{bookSeq}")
+    @Operation(summary="예약 취소", description="예약을 취소합니다.")
+    public ApiResponse<?> cancelBook(@PathVariable(value="bookSeq") Long bookSeq) {
+        bookService.cancelBook(bookSeq);
+        return ResponseUtil.successResponse("예약이 성공적으로 취소되었습니다.").getBody();
     }
 
     // 회원 예약 내역 조회

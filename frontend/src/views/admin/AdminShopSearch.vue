@@ -1,76 +1,37 @@
 <script setup>
+import { adminShopStore } from '@/store/AdminShopStore.js';
 import AdminNav from "@/components/AdminNav.vue";
 import AdminSearchBodyTitle from "@/components/AdminSearchBodyTitle.vue";
-import {ref, onMounted} from "vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { createPinia } from 'pinia';
+import piniaPersist from 'pinia-plugin-persist';
 
+const shopStore = adminShopStore();
 const router = useRouter();
+const pinia = createPinia();
+pinia.use(piniaPersist);
+
+// 검색 상태
+const searchQuery = ref('');
 
 const goToShopReview = (shopSeq) => {
   router.push(`/admin/shopList/review/${shopSeq}`);
 };
 
-const shopList = ref([]);
-const page = 1;
-const size = 10;
-const searchQuery = ref("");
-let allShops = ref([]);
-const showModal = ref(false);
-const shopSeqToDelete = ref(null);
 
-const fetchShops = async () => {
-  try {
-    const response = await axios.get('http://localhost:8100/api/v1/admin/shop', {
-      params: { page, size }
-    });
-    allShops.value = response.data.data.filter(shop => shop.shopDelStatus !== 'Y');
-    shopList.value = [...allShops.value];
-  } catch (error) {
-    console.error("데이터를 불러오는 중 오류 발생", error);
-  }
-};
-
-const searchShops = async () => {
-  if (!searchQuery.value) {
-    shopList.value = [...allShops.value];
-  } else {
-    shopList.value = allShops.value.filter(shop =>
-        shop.shopName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  }
-};
-
-const openDeleteModal = (shopSeq) => {
-  shopSeqToDelete.value = shopSeq;
-  showModal.value = true;
-};
-
-const confirmDeleteShop = async () => {
-  try {
-    await axios.delete(`http://localhost:8100/api/v1/admin/shop/${shopSeqToDelete.value}`);
-    fetchShops();
-    showModal.value = false;
-  } catch (error) {
-    console.error("삭제 요청 중 오류 발생:", error.response?.data || error);
-  }
-};
-
-const closeModal = () => {
-  showModal.value = false;
-  shopSeqToDelete.value = null;
-};
-
-onMounted(() => {
-  fetchShops();
+onMounted(async () => {
+  await shopStore.fetchShops();  // 데이터를 항상 로드
+  shopStore.initializeSearch();  // 검색 초기화 호출
 });
 
 const handleSearchKeyPress = (event) => {
   if (event.key === "Enter") {
-    searchShops();
+    shopStore.searchShops();
   }
 };
 </script>
+
 
 <template>
   <div class="main-header">
@@ -81,10 +42,9 @@ const handleSearchKeyPress = (event) => {
       <AdminNav class="nav"/>
       <div class="main-content">
         <AdminSearchBodyTitle/>
-
         <div class="search-box">
           <input
-              v-model="searchQuery"
+              v-model="shopStore.searchQuery"
               type="text"
               placeholder="찾고있는 정보가 있나요?"
               @keydown="handleSearchKeyPress"
@@ -92,14 +52,14 @@ const handleSearchKeyPress = (event) => {
         </div>
 
         <div class="content">
-          <div class="shop-item" v-for="shop in shopList" :key="shop.shopSeq" @click="goToShopReview(shop.shopSeq)">
+          <div class="shop-item" v-for="shop in shopStore.shopList" :key="shop.shopSeq">
             <img :src="shop.shopImgUrl" alt="매장 이미지" class="store-image"/>
-            <div class="shop-info">
+            <div class="shop-info" @click="goToShopReview(shop.shopSeq)">
               <p class="shop-name">{{ shop.shopName }}</p>
               <p class="shop-category">{{ shop.categoryName }}</p>
               <p class="shop-address">매장 주소 | {{ shop.shopAddress }}</p>
             </div>
-            <button class="delete-button" @click="openDeleteModal(shop.shopSeq)">
+            <button class="delete-button" @click="shopStore.openDeleteModal(shop.shopSeq)">
               매장 삭제
             </button>
           </div>
@@ -108,17 +68,17 @@ const handleSearchKeyPress = (event) => {
     </div>
   </div>
 
-  <!-- 모달 창 -->
-  <div v-if="showModal" class="modal-overlay">
+  <div v-show="shopStore.showModal" class="modal-overlay">
     <div class="modal-content">
       <p class="modal-text">매장을 삭제하시겠습니까?</p>
       <div class="modal-buttons">
-        <button @click="confirmDeleteShop">네</button>
-        <button @click="closeModal">아니오</button>
+        <button @click="shopStore.confirmDeleteShop">네</button>
+        <button @click="shopStore.closeModal">아니오</button>
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .admin-container {
@@ -260,14 +220,13 @@ const handleSearchKeyPress = (event) => {
 
 .modal-text {
   font-size: 30px;
-  margin: 35px 0 80px 0;
+  margin: 35px 0 50px 0;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: center;
   gap:39px;
-
 }
 
 .modal-buttons button {

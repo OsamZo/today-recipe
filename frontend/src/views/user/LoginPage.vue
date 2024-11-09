@@ -1,44 +1,22 @@
 <script setup>
-import '@/assets/css/reset.css';
+import { useUserStore } from '@/store/UserStore';
+import { onMounted } from 'vue';
 
-import { ref } from 'vue';
-import axios from 'axios';
+const userStore = useUserStore();
 
-const googleResult = ref(null);
-
-const loginWithGoogle = async () => {
-  try {
-    const response = await axios.post('http://localhost:8100/api/v1/oauth2/google');
-
-    window.location.href = response.data;
-  } catch (error) {
-    console.error('로그인 URL 요청 실패:', error);
-  }
-};
-
-const resultWithGoogle = async (authCode) => {
-  try {
-    const response = await axios.get(`http://localhost:8100/api/v1/oauth2/google?code=${authCode}`);
-
-    const result = response.data;
-
-    if (result === 'signup') {
-      window.location.href = '/signup';
-    } else if (result === 'login') {
-      window.location.href = '/';
+onMounted(() => {
+  if (window.location.search.includes('code')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get('code');
+    if (authCode) {
+      userStore.processGoogleAuth(authCode);
     }
-  } catch (error) {
-    console.error('로그인 처리 중 오류 발생', error);
   }
-};
+});
 
-if (window.location.search.includes('code')) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const authCode = urlParams.get('code');
-  if (authCode) {
-    resultWithGoogle(authCode);
-  }
-}
+const initiateGoogleLogin = () => {
+  userStore.handleGoogleLogin();
+};
 </script>
 
 <template>
@@ -48,7 +26,7 @@ if (window.location.search.includes('code')) {
       <img src="https://goruna.s3.us-west-1.amazonaws.com/1a90a548-a272-4c5d-aa3f-076c6b74997d_kakaotalk.png">
       <div class="login-type">카카오 계정으로 로그인</div>
     </div>
-    <div class="gray-btn" @click="loginWithGoogle">
+    <div class="gray-btn" @click="initiateGoogleLogin">
       <img src="https://goruna.s3.us-west-1.amazonaws.com/755c83be-a394-4344-801c-6b3f8f118b0f_google.png">
       <div class="login-type">구글 계정으로 로그인</div>
     </div>

@@ -93,7 +93,8 @@ onMounted(() => {
       </div>
       <div class="shop_list_box">
         <div v-for="shop in shopList" :key="shop.shopSeq" class="shop_white_background">
-          <RouterLink :to="`shop/${shop.shopSeq}`">
+          <RouterLink
+              :to="{path: `shop/${shop.shopSeq}`, query: {productSeq: shop.productSeq}}">
             <div class="flex shop_title_box">
               <div class="shop_name">{{ shop.shopName }}</div>
               <div class="category_name">{{ shop.categoryName }}</div>

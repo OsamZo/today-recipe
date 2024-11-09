@@ -1,67 +1,21 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useShopData } from '@/components/Admin/useShopData';
-import { useImageModal } from '@/components/Admin/useImageModal';
-import { useAuthBtn } from '@/components/Admin/useAuthBtn.js'
-import axios from "axios";
+import { authShopDataApi } from '@/api/Admin/AuthShopDataApi.js';
+import { imageModalApi } from '@/api/Admin/ImageModalApi.js';
+import { authBtnApi } from '@/api/Admin/AuthBtnApi.js'
 
 const route = useRoute();
 const shopSeq = Number(route.params.shopSeq);
 
-// 매장 데이터 로드
-const { shop, fetchShops } = useShopData(shopSeq);
+const { shop, fetchShops } = authShopDataApi(shopSeq);
 
-// 이미지 모달 관련 데이터 및 메서드
-const { showModal, imgUrl, openImgModal, closeModal } = useImageModal(shopSeq);
+const { showModal, imgUrl, openImgModal, closeModal } = imageModalApi(shopSeq);
 
-// 처리 요청
-const { acceptAuth, cancelAuth } = useAuthBtn(shopSeq, fetchShops);
-
-// const acceptAuth = async () => {
-//   try {
-//     const response = await axios.put(
-//         `http://localhost:8100/api/v1/admin/shop/${shopSeq}/auth`,
-//         'APPROVE',
-//         {
-//           headers: {
-//             'Content-Type': 'application/json'
-//           }
-//         }
-//     );
-//     if (response.status === 200) {
-//       alert("요청이 성공적으로 처리되었습니다.");
-//       fetchShops(); // 상태 업데이트 후 데이터를 가져오거나 상태를 변경
-//     }
-//   } catch (error) {
-//     alert("요청이 실패하였습니다.");
-//     console.error("상태 업데이트 도중 오류 발생 : ", error.response?.data || error);
-//   }
-// };
-//
-// const cancelAuth = async () => {
-//   try {
-//     const response = await axios.put(
-//         `http://localhost:8100/api/v1/admin/shop/${shopSeq}/auth`,
-//         'REJECT',
-//         {
-//           headers: {
-//             'Content-Type': 'application/json'
-//           }
-//         }
-//     );
-//     if (response.status === 200) {
-//       alert("요청이 성공적으로 처리되었습니다.");
-//       fetchShops(); // 상태 업데이트 후 데이터를 가져오거나 상태를 변경
-//     }
-//   } catch (error) {
-//     alert("요청이 실패하였습니다.");
-//     console.error("상태 업데이트 도중 오류 발생 : ", error.response?.data || error);
-//   }
-// };
+const { acceptAuth, cancelAuth } = authBtnApi(shopSeq, fetchShops);
 
 onMounted(() => {
-  fetchShops(); // 컴포넌트가 마운트될 때 매장 데이터 가져오기
+  fetchShops();
 });
 
 const formattedShopOpenDate = computed(() => {
