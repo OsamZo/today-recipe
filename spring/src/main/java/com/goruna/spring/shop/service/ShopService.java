@@ -17,9 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +45,8 @@ public class ShopService {
 
     // 오늘의 특가 리스트 조회
     public List<ShopListReadResDTO> readLatest5ShopsToday() {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         List<Product> shops = shopRepository.readLatest5ShopsToday(startOfDay, endOfDay);
         return getShopListReadResDTOS(shops);
@@ -56,8 +54,8 @@ public class ShopService {
 
     // 전체 매장 목록 조회
     public List<ShopListReadResDTO> readShopsAllToday() {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         List<Product> shops = shopRepository.readShopsAllToday(startOfDay, endOfDay);
         return getShopListReadResDTOS(shops);
@@ -65,8 +63,8 @@ public class ShopService {
 
     // 카테고리 별 매장 목록 조회
     public List<ShopListReadResDTO> readShopsByCategory(Long categorySeq, Integer page) {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         if (page == null || page < 1) {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
@@ -84,8 +82,8 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         Product product = productRepository.readLatestProductToday(shopSeq, startOfDay, endOfDay);
 
