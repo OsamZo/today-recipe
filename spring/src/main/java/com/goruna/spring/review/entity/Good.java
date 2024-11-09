@@ -28,7 +28,7 @@ public class Good {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private YnType isClicked = YnType.N;
+    private YnType isClicked = YnType.Y;
 
     @Builder
     public Good(User user, Review review){
