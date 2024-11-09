@@ -1,6 +1,6 @@
 <script setup>
-import {ref} from "vue";
-import axios from "axios";
+import { ref } from "vue";
+import { bookProduct } from "@/api/book/bookApi.js";
 
 const props = defineProps({
   productQty: {
@@ -29,13 +29,8 @@ const updateQuantity = (change) => {
 
 const booking = async() => {
   try {
-    console.log(props.productSeq)
-    const response = await axios.post(`http://localhost:8100/api/v1/product/${props.productSeq}`, null, {
-      params: {
-        userSeq: 1,
-        bookQty: selectedQuantity.value
-      }
-    });
+    const userSeq = 1;
+    await bookProduct(props.productSeq, userSeq, selectedQuantity.value);
     alert("예약이 완료되었습니다.");
   } catch(error) {
     alert("예약에 실패했습니다.");

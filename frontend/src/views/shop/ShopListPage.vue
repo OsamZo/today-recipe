@@ -1,8 +1,8 @@
 <script setup>
 import '@/assets/css/reset.css';
-import axios from "axios";
 import {RouterLink, useRouter} from 'vue-router';
 import {onMounted, reactive, ref} from "vue";
+import {fetchCategoryList, fetchShopListByCategory} from "@/api/shop/ShopListReadApi.js";
 
 const router = useRouter();
 const selectedCategory = ref(1);
@@ -10,51 +10,42 @@ const shopList = reactive([]);
 const categoryList = reactive([]);
 
 // 매장 리스트 가져오기
-const fetchShopList = async(categorySeq) => {
-  try {
-    const response = await axios.get(`http://localhost:8100/api/v1/category/${selectedCategory.value}/shop`);
-    const shops = response.data.data;
+const loadShopList = async (categorySeq) => {
+  const shops = await fetchShopListByCategory(categorySeq);
 
-    shopList.length = 0;
-    shops.forEach(shop => {
-      shopList.push({
-        shopSeq: shop.shopSeq,
-        shopName: shop.shopName,
-        shopImgUrl: shop.shopImgUrl,
-        shopAddress: shop.shopAddress,
-        categorySeq: shop.categorySeq,
-        categoryName: shop.categoryName,
-        productOriginalPrice: shop.productOriginalPrice,
-        productSalePrice: shop.productSalePrice
-      })
-    })
-  } catch(error) {
-    console.log("매장 리스트를 불러오던 중 오류 발생", error);
-  }
-}
+  shopList.length = 0;
+
+  shops.forEach(shop => {
+    shopList.push({
+      shopSeq: shop.shopSeq,
+      shopName: shop.shopName,
+      shopImgUrl: shop.shopImgUrl,
+      shopAddress: shop.shopAddress,
+      categorySeq: shop.categorySeq,
+      categoryName: shop.categoryName,
+      productOriginalPrice: shop.productOriginalPrice,
+      productSalePrice: shop.productSalePrice
+    });
+  });
+};
 
 // 카테고리 리스트 가져오기
-const fetchCategoryList = async() => {
-  try {
-    const response = await axios.get(`http://localhost:8100/api/v1/category`);
-    const categories = response.data.data;
-
-    categories.forEach(category => {
-      categoryList.push({
-        categorySeq: category.categorySeq,
-        categoryName: category.categoryName
-      })
-    })
-  } catch(error) {
-    console.log("카테고리 리스트를 불러오던 중 오류 발생", error);
-  }
-}
+const loadCategoryList = async () => {
+  const categories = await fetchCategoryList();
+  categoryList.length = 0;
+  categories.forEach(category => {
+    categoryList.push({
+      categorySeq: category.categorySeq,
+      categoryName: category.categoryName
+    });
+  });
+};
 
 // 카테고리 버튼 클릭 시 변경
 const changeCategory = (categorySeq) => {
   selectedCategory.value = categorySeq;
   routeByCategory(selectedCategory.value);
-  fetchShopList(categorySeq);
+  loadShopList(categorySeq);
 }
 
 // 가격 포맷팅 함수
@@ -70,8 +61,8 @@ const routeByCategory = (categorySeq) => {
 }
 
 onMounted(() => {
-  fetchCategoryList();
-  fetchShopList(selectedCategory.value);
+  loadCategoryList();
+  loadShopList(selectedCategory.value);
 })
 </script>
 
