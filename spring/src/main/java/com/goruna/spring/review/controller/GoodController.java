@@ -32,16 +32,19 @@ public class GoodController {
     @Operation(summary = "좋아요 추가 API", description = "좋아요 추가를 위한 API 입니다.")
     public ApiResponse<?> addGood(@PathVariable Long shopSeq, @RequestBody GoodRequestDTO requestDTO) {
 
-        goodService.createGood(requestDTO);
-        return ResponseUtil.successResponse("좋아요가 성공적으로 추가되었습니다.").getBody();
+        GoodResDTO resDTO = goodService.createGood(requestDTO);
+        return ResponseUtil.successResponse("좋아요가 성공적으로 추가되었습니다.", resDTO).getBody();
     }
 
     /* 좋아요 삭제 */
     @DeleteMapping("/good/{goodSeq}")
     @Operation(summary = "좋아요 삭제 API", description = "좋아요 삭제를 위한 API 입니다.")
-    public ApiResponse<?> deleteGood(@PathVariable Long shopSeq, @PathVariable Long goodSeq) {
-
-        goodService.deleteGood(goodSeq);
-        return ResponseUtil.successResponse("좋아요가 성공적으로 삭제되었습니다.").getBody();
+    public ApiResponse<?> deleteGood(@PathVariable Long shopSeq, @PathVariable Long goodSeq, @RequestParam Long userSeq) {
+        boolean isDeleted = goodService.deleteGood(goodSeq, userSeq);
+        if (isDeleted) {
+            return ResponseUtil.successResponse("좋아요가 성공적으로 삭제되었습니다.").getBody();
+        } else {
+            return ResponseUtil.failureResponse("좋아요 삭제 실패: 권한이 없습니다.", null).getBody();
+        }
     }
 }
