@@ -7,10 +7,9 @@ const nickname = ref('');
 const nicknameError = ref(false);
 
 onMounted(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  if (token) {
-    userStore.storeJwtToken(token);
+  // JWT 토큰이 이미 UserStore에 저장되어 있으므로, 추가 작업 불필요
+  if (!userStore.userSeq) {
+    console.error('유효한 JWT 토큰이 필요합니다.');
   }
 });
 
