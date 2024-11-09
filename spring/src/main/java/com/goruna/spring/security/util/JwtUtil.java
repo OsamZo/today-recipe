@@ -74,4 +74,17 @@ public class JwtUtil {
                 .compact();
         return token;
     }
+
+    public String generateRefreshToken(Long userSeq, String loginEmail) {
+        // 만료 기간 설정 (예: 7일)
+        long expirationTime = 1000L * 60 * 60 * 24 * 7; // 7일
+
+        String refreshToken = Jwts.builder()
+                .setSubject(loginEmail)
+                .claim("userSeq", userSeq)
+                .signWith(key)
+                .setExpiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
+                .compact();
+        return refreshToken;
+    }
 }

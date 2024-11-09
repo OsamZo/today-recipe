@@ -1,7 +1,15 @@
 <script setup>
 import {RouterLink, useRouter} from 'vue-router';
+import { useUserStore } from '@/store/UserStore';
 
 const router = useRouter();
+const userStore = useUserStore();
+
+const handleLogout = () => {
+  userStore.logout(); // 로그아웃 메서드 호출
+  console.log('Logout triggered'); // 로그아웃 이벤트가 호출되는지 확인하기 위해 로그 추가
+};
+
 </script>
 
 <template>
@@ -28,13 +36,10 @@ const router = useRouter();
                 stroke="white" stroke-width="2"/>
           </svg>
         </div>
-        <div>
-          <svg width="36" height="32" viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M21.6667 8.66665V4.99998C21.6667 4.02752 21.2804 3.09489 20.5927 2.40725C19.9051 1.71962 18.9725 1.33331 18 1.33331H5.16667C4.19421 1.33331 3.26157 1.71962 2.57394 2.40725C1.88631 3.09489 1.5 4.02752 1.5 4.99998V27C1.5 27.9724 1.88631 28.9051 2.57394 29.5927C3.26157 30.2803 4.19421 30.6666 5.16667 30.6666H18C18.9725 30.6666 19.9051 30.2803 20.5927 29.5927C21.2804 28.9051 21.6667 27.9724 21.6667 27V23.3333"
-                stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M12.5 16H34.5M34.5 16L29 10.5M34.5 16L29 21.5" stroke="white" stroke-width="2.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
+        <div @click="handleLogout" style="cursor: pointer;">
+          <svg width="26" height="35" viewBox="0 0 26 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.6667 8.66665V4.99998C21.6667 4.02752 21.2804 3.09489 20.5927 2.40725C19.9051 1.71962 18.9725 1.33331 18 1.33331H5.16667C4.19421 1.33331 3.26157 1.71962 2.57394 2.40725C1.88631 3.09489 1.5 4.02752 1.5 4.99998V27C1.5 27.9724 1.88631 28.9051 2.57394 29.5927C3.26157 30.2803 4.19421 30.6666 5.16667 30.6666H18C18.9725 30.6666 19.9051 30.2803 20.5927 29.5927C21.2804 28.9051 21.6667 27.9724 21.6667 27V23.3333" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.5 16H34.5M34.5 16L29 10.5M34.5 16L29 21.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
