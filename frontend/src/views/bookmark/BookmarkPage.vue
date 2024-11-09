@@ -25,16 +25,23 @@
 
 <script setup>
 import { useBookmarkStore } from '@/store/BookmarkStore';
+import { useUserStore } from '@/store/UserStore'; 
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 const bookmarkStore = useBookmarkStore();
+const userStore = useUserStore();
 const { bookmarks } = storeToRefs(bookmarkStore);
 const isLoading = ref(true);
-const isDeleting = ref(false); 
+const isDeleting = ref(false);
 
 onMounted(async () => {
-  const userSeq = 1;
+  const userSeq = userStore.userSeq;
+  if (!userSeq) {
+    console.error('유효하지 않은 사용자 정보입니다.');
+    return;
+  }
+
   try {
     await bookmarkStore.loadBookmarks(userSeq);
   } catch (error) {
@@ -45,15 +52,20 @@ onMounted(async () => {
 });
 
 const handleDeleteBookmark = async (bookmarkSeq) => {
-  const userSeq = 1; 
-  isDeleting.value = true; 
+  const userSeq = userStore.userSeq;
+  if (!userSeq) {
+    console.error('유효하지 않은 사용자 정보입니다.');
+    return;
+  }
+
+  isDeleting.value = true;
   try {
     await bookmarkStore.removeBookmark(userSeq, bookmarkSeq);
     console.log('북마크가 성공적으로 삭제되었습니다.');
   } catch (error) {
     console.error('북마크 삭제 중 오류:', error);
   } finally {
-    isDeleting.value = false; 
+    isDeleting.value = false;
   }
 };
 </script>
