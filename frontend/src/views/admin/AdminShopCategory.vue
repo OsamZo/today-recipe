@@ -1,45 +1,10 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
+import { onMounted } from "vue";
+import { categoryApi } from "@/api/Admin/CategoryApi.js"; // composable 임포트
 import AdminNav from "@/components/AdminNav.vue";
 import AdminCategoryBodyTitle from "@/components/AdminCategoryBodyTitle.vue";
 
-const categoryList = ref([]);
-const showModal = ref(false);
-const selectedCategory = ref(null);
-
-const fetchCategory = async () => {
-  try {
-    const response = await axios.get('http://localhost:8100/api/v1/admin/category');
-    categoryList.value = response.data.data;
-  } catch (error) {
-    console.error("데이터를 불러오는 중 오류 발생", error);
-  }
-}
-
-const confirmDeleteCategory = (category) => {
-  selectedCategory.value = category;
-  showModal.value = true;
-};
-
-const deleteCategory = async () => {
-  try {
-    const response = await axios.delete(`http://localhost:8100/api/v1/admin/category/${selectedCategory.value.categorySeq}`);
-    if (response.status === 200) {
-      alert(`${selectedCategory.value.categoryName}가 삭제되었습니다.`);
-      fetchCategory();
-      closeModal();
-    }
-  } catch (error) {
-    alert("삭제 요청이 실패하였습니다.");
-    console.error("카테고리 삭제 도중 오류 발생:", error.response?.data || error);
-  }
-};
-
-const closeModal = () => {
-  showModal.value = false;
-  selectedCategory.value = null;
-};
+const { categoryList, selectedCategory, showModal, confirmDeleteCategory, fetchCategory, deleteCategory } = categoryApi();
 
 onMounted(() => {
   fetchCategory();
@@ -54,7 +19,7 @@ onMounted(() => {
     <div class="content-box">
       <AdminNav class="nav" />
       <div class="main-content">
-        <AdminCategoryBodyTitle class="topBar"/>
+        <AdminCategoryBodyTitle :fetchCategory="fetchCategory" />
         <div class="content">
           <!-- 카테고리 리스트 렌더링 -->
           <div v-for="(category, index) in categoryList" :key="category.categorySeq">
@@ -73,10 +38,10 @@ onMounted(() => {
   <!-- 삭제 확인 모달 -->
   <div v-if="showModal" class="modal-overlay">
     <div class="modal-content">
-      <p>{{ selectedCategory?.categoryName }}를 삭제하시겠습니까?</p>
+      <p>{{ selectedCategory?.categoryName }}을(를) 삭제하시겠습니까?</p>
       <div class="modal-buttons">
         <button class="modal-confirm" @click="deleteCategory">네</button>
-        <button class="modal-cancel" @click="closeModal">아니요</button>
+        <button class="modal-cancel" @click="showModal = false">아니요</button>
       </div>
     </div>
   </div>

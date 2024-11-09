@@ -19,32 +19,14 @@
     </div>
 </template>
 
-<script>
-import { useReviewStore } from '@/store/ReviewStore';
+<script setup>
+defineProps({
+    reviews: {
+        type: Array,
+        required: true
 
-export default {
-    props: {
-        reviews: {
-            type: Array,
-            required: true
-        }
-    },
-    setup() {
-        const reviewStore = useReviewStore();
-
-        const toggleLike = (review) => {
-            if (review.isLiked) {
-                reviewStore.deleteLike(review.shopSeq, review.goodSeq, review.reviewSeq);
-            } else {
-                reviewStore.addLike(review.userSeq, review.reviewSeq, review.shopSeq);
-            }
-        };
-
-        return {
-            toggleLike
-        };
     }
-};
+});
 </script>
 
 <style scoped>

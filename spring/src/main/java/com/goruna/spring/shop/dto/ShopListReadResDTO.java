@@ -15,6 +15,10 @@ public class ShopListReadResDTO {
 
     private String shopImgUrl;
 
+    private String shopAddress;
+
+    private Long categorySeq;
+
     private String categoryName;
 
     private int productOriginalPrice;

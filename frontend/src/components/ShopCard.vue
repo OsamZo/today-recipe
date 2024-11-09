@@ -8,20 +8,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ShopCard',
-  props: {
-    shopImgUrl: {
-      type: String,
-      required: true
-    },
-    shopName: {
-      type: String,
-      required: true
-    }
+<script setup>
+defineProps({
+  shopImgUrl: {
+    type: String,
+    required: true
+  },
+  shopName: {
+    type: String,
+    required: true
   }
-};
+});
 </script>
 
 <style scoped>

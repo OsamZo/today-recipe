@@ -21,14 +21,19 @@ public class UserController {
 
     @PostMapping("/{userSeq}/nickname")
     @Operation(summary = "회원 닉네임 추가", description = "회원의 닉네임을 추가합니다.")
-    public ApiResponse<?> addNickname(@PathVariable Long userSeq,@RequestBody NickNameRequestDto nickNameRequestDto) {
-        userInfoService.createNickname(nickNameRequestDto);
+    public ApiResponse<?> addNickname(@PathVariable Long userSeq, @RequestBody NickNameRequestDto nickNameRequestDto) {
+
+        if (nickNameRequestDto.getUserNickname() == null || nickNameRequestDto.getUserNickname().isEmpty()) {
+            throw new IllegalArgumentException("닉네임은 필수 항목입니다.");
+        }
+        userInfoService.createNickname(userSeq, nickNameRequestDto);
         return ResponseUtil.successResponse("회원 닉네임이 성공적으로 추가되었습니다").getBody();
     }
 
     @GetMapping("/{userSeq}/info")
     @Operation(summary = "회원 정보 조회", description = "회원의 정보를 조회합니다.")
     public ApiResponse<?> getUserInfo(@PathVariable Long userSeq) {
+
         UserInfoResponse userInfoResponse = userInfoService.getUserInfo(userSeq);
         return ResponseUtil.successResponse("회원이 성공적으로 조회되었습니다.",userInfoResponse).getBody();
     }

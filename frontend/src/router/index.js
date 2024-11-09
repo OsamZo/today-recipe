@@ -4,13 +4,18 @@ import ReviewRouter from "@/router/ReviewRouter.js";
 import AdminRouter from "@/router/AdminRouter.js"
 import UserRouter from "@/router/UserRouter.js";
 import OwnerRouter from "@/router/OwnerRouter.js";
+import ShopRouter from "@/router/ShopRouter.js";
+import BookMarkRouter from "@/router/BookmarkRouter.js";
+
 
 const routes = [
     ...MainRouter,
     ...ReviewRouter,
     ...AdminRouter,
     ...UserRouter,
-    ...OwnerRouter
+    ...OwnerRouter,
+    ...ShopRouter,
+    ...BookMarkRouter
 ]
 
 const router = createRouter({
