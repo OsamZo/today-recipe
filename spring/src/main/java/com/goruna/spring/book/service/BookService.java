@@ -33,7 +33,6 @@ public class BookService {
     public void createBook(Long productSeq, Long userSeq, int bookQty) {
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
-
         Product product = productRepository.findById(productSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.PRODUCT_NOT_FOUND));
 

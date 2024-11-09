@@ -95,6 +95,7 @@ public class ShopService {
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
         shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
+        shopDetailReadResDTO.setProductSeq(product.getProductSeq());
         shopDetailReadResDTO.setProductName(product.getProductName());
         shopDetailReadResDTO.setProductDescription(product.getProductDescription());
         shopDetailReadResDTO.setProductQty(product.getProductQty());
