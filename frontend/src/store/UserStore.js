@@ -4,7 +4,7 @@ import { loginWithGoogle, resultWithGoogle, submitNickname } from '@/api/user/Us
 export const useUserStore = defineStore('user', {
   state: () => ({
     nickname: '',
-    userSeq: null
+    userSeq: localStorage.getItem('userSeq') || null // 초기화 시 로컬 스토리지에서 복원
   }),
   actions: {
     async handleGoogleLogin() {
@@ -39,12 +39,15 @@ export const useUserStore = defineStore('user', {
           const data = await response.json();
           const newAccessToken = data.accessToken;
           this.userSeq = decodeJwt(newAccessToken).userSeq; // 토큰 디코딩하여 userSeq 설정
+          localStorage.setItem('userSeq', this.userSeq); // 로컬 스토리지에 저장
           console.log('세션 복원 성공:', this.userSeq);
         } else {
           console.warn('리프레시 토큰으로 새 액세스 토큰 발급 실패');
+          localStorage.removeItem('userSeq'); // 실패 시 로컬 스토리지에서 제거
         }
       } catch (error) {
         console.error('세션 복원 중 오류 발생:', error);
+        localStorage.removeItem('userSeq'); // 오류 시 로컬 스토리지에서 제거
       }
     },
     async addNickname(userSeq, nickname) {
@@ -58,6 +61,10 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         throw error;
       }
+    },
+    clearUserSeq() {
+      this.userSeq = null;
+      localStorage.removeItem('userSeq'); // 로그아웃 시 로컬 스토리지에서 제거
     }
   }
 });
