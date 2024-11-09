@@ -3,7 +3,8 @@ import {ref, onMounted, reactive} from 'vue';
 import axios from "axios";
 import '@/assets/css/reset.css';
 import router from "@/router/index.js";
-
+import { useShopStore } from "@/store/ShopStore.js";
+const shopStore = useShopStore();
 // ========= 지도 관련 기능 =========
 const { VITE_KAKAO_MAP_KEY } = import.meta.env;
 const { VITE_KAKAO_MAP_KEY_ALL } = import.meta.env;
@@ -220,6 +221,7 @@ onMounted(async() => {
     const coords = await getCurrentLocation();
     currentLocation.value = coords;
     loadKakaoMap(map.value, coords); // 지도를 로드하고 위치 전달하여 마커 표시
+    shopStore.loadShopData();
   } catch (error) {
     console.log("현재 위치를 가져오는 데 실패했습니다.", error);
   }
