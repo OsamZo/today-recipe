@@ -13,11 +13,13 @@
 
 <script setup>
 import { useReviewStore } from '@/store/ReviewStore';
+import { useUserStore } from '@/store/UserStore'; 
 import { onMounted, computed, ref } from 'vue';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
 import ShopCard from '@/components/ShopCard.vue';
 
 const reviewStore = useReviewStore();
+const userStore = useUserStore(); 
 const reviewContent = ref('');
 
 onMounted(() => {
@@ -27,7 +29,12 @@ onMounted(() => {
 const shopData = computed(() => reviewStore.shopData || { shopImgUrl: '', shopName: '' });
 
 const saveReview = () => {
-    const userSeq = 1; 
+    const userSeq = userStore.userSeq;
+    if (!userSeq) {
+        alert('유효하지 않은 사용자 정보입니다.');
+        return;
+    }
+
     if (reviewContent.value.trim() === '') {
         alert('리뷰 내용을 입력해주세요.');
         return;
