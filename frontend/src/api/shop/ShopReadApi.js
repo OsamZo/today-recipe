@@ -15,7 +15,7 @@ export const fetchShopCardBySeq = async (shopSeq) => {
 export const fetchOwnerShopInfo = async () => {
     try {
         const response = await axios.get(`http://localhost:8100/api/v1/owner/shop`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+            headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
         });
         return response.data.data;
     } catch (error) {
