@@ -3,10 +3,10 @@ import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
 import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
 import {onMounted, reactive, ref} from "vue";
-import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
 import {useBookmarkStore} from "@/store/BookmarkStore.js";
 import {useUserStore} from "@/store/UserStore.js";
+import {fetchShopDetail} from "@/api/shop/ShopReadApi.js";
 
 const shopDetail = reactive([]);
 const route = useRoute();
@@ -14,31 +14,19 @@ const router = useRouter();
 const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
-const fetchShopDetail = async(categorySeq, shopSeq) => {
+const loadShopDetail = async () => {
+  const categorySeq = route.params.categorySeq;
+  const shopSeq = route.params.shopSeq;
+
   try {
-    const response  = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop/${shopSeq}`);
-    const data = response.data.data;
-    console.log(data);
-    shopDetail.shopSeq = data.shopSeq;
-    shopDetail.shopName = data.shopName;
-    shopDetail.shopReviewCount = data.shopReviewCount;
-    shopDetail.productClosedAt = data.productClosedAt;
-    shopDetail.shopAddress = data.shopAddress;
-    shopDetail.shopTel = data.shopTel;
-    shopDetail.shopIntroduction = data.shopIntroduction;
-    shopDetail.categoryName = data.categoryName;
-    shopDetail.productSeq = data.productSeq;
-    shopDetail.productName = data.productName;
-    shopDetail.productDescription = data.productDescription;
-    shopDetail.productQty = data.productQty;
-    shopDetail.productOriginalPrice = data.productOriginalPrice;
-    shopDetail.productSalePrice = data.productSalePrice;
-    shopDetail.shopImgUrl = data.shopImgUrl;
-    shopDetail.productImgUrl = data.productImgUrl;
-  } catch(error) {
-    console.log("가게 상세 정보를 불러오는 데 오류 발생", error);
+    const data = await fetchShopDetail(categorySeq, shopSeq);
+
+    // 데이터를 shopDetail에 병합
+    Object.assign(shopDetail, data);
+  } catch (error) {
+    console.error("매장 상세 정보를 불러오는데 실패했습니다:", error);
   }
-}
+};
 
 // ========== 북마크 ==========
 const bookmarkStore = useBookmarkStore();
@@ -99,7 +87,7 @@ const isModalOpen = ref(false);
 
 onMounted(async() => {
   const { categorySeq, shopSeq } = route.params;
-  await fetchShopDetail(categorySeq, shopSeq);
+  await loadShopDetail(categorySeq, shopSeq);
 
   //const userSeq = userStore.userSeq;
   const userSeq = 1;
