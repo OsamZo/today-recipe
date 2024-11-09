@@ -1,25 +1,33 @@
 <script setup>
 import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
-import {onMounted, reactive} from "vue";
+import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
+import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
+import {useBookmarkStore} from "@/store/BookmarkStore.js";
+import {useUserStore} from "@/store/UserStore.js";
 
 const shopDetail = reactive([]);
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
 const fetchShopDetail = async(categorySeq, shopSeq) => {
   try {
     const response  = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop/${shopSeq}`);
     const data = response.data.data;
-
+    console.log(data);
+    shopDetail.shopSeq = data.shopSeq;
     shopDetail.shopName = data.shopName;
     shopDetail.shopReviewCount = data.shopReviewCount;
     shopDetail.productClosedAt = data.productClosedAt;
     shopDetail.shopAddress = data.shopAddress;
+    shopDetail.shopTel = data.shopTel;
     shopDetail.shopIntroduction = data.shopIntroduction;
+    shopDetail.categoryName = data.categoryName;
+    shopDetail.productSeq = data.productSeq;
     shopDetail.productName = data.productName;
     shopDetail.productDescription = data.productDescription;
     shopDetail.productQty = data.productQty;
@@ -29,6 +37,47 @@ const fetchShopDetail = async(categorySeq, shopSeq) => {
     shopDetail.productImgUrl = data.productImgUrl;
   } catch(error) {
     console.log("가게 상세 정보를 불러오는 데 오류 발생", error);
+  }
+}
+
+// ========== 북마크 ==========
+const bookmarkStore = useBookmarkStore();
+const isBookmarked = ref(false);
+const defaultBookmarkIcon = 'https://goruna.s3.us-west-1.amazonaws.com/b23bd521-8f40-4e42-8d24-17d2372116e2_icons8-bookmark-48%20%281%29.png';
+const checkedBookmarkIcon = 'https://goruna.s3.us-west-1.amazonaws.com/22e88df2-b952-4462-a282-39de0b060447_icons8-bookmark-48%20%282%29.png';
+
+// 북마크 등록되어 있는지 체크
+const checkIfBookmarked = () => {
+  const bookmarkedShop = bookmarkStore.bookmarks.find(bookmark => bookmark.shopSeq === shopDetail.shopSeq);
+
+  // 'isBookmarked.value = bookmarkedShop ? true : false;' 을 아래와 같이 작성 가능
+  isBookmarked.value = !!bookmarkedShop;
+}
+
+// 북마크 등록/취소
+const toggleBookmark = async() => {
+  try {
+    const bookmarkedShop = bookmarkStore.bookmarks.find(bookmark => bookmark.shopSeq === shopDetail.shopSeq) ;
+
+    if (isBookmarked.value) {
+      await bookmarkStore.removeBookmark(1, bookmarkedShop.bookmarkSeq);
+      isBookmarked.value = false;
+      alert("북마크가 취소되었습니다.");
+    } else {
+
+      await bookmarkStore.addBookmark(1, shopDetail.shopSeq, {
+        shopName: shopDetail.shopName,
+        shopAddress: shopDetail.shopAddress,
+        shopImgUrl: shopDetail.shopImgUrl,
+        shopTel: shopDetail.shopTel,
+        categoryName: shopDetail.categoryName
+      });
+
+      isBookmarked.value = true;
+      alert("북마크가 등록되었습니다.");
+    }
+  } catch(error) {
+    console.log("북마크 생성 중 오류 발생", error);
   }
 }
 
@@ -42,22 +91,52 @@ const formatPrice = (price) => {
 
 // 리뷰 목록으로 라우팅
 const routeToReviewList = () => {
-  const shopSeq = route.params.shopSeq;
   router.push(`/review`);
 }
 
-onMounted(() => {
+// 예약하기 누를 시 모달
+const isModalOpen = ref(false);
+
+onMounted(async() => {
   const { categorySeq, shopSeq } = route.params;
-  fetchShopDetail(categorySeq, shopSeq);
+  await fetchShopDetail(categorySeq, shopSeq);
+
+  //const userSeq = userStore.userSeq;
+  const userSeq = 1;
+  if (!userSeq) {
+    console.error('유효하지 않은 사용자 정보입니다.');
+    return;
+  }
+
+  try {
+    await bookmarkStore.loadBookmarks(userSeq);
+    console.log("북마크 로드 성공");
+    checkIfBookmarked();
+  } catch (error) {
+    console.error('북마크 로드 중 오류:', error);
+  }
 })
 </script>
 
 <template>
+  <BookQuantityModal
+      v-if="isModalOpen"
+      :product-seq="shopDetail.productSeq"
+      :productQty="shopDetail.productQty"
+      @close="isModalOpen=false"/>
   <WhiteContentBox>
     <ShopCard
         :shopImgUrl="shopDetail.shopImgUrl"
-        :shopName="shopDetail.shopName"
-    />
+        :shopName="shopDetail.shopName">
+      <template #bookmark>
+        <img
+            @click="toggleBookmark"
+            class="bookmark"
+            :src="isBookmarked ? checkedBookmarkIcon : defaultBookmarkIcon"
+            alt="북마크 이미지">
+      </template>
+    </ShopCard>
+
     <div class="shop_detail_box">
       <div class="review_box" @click="routeToReviewList()">리뷰 {{ shopDetail.shopReviewCount }}개 ></div>
       <div class="shop_info_box">
@@ -89,7 +168,7 @@ onMounted(() => {
             <div class="product_qty">남은 수량: {{ shopDetail.productQty }}개</div>
           </div>
           <div>
-            <button class="book_button">예약하기</button>
+            <button class="book_button" @click="isModalOpen = true">예약하기</button>
           </div>
         </div>
       </div>
@@ -101,6 +180,10 @@ onMounted(() => {
 <style scoped>
 .flex{
   display: flex;
+}
+
+.bookmark {
+  cursor: pointer;
 }
 
 .shop_detail_box {

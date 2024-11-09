@@ -93,8 +93,10 @@ public class ShopService {
         int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
 
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setShopSeq(product.getShop().getShopSeq());
         shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
+        shopDetailReadResDTO.setProductSeq(product.getProductSeq());
         shopDetailReadResDTO.setProductName(product.getProductName());
         shopDetailReadResDTO.setProductDescription(product.getProductDescription());
         shopDetailReadResDTO.setProductQty(product.getProductQty());

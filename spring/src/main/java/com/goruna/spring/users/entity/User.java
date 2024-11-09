@@ -40,10 +40,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_deleted_time", nullable = true)
     private LocalDateTime userDeletedTime;
 
-    @Column(name = "user_saved_money", nullable = false)
+    @Column(name = "user_saved_money", nullable = true)
     private int userSavedMoney;
 
-    @Column(name = "user_usage_count", nullable = false)
+    @Column(name = "user_usage_count", nullable = true)
     private int userUsageCount = 0;
 
     @OneToMany(mappedBy = "user")
@@ -51,4 +51,8 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Bookmark> bookmarks;
+
+    public void UserEmail(String email) {
+        this.userEmail = email;
+    }
 }

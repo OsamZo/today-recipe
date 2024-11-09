@@ -10,3 +10,17 @@ export const fetchShopCardBySeq = async (shopSeq) => {
         throw error;
     }
 };
+
+// (사장) 본인의 매장 정보 조회 API
+export const fetchOwnerShopInfo = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8100/api/v1/owner/shop`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('jwtToken')}` }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('매장 정보를 가져오는 중 오류가 발생했습니다. :', error);
+        throw error;
+    }
+}
+

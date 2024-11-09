@@ -4,6 +4,7 @@
       <div class="title-container">
         <p class="shop-title">{{ shopName }}</p>
         <slot name="action"></slot> <!-- 액션 슬롯 -->
+        <slot name="bookmark"></slot>
       </div>
   </div>
 </template>
@@ -68,5 +69,10 @@ defineProps({
 
 .review-button:hover {
   background-color: #a0522d; 
+}
+
+.bookmark {
+  width: 37px;
+  height: 37px;
 }
 </style>
