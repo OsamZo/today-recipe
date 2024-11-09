@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {fetchOwnerShopInfo} from "@/api/shop/ShopReadApi.js";
 
-export const ShopStore = defineStore('ShopStore', {
+export const useShopStore = defineStore('ShopStore', {
     state: () => ({
         shopData: JSON.parse(localStorage.getItem('shopData')) || {
             userSeq: '',
@@ -12,7 +12,7 @@ export const ShopStore = defineStore('ShopStore', {
         }
     }),
     actions: {
-        async loadOnwerShopData(shopSeq){
+        async loadOnwerShopData(){
             try {
                 const shopInfo = await fetchOwnerShopInfo();
                 this.shopData = shopInfo;
