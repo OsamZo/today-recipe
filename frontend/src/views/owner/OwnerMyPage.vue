@@ -1,18 +1,36 @@
 <script setup>
 import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 import OwnerProduct from "@/views/owner/OwnerProduct.vue";
+import {useShopStore} from "@/store/ShopStore.js";
 
+// 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
+const shopStore = useShopStore();
 
+
+const shopData = computed(() => shopStore.shopData);
 const selectMenu = (menu) => {
   console.log(menu);
   selectedMenu.value = menu;
+  if(selectedMenu.value === 'ShopInfo') {
+    shopStore.loadOnwerShopData();
+  }
 };
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <template>
@@ -69,7 +87,7 @@ const selectMenu = (menu) => {
           <UserInfo v-if="selectedMenu === 'userInfo'"/>
           <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
           <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'"/>
-          <ShopInfo v-else-if="selectedMenu === 'ShopInfo'"/>
+          <ShopInfo v-else-if="selectedMenu === 'ShopInfo'" :shopData="shopData"/>
           <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>

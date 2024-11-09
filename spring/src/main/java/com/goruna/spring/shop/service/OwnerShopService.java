@@ -41,8 +41,9 @@ public class OwnerShopService {
     public OnwerShopInfoResDTO getOnwerShopInfo() {
 
         Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
-        Shop shop = ShopRepository.findById(userSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        System.out.println(userSeq);
+        Shop shop = ShopRepository.findShopByUserSeq(userSeq);
+
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
     }
 }

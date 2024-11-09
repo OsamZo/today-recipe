@@ -42,10 +42,9 @@ import '@/assets/css/reset.css';
         <input type="text" id="quantity" value=""/>
         <button class="increment">+</button>
       </div>
-
+      <br><br><br><br><br><br><br><br><br>
+      <button class="save-product">저장하기</button>
     </div>
-
-
   </div>
 
 
@@ -178,7 +177,7 @@ import '@/assets/css/reset.css';
 #quantity{
   text-align: center;
   width: 45px;
-  height: 26px;
+  height: 30px;
 }
 .decrement{
   border-radius: 8px 0 0 8px;
@@ -186,6 +185,18 @@ import '@/assets/css/reset.css';
 }
 .increment{
   border-radius: 0 8px 8px 0;
+}
+.save-product{
+  margin-right: 10px;
+  width: 116px;
+  height: 42px;
+  color: var(--text-white);
+  border-radius: 10px;
+  background: var(--button-brown);
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  align-items: center;
 }
 
 

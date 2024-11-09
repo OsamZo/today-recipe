@@ -1,5 +1,13 @@
 <script setup>
 import '@/assets/css/reset.css';
+
+defineProps({
+  shopData: {
+    type: Object,
+    required: true
+  }
+});
+
 </script>
 
 <template>
@@ -11,29 +19,28 @@ import '@/assets/css/reset.css';
     <div class="content-container">
 
       <div class="inline">
-        <div class="columeName">매장명</div>
+        <div class="column-name">매장명</div>
         <div class="inline">
-          <div class="columeContent" style="margin-right: 30px">쿠키집</div>
+          <div class="column-content" style="margin-right: 30px">{{ shopData.shopName }}</div>
         </div>
       </div>
 
       <div class="inline">
-        <div class="columeName">주소</div>
-        <div class="columeContent">서울특별시 강남구 도곡동 123-12 1층</div>
+        <div class="column-name">주소</div>
+        <div class="column-content">{{ shopData.shopAddress}}</div>
       </div>
 
       <div class="inline">
-        <div class="columeName">매장 소개</div>
-        <div class="columeContent">쿠키 맛집!</div>
+        <div class="column-name">매장 소개</div>
+        <div class="column-content">{{ shopData.shopIntroduction }}</div>
       </div>
 
 
       <br><br><br><br>
 
       <div class="inline">
-        <div class="columeName">판매 정보 수정 </div>
-        <div class="button">수정하기</div>
-        <div class="button2">매장 삭제</div>
+        <button class="update-shopinfo" @click="">수정하기</button>
+        <button class="delete-shopinfo" @click="">매장 삭제</button>
       </div>
 
     </div>
@@ -46,7 +53,7 @@ import '@/assets/css/reset.css';
   flex-direction: column;
   margin-left: 30%;
 }
-.button{
+.update-shopinfo{
   margin-right: 10px;
   width: 116px;
   height: 42px;
@@ -56,8 +63,10 @@ import '@/assets/css/reset.css';
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
+  cursor: pointer;
 }
-.button2{
+.delete-shopinfo{
   margin-right: 10px;
   width: 116px;
   height: 42px;
@@ -67,11 +76,13 @@ import '@/assets/css/reset.css';
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
+  cursor: pointer;
 }
-.columeContent{
+.column-content{
   font-size: 30px;
 }
-.columeName{
+.column-name{
   font-size: 28px;
   color: var(--text-black);
   width: 230px;

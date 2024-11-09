@@ -3,7 +3,14 @@ import { fetchShopList } from '@/api/shop/ShopListReadApi';
 
 export const useShopStore = defineStore('shopStore', {
     state: () => ({
-         shopSeqs : []
+        shopSeqs: [],
+        shopData: JSON.parse(localStorage.getItem('shopData')) || {
+            userSeq: '',
+            shopSeq: '',
+            shopName: '',
+            shopAddress: '',
+            shopIntroduction: ''
+        }
     }),
 
     actions: {
@@ -17,6 +24,19 @@ export const useShopStore = defineStore('shopStore', {
             } catch (error) {
                 console.log('스토어에서 매장 고유번호 데이터를 로드하는 중 오류 발생', error);
             }
+        },
+        async loadOnwerShopData(){
+            try {
+                const shopInfo = await fetchOwnerShopInfo();
+                this.shopData = shopInfo;
+
+                // 로컬 스토리지에 저장
+                localStorage.setItem('shopData', JSON.stringify(this.shopData));
+            } catch (error) {
+                console.log('스토어에서 매장 데이터를 로드하는 중 오류 발생 :', error);
+            }
         }
+
+
     }
 });
