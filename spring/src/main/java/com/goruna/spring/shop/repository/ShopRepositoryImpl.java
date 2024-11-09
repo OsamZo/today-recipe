@@ -49,7 +49,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .from(product)
                 .where(combinedCondition) // 결합된 조건을 사용
                 .groupBy(product.shop.shopSeq)
-                .orderBy(product.regDate.desc())
+                //.orderBy(product.regDate.desc())
                 .limit(1);
     }
 
