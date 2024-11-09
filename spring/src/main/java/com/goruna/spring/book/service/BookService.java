@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final ShopRepository shopRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
@@ -77,7 +76,12 @@ public class BookService {
     public void cancelBook(Long bookSeq) {
         Book book = bookRepository.findById(bookSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        Product product = productRepository.findById(book.getProduct().getProductSeq())
+                        .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+
         book.cancelBook();
+        product.updateProductQty(product.getProductQty() + book.getBookQty());
+
         bookRepository.save(book);
     }
 }
