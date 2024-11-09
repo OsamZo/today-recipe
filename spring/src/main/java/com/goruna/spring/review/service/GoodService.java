@@ -1,8 +1,8 @@
 package com.goruna.spring.review.service;
 
-import com.goruna.spring.review.dto.GoodDeleteResDTO;
+import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.review.dto.GoodRequestDTO;
-import com.goruna.spring.review.dto.GoodCreateResDTO;
+import com.goruna.spring.review.dto.GoodResDTO;
 import com.goruna.spring.review.entity.Good;
 import com.goruna.spring.review.entity.Review;
 import com.goruna.spring.review.repository.GoodRepository;
@@ -23,9 +23,30 @@ public class GoodService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
+    /* 좋아요 조회 */
+    public GoodResDTO readGood(Long userSeq, Long reviewSeq){
+
+        Review review = reviewRepository.findById(reviewSeq)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Good good = goodRepository.findByUserAndReview(user, review)
+                .orElse(null);
+
+        if (good != null) {
+            // `Good` 객체가 존재하면 해당 객체의 정보로 DTO 생성
+            return new GoodResDTO(good.getGoodSeq(), good.getIsClicked());
+        } else {
+            // `Good` 객체가 없을 경우 기본 값으로 반환
+            return new GoodResDTO(null, YnType.Y);
+        }
+    }
+
     /* 좋아요 추가 */
     @Transactional
-    public GoodCreateResDTO createGood(GoodRequestDTO requestDTO) {
+    public void createGood(GoodRequestDTO requestDTO) {
 
         Review review = reviewRepository.findById(requestDTO.getReviewSeq())
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
@@ -38,18 +59,14 @@ public class GoodService {
                 .review(review)
                 .build();
         goodRepository.save(good);
-
-        return modelMapper.map(good, GoodCreateResDTO.class);
     }
 
     /* 좋아요 삭제 */
     @Transactional
-    public GoodDeleteResDTO deleteGood(Long goodSeq) {
+    public void deleteGood(Long goodSeq) {
         Good good = goodRepository.findById(goodSeq)
                 .orElseThrow(() -> new IllegalArgumentException("Good not found"));
 
         goodRepository.delete(good);
-
-        return new GoodDeleteResDTO(good.getIsClicked());
     }
 }
