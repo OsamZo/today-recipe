@@ -1,8 +1,8 @@
 <script setup>
 import {ref, onMounted, reactive} from 'vue';
-import axios from "axios";
 import '@/assets/css/reset.css';
 import router from "@/router/index.js";
+import {fetchShopList, fetchTodaySaleList} from "@/api/shop/ShopListReadApi.js";
 import { useShopStore } from "@/store/ShopStore.js";
 const shopStore = useShopStore();
 // ========= 지도 관련 기능 =========
@@ -112,8 +112,7 @@ const getCoordinatesFromAddress = async(address) => {
 // 지도 반경에 있는 가게에 마커 표시
 const displayShopMarkers = async(mapInstance) => {
   try {
-    const response = await axios.get(`http://localhost:8100/api/v1/shop`);
-    shops.value = response.data.data;
+    shops.value = await fetchShopList();
 
     for (const shop of shops.value) {
       const coords = await getCoordinatesFromAddress(shop.shopAddress);
@@ -184,10 +183,9 @@ const displayShopMarkers = async(mapInstance) => {
 
 // ========= 오늘의 특가 리스트 가져오기 =========
 const todaySaleProducts = reactive([]);
-const fetchTodaySaleList = async() => {
+const loadTodaySaleList = async() => {
   try {
-    const response = await axios.get(`http://localhost:8100/api/v1/shop/today`);
-    const todaySaleList = response.data.data;
+    const todaySaleList = await fetchTodaySaleList();
 
     todaySaleList.forEach(product => {
       todaySaleProducts.push({
@@ -216,12 +214,12 @@ const formatPrice = (price) => {
 
 onMounted(async() => {
   try {
-    fetchTodaySaleList();
+    await loadTodaySaleList();
 
     const coords = await getCurrentLocation();
     currentLocation.value = coords;
     loadKakaoMap(map.value, coords); // 지도를 로드하고 위치 전달하여 마커 표시
-    shopStore.loadShopData();
+    await shopStore.loadShopData();
   } catch (error) {
     console.log("현재 위치를 가져오는 데 실패했습니다.", error);
   }

@@ -24,3 +24,14 @@ export const fetchOwnerShopInfo = async () => {
     }
 }
 
+// 매장 상세 정보를 가져오는 API
+export const fetchShopDetail = async(categorySeq, shopSeq) => {
+    try {
+        const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop/${shopSeq}`);
+        return response.data.data;
+    } catch(error) {
+        console.log("가게 상세 정보를 불러오는 데 오류 발생", error);
+        throw error;
+    }
+}
+

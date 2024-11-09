@@ -3,10 +3,10 @@ import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
 import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
 import {onMounted, reactive, ref} from "vue";
-import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
 import {useBookmarkStore} from "@/store/BookmarkStore.js";
 import {useUserStore} from "@/store/UserStore.js";
+import {fetchShopDetail} from "@/api/shop/ShopReadApi.js";
 
 const shopDetail = reactive([]);
 const route = useRoute();
@@ -14,31 +14,19 @@ const router = useRouter();
 const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
-const fetchShopDetail = async(categorySeq, shopSeq) => {
+const loadShopDetail = async () => {
+  const categorySeq = route.params.categorySeq;
+  const shopSeq = route.params.shopSeq;
+
   try {
-    const response  = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop/${shopSeq}`);
-    const data = response.data.data;
-    console.log(data);
-    shopDetail.shopSeq = data.shopSeq;
-    shopDetail.shopName = data.shopName;
-    shopDetail.shopReviewCount = data.shopReviewCount;
-    shopDetail.productClosedAt = data.productClosedAt;
-    shopDetail.shopAddress = data.shopAddress;
-    shopDetail.shopTel = data.shopTel;
-    shopDetail.shopIntroduction = data.shopIntroduction;
-    shopDetail.categoryName = data.categoryName;
-    shopDetail.productSeq = data.productSeq;
-    shopDetail.productName = data.productName;
-    shopDetail.productDescription = data.productDescription;
-    shopDetail.productQty = data.productQty;
-    shopDetail.productOriginalPrice = data.productOriginalPrice;
-    shopDetail.productSalePrice = data.productSalePrice;
-    shopDetail.shopImgUrl = data.shopImgUrl;
-    shopDetail.productImgUrl = data.productImgUrl;
-  } catch(error) {
-    console.log("가게 상세 정보를 불러오는 데 오류 발생", error);
+    const data = await fetchShopDetail(categorySeq, shopSeq);
+
+    // 데이터를 shopDetail에 병합
+    Object.assign(shopDetail, data);
+  } catch (error) {
+    console.error("매장 상세 정보를 불러오는데 실패했습니다:", error);
   }
-}
+};
 
 // ========== 북마크 ==========
 const bookmarkStore = useBookmarkStore();
@@ -55,9 +43,9 @@ const checkIfBookmarked = () => {
 }
 
 // 북마크 등록/취소
-const toggleBookmark = async() => {
+const toggleBookmark = async () => {
   try {
-    const bookmarkedShop = bookmarkStore.bookmarks.find(bookmark => bookmark.shopSeq === shopDetail.shopSeq) ;
+    const bookmarkedShop = bookmarkStore.bookmarks.find(bookmark => bookmark.shopSeq === shopDetail.shopSeq);
 
     if (isBookmarked.value) {
       await bookmarkStore.removeBookmark(1, bookmarkedShop.bookmarkSeq);
@@ -76,7 +64,7 @@ const toggleBookmark = async() => {
       isBookmarked.value = true;
       alert("북마크가 등록되었습니다.");
     }
-  } catch(error) {
+  } catch (error) {
     console.log("북마크 생성 중 오류 발생", error);
   }
 }
@@ -97,8 +85,13 @@ const routeToReviewList = () => {
 // 예약하기 누를 시 모달
 const isModalOpen = ref(false);
 
-onMounted(async() => {
-  const { categorySeq, shopSeq } = route.params;
+// 모달 닫기
+const closeModal = () => {
+  isModalOpen.value = false;
+}
+
+onMounted(async () => {
+  const {categorySeq, shopSeq} = route.params;
   await fetchShopDetail(categorySeq, shopSeq);
 
   //const userSeq = userStore.userSeq;
@@ -119,11 +112,14 @@ onMounted(async() => {
 </script>
 
 <template>
-  <BookQuantityModal
-      v-if="isModalOpen"
-      :product-seq="shopDetail.productSeq"
-      :productQty="shopDetail.productQty"
-      @close="isModalOpen=false"/>
+  <div v-if="isModalOpen" class="modal-background" @click="closeModal">
+    <BookQuantityModal
+        :product-seq="shopDetail.productSeq"
+        :productQty="shopDetail.productQty"
+        @close="isModalOpen=false"
+        @click.stop
+    />
+  </div>
   <WhiteContentBox>
     <ShopCard
         :shopImgUrl="shopDetail.shopImgUrl"
@@ -142,7 +138,7 @@ onMounted(async() => {
       <div class="shop_info_box">
         <div>마감 시간 | {{ shopDetail.productClosedAt }}</div>
         <div>매장 주소 | {{ shopDetail.shopAddress }}</div>
-        <div>매장 소개 | {{ shopDetail.shopIntroduction}}</div>
+        <div>매장 소개 | {{ shopDetail.shopIntroduction }}</div>
       </div>
       <hr class="brown_hr">
       <div>
@@ -158,12 +154,17 @@ onMounted(async() => {
                 <div class="original_price_box">
                   <div class="original_price">{{ formatPrice(shopDetail.productOriginalPrice) }}원</div>
                   <svg width="74" height="16" viewBox="0 0 74 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M73.7071 8.70711C74.0976 8.31658 74.0976 7.68342 73.7071 7.29289L67.3431 0.928932C66.9526 0.538408 66.3195 0.538408 65.9289 0.928932C65.5384 1.31946 65.5384 1.95262 65.9289 2.34315L71.5858 8L65.9289 13.6569C65.5384 14.0474 65.5384 14.6805 65.9289 15.0711C66.3195 15.4616 66.9526 15.4616 67.3431 15.0711L73.7071 8.70711ZM0 9H73V7H0V9Z" fill="#EB4335"/>
+                    <path
+                        d="M73.7071 8.70711C74.0976 8.31658 74.0976 7.68342 73.7071 7.29289L67.3431 0.928932C66.9526 0.538408 66.3195 0.538408 65.9289 0.928932C65.5384 1.31946 65.5384 1.95262 65.9289 2.34315L71.5858 8L65.9289 13.6569C65.5384 14.0474 65.5384 14.6805 65.9289 15.0711C66.3195 15.4616 66.9526 15.4616 67.3431 15.0711L73.7071 8.70711ZM0 9H73V7H0V9Z"
+                        fill="#EB4335"/>
                   </svg>
                 </div>
                 <div class="sale_price">{{ formatPrice(shopDetail.productSalePrice) }}원</div>
               </div>
-              <div class="saled_price">({{ formatPrice(shopDetail.productOriginalPrice - shopDetail.productSalePrice) }}원 할인)</div>
+              <div class="saled_price">({{
+                  formatPrice(shopDetail.productOriginalPrice - shopDetail.productSalePrice)
+                }}원 할인)
+              </div>
             </div>
             <div class="product_qty">남은 수량: {{ shopDetail.productQty }}개</div>
           </div>
@@ -175,11 +176,25 @@ onMounted(async() => {
       <hr class="grey_hr">
     </div>
   </WhiteContentBox>
+
 </template>
 
 <style scoped>
-.flex{
+.flex {
   display: flex;
+}
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bookmark {
@@ -279,7 +294,7 @@ onMounted(async() => {
 .product_qty {
   font-size: 15px;
   white-space: nowrap;
-  padding: 10px 0 0 0 ;
+  padding: 10px 0 0 0;
 }
 
 .book_button {
