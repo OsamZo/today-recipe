@@ -7,8 +7,6 @@
                     <span class="review-date">{{ review.regDate }}</span>
                 </div>
                 <div class="review-actions">
-                    <!-- <button class="action-btn gray-btn">수정</button>
-                    <button class="action-btn gray-btn">삭제</button> -->
                     <button @click="toggleLike(review)" class="action-btn like-btn">
                         ❤️ <span class="like-count">{{ review.likeCount }}</span>
                     </button>
@@ -20,13 +18,65 @@
 </template>
 
 <script setup>
-defineProps({
-    reviews: {
-        type: Array,
-        required: true
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useReviewStore } from '@/store/ReviewStore';
+import { useUserStore } from '@/store/UserStore';
 
+const route = useRoute();
+const reviewStore = useReviewStore();
+const userStore = useUserStore();
+const reviews = ref([]);
+
+// URL에서 shopSeq 가져오기
+const shopSeq = route.params.shopSeq || 1; // 기본값 1 설정
+
+onMounted(async () => {
+    try {
+        // shopSeq를 사용하여 리뷰 리스트 불러오기
+        await reviewStore.loadReviews(shopSeq);
+        reviews.value = reviewStore.reviews;
+
+        // 각 리뷰의 좋아요 상태 조회
+        if (userStore.userSeq) {
+            for (let review of reviews.value) {
+                try {
+                    const isLiked = await reviewStore.checkLikeStatus(userStore.userSeq, review.reviewSeq);
+                    review.isLiked = isLiked; // 좋아요 상태 설정
+                } catch (error) {
+                    console.error(`리뷰 ${review.reviewSeq}의 좋아요 상태 조회 중 오류 발생:`, error);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('리뷰 목록 불러오기 중 오류 발생:', error);
     }
 });
+
+const toggleLike = async (review) => {
+    if (!userStore.userSeq) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    try {
+        if (review.isLiked === 'Y') {
+            // 좋아요 삭제
+            await reviewStore.deleteLike(review.goodSeq, review.reviewSeq);
+            review.isLiked = 'N'; // 상태 업데이트
+            review.likeCount -= 1; // likeCount 감소
+        } else {
+            // 좋아요 추가
+            await reviewStore.addLike(userStore.userSeq, review.reviewSeq, shopSeq);
+            review.isLiked = 'Y'; // 상태 업데이트
+            review.likeCount += 1; // likeCount 증가
+        }
+
+        localStorage.setItem('reviews', JSON.stringify(reviews.value));
+    } catch (error) {
+        console.error('좋아요 상태 변경 중 오류 발생:', error);
+    }
+};
 </script>
 
 <style scoped>
