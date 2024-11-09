@@ -1,7 +1,7 @@
 <script setup>
 import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, ref} from "vue";
 import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
@@ -12,19 +12,16 @@ import {useShopStore} from "@/store/ShopStore.js";
 const selectedMenu = ref('userInfo');
 const shopStore = useShopStore();
 
+
+const shopData = computed(() => shopStore.shopData);
 const selectMenu = (menu) => {
   console.log(menu);
   selectedMenu.value = menu;
   if(selectedMenu.value === 'ShopInfo') {
     shopStore.loadOnwerShopData();
-    const shopData = computed(() => shopStore.shopData);
   }
 };
 
-// 화면 마운트 시 개인 정보 조회 화면 로드
-onMounted(() => {
-
-});
 
 
 
