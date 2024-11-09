@@ -21,7 +21,7 @@ defineProps({
       <div class="inline">
         <div class="column-name">매장명</div>
         <div class="inline">
-          <div class="column-content" style="margin-right: 30px">{{ shopData.shopNmae }}</div>
+          <div class="column-content" style="margin-right: 30px">{{ shopData.shopName }}</div>
         </div>
       </div>
 
@@ -39,7 +39,6 @@ defineProps({
       <br><br><br><br>
 
       <div class="inline">
-        <div class="column-name">판매 정보 수정 </div>
         <button class="update-shopinfo" @click="">수정하기</button>
         <button class="delete-shopinfo" @click="">매장 삭제</button>
       </div>
