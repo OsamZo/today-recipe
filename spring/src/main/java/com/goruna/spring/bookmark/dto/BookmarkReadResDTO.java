@@ -9,6 +9,7 @@ public class BookmarkReadResDTO {
 
     /* 매장 사진, 매장 이름, 매장 카테고리 이름, 마감 시간, 매장 주소 */
     private Long bookmarkSeq;
+    private Long shopSeq;
     private String shopImgUrl; // 매장 사진
     private String shopName; // 매장 이름
     private String categoryName; // 매장 카테고리 이름

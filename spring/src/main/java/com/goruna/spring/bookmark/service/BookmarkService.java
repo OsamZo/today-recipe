@@ -60,6 +60,7 @@ public class BookmarkService {
                     var shop = bookmark.getShop();
                     return new BookmarkReadResDTO(
                             bookmark.getBookmarkSeq(),
+                            shop.getShopSeq(),
                             shop.getShopImgUrl(),
                             shop.getShopName(),
                             shop.getShopCategory().getCategoryName(),
