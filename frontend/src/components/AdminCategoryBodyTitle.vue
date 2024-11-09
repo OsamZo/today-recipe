@@ -2,20 +2,23 @@
 import { ref } from "vue";
 import axios from "axios";
 
+const props = defineProps({
+  fetchCategory: Function,
+});
+
 const showModal = ref(false);
 const newCategoryName = ref("");
 
-// 모달 열기 및 닫기
 const openModal = () => {
   showModal.value = true;
 };
 
 const closeModal = () => {
   showModal.value = false;
-  newCategoryName.value = ""; // 입력창 초기화
+  newCategoryName.value = "";
+  props.fetchCategory();
 };
 
-// 카테고리 추가 API 요청
 const addCategory = async () => {
   if (newCategoryName.value.trim() === "") {
     alert("카테고리 이름을 입력해주세요.");
@@ -47,7 +50,6 @@ const addCategory = async () => {
     <div class="bar"></div>
   </div>
 
-  <!-- 모달 창 -->
   <div v-if="showModal" class="modal-overlay">
     <div class="modal-content">
       <p class="modal-title">카테고리 추가</p>

@@ -1,8 +1,8 @@
-// composables/useImageModal.js
+// composables/ImageModalApi.js
 import { ref } from 'vue';
 import axios from 'axios';
 
-export function useImageModal(shopSeq) {
+export function imageModalApi(shopSeq) {
     const showModal = ref(false);
     const imgUrl = ref("");
 

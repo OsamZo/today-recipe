@@ -1,8 +1,7 @@
-// composables/useShopData.js
 import { ref } from 'vue';
 import axios from 'axios';
 
-export function useShopData(shopSeq) {
+export function authShopDataApi(shopSeq) {
     const shop = ref({});
 
     const fetchShops = async () => {
@@ -14,8 +13,6 @@ export function useShopData(shopSeq) {
             console.error("데이터를 불러오는 중 오류 발생:", error);
         }
     };
-
-    
 
     return {
         shop,
