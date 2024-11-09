@@ -7,12 +7,14 @@ import com.goruna.spring.users.dto.GoogleResponse;
 import com.goruna.spring.users.entity.User;
 import com.goruna.spring.users.repository.UserRepository;
 import com.goruna.spring.users.service.LoginService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +41,8 @@ public class LoginController {
         return reqUrl;
     }
 
-    @RequestMapping(value="/oauth2/google", method = RequestMethod.GET)
-    public RedirectView loginGoogle(@RequestParam(value = "code") String authCode){
+    @RequestMapping(value = "/oauth2/google", method = RequestMethod.GET)
+    public ResponseEntity<Void> loginGoogle(@RequestParam(value = "code") String authCode, HttpServletResponse response) {
         System.out.println("Received auth code: " + authCode);
         RestTemplate restTemplate = new RestTemplate();
         GoogleRequest googleOAuthRequestParam = GoogleRequest
@@ -70,17 +72,66 @@ public class LoginController {
         String email = resultEntity2.getBody().getEmail();
         String result = loginService.socialLogin(email);
 
-        if ("signup".equals(result)) {
-            // 회원가입 후 자동 로그인 위해 JWT 토큰 반환
-            User user = userRepository.findByUserEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-            String token = jwtUtil.generateToken(user.getUserSeq(), email);
-            System.out.println(token);
-            // 클라이언트에 JWT 토큰을 전달하는 방식
-            return new RedirectView("http://localhost:5173/nickName?token=" + token);  // token을 프론트엔드로 넘김
+        User user;
+        try {
+            // 사용자가 존재하는지 확인
+            user = userRepository.findByUserEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        } catch (RuntimeException e) {
+            // 사용자 존재하지 않을 경우 새 사용자 등록
+            user = new User();
+            user.UserEmail(email);
+            userRepository.save(user);
+            System.out.println("New user registered with email: " + email);
+        }
 
+        // JWT 토큰 발급
+        String accessToken = jwtUtil.generateToken(user.getUserSeq(), email);
+        String refreshToken = jwtUtil.generateRefreshToken(user.getUserSeq(), email);
+
+        // 쿠키 설정
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // 7일
+                .build();
+
+        ResponseCookie accessTokenCookie = ResponseCookie.from("token", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .build();
+
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
+
+        if ("signup".equals(result)) {
+            return ResponseEntity.status(302).header("Location", "http://localhost:5173/nickName").build();
         } else {
-            // 이미 로그인한 사용자일 경우
-            return new RedirectView("http://localhost:5173");
+            return ResponseEntity.status(302).header("Location", "http://localhost:5173").build();
+        }
+    }
+
+
+
+    @PostMapping("/auth/refresh")
+    public ResponseEntity<Map<String, String>> refreshAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+        if (refreshToken != null && jwtUtil.validateToken(refreshToken)) {
+            Long userSeq = jwtUtil.getUserSeq(refreshToken);
+            String userEmail = jwtUtil.getLoginId(refreshToken);
+
+            // 사용자 확인
+            User user = userRepository.findByUserEmail(userEmail)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // 새 액세스 토큰 발급
+            String newAccessToken = jwtUtil.generateToken(userSeq, userEmail);
+
+            // 응답 데이터 생성
+            Map<String, String> tokens = new HashMap<>();
+            tokens.put("accessToken", newAccessToken);
+
+            return ResponseEntity.ok(tokens);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }
