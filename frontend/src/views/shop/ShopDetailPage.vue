@@ -2,7 +2,7 @@
 import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
 import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useBookmarkStore} from "@/store/BookmarkStore.js";
 import {useUserStore} from "@/store/UserStore.js";
@@ -11,16 +11,11 @@ import {fetchShopDetail} from "@/api/shop/ShopReadApi.js";
 const shopDetail = reactive([]);
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
-const loadShopDetail = async () => {
-  const categorySeq = route.params.categorySeq;
-  const shopSeq = route.params.shopSeq;
-
+const loadShopDetail = async (categorySeq, shopSeq) => {
   try {
     const data = await fetchShopDetail(categorySeq, shopSeq);
-
     // 데이터를 shopDetail에 병합
     Object.assign(shopDetail, data);
   } catch (error) {
@@ -92,7 +87,7 @@ const closeModal = () => {
 
 onMounted(async () => {
   const {categorySeq, shopSeq} = route.params;
-  await fetchShopDetail(categorySeq, shopSeq);
+  await loadShopDetail(categorySeq, shopSeq);
 
   //const userSeq = userStore.userSeq;
   const userSeq = 1;
@@ -116,7 +111,7 @@ onMounted(async () => {
     <BookQuantityModal
         :product-seq="shopDetail.productSeq"
         :productQty="shopDetail.productQty"
-        @close="isModalOpen=false"
+        @close="closeModal"
         @click.stop
     />
   </div>
