@@ -80,9 +80,12 @@ const routeToReviewList = () => {
 // 예약하기 누를 시 모달
 const isModalOpen = ref(false);
 
-// 모달 닫기
 const closeModal = () => {
   isModalOpen.value = false;
+}
+
+const updateQuantity = (updatedQty) => {
+  shopDetail.productQty = updatedQty;
 }
 
 onMounted(async () => {
@@ -112,6 +115,7 @@ onMounted(async () => {
         :product-seq="shopDetail.productSeq"
         :productQty="shopDetail.productQty"
         @close="closeModal"
+        @updated-quantity = "updateQuantity"
         @click.stop
     />
   </div>
