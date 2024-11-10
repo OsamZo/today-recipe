@@ -12,9 +12,14 @@ export const fetchShopList = async() => {
 }
 
 // 카테고리별 매장 목록 가져오기 API
-export const fetchShopListByCategory = async (categorySeq) => {
+export const fetchShopListByCategory = async (categorySeq, orderBy, searchKeyword) => {
     try {
-        const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop`);
+        const response = await axios.get(`http://localhost:8100/api/v1/category/${categorySeq}/shop`, {
+            params: {
+                orderBy: orderBy,
+                searchKeyword: searchKeyword
+            }
+        });
         return response.data.data;
     } catch (error) {
         console.error("매장 리스트를 불러오던 중 오류 발생", error);
