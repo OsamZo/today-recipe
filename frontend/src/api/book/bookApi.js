@@ -10,7 +10,12 @@ export const bookProduct = async(productSeq, userSeq, bookQty) => {
                     bookQty,
                 },
             });
-    } catch(error) {
-        console.log("예약에 실패했습니다.", error);
+    }  catch (error) {
+        if (error.response.status === 400 && error.response.data.errorCode === 'BOOK_ERROR_003') {
+            alert('이미 오늘 예약한 상품이 있습니다. 중복 예약이 불가능합니다.');
+        } else {
+            alert('예약에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        }
+        throw error;
     }
 }

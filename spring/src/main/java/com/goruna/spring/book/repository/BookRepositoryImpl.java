@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.goruna.spring.book.entity.QBook.book;
@@ -39,4 +40,16 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
                 .fetch();
     }
 
+    // 오늘 해당 매장에 예약한 상품이 있는지 카운트
+    @Override
+    public Long CountTodayBookByUserSeqAndShopSeq(Long userSeq, Long shopSeq, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        return jpaQueryFactory
+                .selectFrom(book)
+                .join(book.product, product).fetchJoin()
+                .join(product.shop, shop).fetchJoin()
+                .where(book.user.userSeq.eq(userSeq)
+                        .and(shop.shopSeq.eq(shopSeq))
+                        .and(book.regDate.between(startOfDay, endOfDay)))
+                .fetchCount();
+    }
 }
