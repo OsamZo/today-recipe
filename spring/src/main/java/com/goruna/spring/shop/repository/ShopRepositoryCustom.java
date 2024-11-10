@@ -13,10 +13,10 @@ public interface ShopRepositoryCustom {
 
     List<Product> readShopsAllToday(LocalDateTime startOfDay, LocalDateTime endOfDay);
 
-    List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<Product> readShopsByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay, String orderBy, String searchKeyword);
 
     Long countReviewsByShopSeq(Long shopSeq);
-  
+
     Shop getUserShopStatus(Long currentUserSeq);
 
     Shop findShopByUserSeq(Long userSeq);

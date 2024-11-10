@@ -51,9 +51,11 @@ public class ShopController {
     )
     public ApiResponse<?> readShopsByCategory(
             @PathVariable(value = "categorySeq") Long categorySeq,
-            @RequestParam(defaultValue = "1") Integer page
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "latest") String orderBy,
+            @RequestParam(required = false) String searchKeyword
     ) {
-        List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsByCategory(categorySeq, page);
+        List<ShopListReadResDTO> shopListReadResDTOS = shopService.readShopsByCategory(categorySeq, page, orderBy, searchKeyword);
 
         return ResponseUtil.successResponse("카테고리 별 매장 목록 데이터가 성공적으로 조회되었습니다.", shopListReadResDTOS).getBody();
     }
