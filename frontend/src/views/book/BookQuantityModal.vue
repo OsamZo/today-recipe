@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import { bookProduct } from "@/api/book/bookApi.js";
 
 const props = defineProps({
@@ -12,6 +12,8 @@ const props = defineProps({
     required: true
   },
 });
+
+const emit = defineEmits();
 
 // 수량 조절
 const selectedQuantity = ref(1);
@@ -32,8 +34,11 @@ const booking = async() => {
     const userSeq = 1;
     await bookProduct(props.productSeq, userSeq, selectedQuantity.value);
     alert("예약이 완료되었습니다.");
+    emit('close');
   } catch(error) {
     alert("예약에 실패했습니다.");
+    emit('close');
+
   }
 }
 </script>
