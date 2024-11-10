@@ -20,7 +20,6 @@ const loadShopDetail = async () => {
 
   try {
     const data = await fetchShopDetail(categorySeq, shopSeq);
-
     // 데이터를 shopDetail에 병합
     Object.assign(shopDetail, data);
   } catch (error) {
@@ -92,7 +91,7 @@ const closeModal = () => {
 
 onMounted(async () => {
   const {categorySeq, shopSeq} = route.params;
-  await fetchShopDetail(categorySeq, shopSeq);
+  await loadShopDetail(categorySeq, shopSeq);
 
   //const userSeq = userStore.userSeq;
   const userSeq = 1;
@@ -116,7 +115,7 @@ onMounted(async () => {
     <BookQuantityModal
         :product-seq="shopDetail.productSeq"
         :productQty="shopDetail.productQty"
-        @close="isModalOpen=false"
+        @close="closeModal"
         @click.stop
     />
   </div>
