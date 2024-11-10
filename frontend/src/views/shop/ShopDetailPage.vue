@@ -80,9 +80,12 @@ const routeToReviewList = () => {
 // 예약하기 누를 시 모달
 const isModalOpen = ref(false);
 
-// 모달 닫기
 const closeModal = () => {
   isModalOpen.value = false;
+}
+
+const updateQuantity = (updatedQty) => {
+  shopDetail.productQty = updatedQty;
 }
 
 onMounted(async () => {
@@ -112,6 +115,7 @@ onMounted(async () => {
         :product-seq="shopDetail.productSeq"
         :productQty="shopDetail.productQty"
         @close="closeModal"
+        @updated-quantity = "updateQuantity"
         @click.stop
     />
   </div>
@@ -164,7 +168,12 @@ onMounted(async () => {
             <div class="product_qty">남은 수량: {{ shopDetail.productQty }}개</div>
           </div>
           <div>
-            <button class="book_button" @click="isModalOpen = true">예약하기</button>
+            <button
+                class="book_button"
+                @click="isModalOpen = true"
+                :disabled="shopDetail.productQty === 0">
+              예약하기
+            </button>
           </div>
         </div>
       </div>
@@ -302,6 +311,10 @@ onMounted(async () => {
   font-family: "Gowun Dodum";
   margin: 42px 10px 0 0;
   cursor: pointer;
+}
+
+.book_button:disabled {
+  background-color: var(--button-gray);
 }
 
 .grey_hr {

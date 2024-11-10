@@ -37,6 +37,11 @@ const booking = async() => {
     const userSeq = userStore.userSeq;
     await bookProduct(props.productSeq, userSeq, selectedQuantity.value);
     alert("예약이 완료되었습니다.");
+
+    // 예약 성공 시 부모에게 업데이트된 재고 수량 전달
+    const updatedQty = props.productQty - selectedQuantity.value;
+    emit('updated-quantity', updatedQty);
+
     emit('close');
   } catch(error) {
     console.error("예약 중 오류 발생:", error);
