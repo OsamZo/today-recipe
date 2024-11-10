@@ -7,10 +7,22 @@
                     <span class="review-date">{{ review.regDate }}</span>
                 </div>
                 <div class="review-actions">
-                    <button class="action-btn gray-btn">수정</button>
-                    <button class="action-btn gray-btn">삭제</button>
-                    <button class="action-btn like-btn">
-                        ❤️ <span class="like-count">{{ review.likeCount }}</span>
+                    <button 
+                        v-if="!review.isLiked"
+                        @click="addLike(review)" 
+                        class="action-btn like-btn"
+                    >
+                        <span class="heart-icon">🤍</span>
+                        <span class="like-count">{{ review.likeCount }}</span>
+                    </button>
+                    
+                    <button 
+                        v-else
+                        @click="deleteLike(review)" 
+                        class="action-btn like-btn liked"
+                    >
+                        <span class="heart-icon">❤️</span>
+                        <span class="like-count">{{ review.likeCount }}</span>
                     </button>
                 </div>
             </div>
@@ -20,12 +32,85 @@
 </template>
 
 <script setup>
-defineProps({
-    reviews: {
-        type: Array,
-        required: true
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useReviewStore } from '@/store/ReviewStore';
+import { useUserStore } from '@/store/UserStore';
+
+const route = useRoute();
+const reviewStore = useReviewStore();
+const userStore = useUserStore();
+const reviews = ref([]);
+
+// URL에서 shopSeq 가져오기
+const shopSeq = route.params.shopSeq || 1;
+
+onMounted(async () => {
+    try {
+        await reviewStore.loadReviews(shopSeq);
+        reviews.value = reviewStore.reviews;
+
+        if (userStore.userSeq) {
+            checkLikeStatuses();
+        }
+    } catch (error) {
+        console.error('리뷰 목록 불러오기 중 오류 발생:', error);
     }
 });
+
+watch(
+    () => userStore.userSeq,
+    async (newSeq) => {
+        if (newSeq) {
+            await checkLikeStatuses();
+        }
+    }
+);
+
+const checkLikeStatuses = async () => {
+    for (let review of reviews.value) {
+        try {
+            await reviewStore.checkLikeStatus(userStore.userSeq, review.reviewSeq);
+        } catch (error) {
+            console.error(`리뷰 ${review.reviewSeq}의 좋아요 상태 확인 중 오류 발생:`, error);
+        }
+    }
+    reviews.value = [...reviews.value];
+};
+
+const addLike = async (review) => {
+    if (!userStore.userSeq) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    try {
+        await reviewStore.addLike(userStore.userSeq, review.reviewSeq);
+        review.isLiked = true;
+    } catch (error) {
+        console.error('좋아요 추가 중 오류 발생:', error);
+    }
+};
+
+const deleteLike = async (review) => {
+    if (!userStore.userSeq) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    if (!review.goodSeq) {
+        console.error('삭제할 좋아요의 goodSeq가 없습니다.');
+        return;
+    }
+
+    try {
+        await reviewStore.deleteLike(review.reviewSeq);
+        review.isLiked = false;
+        review.goodSeq = null;
+    } catch (error) {
+        console.error('좋아요 삭제 중 오류 발생:', error);
+    }
+};
 </script>
 
 <style scoped>
@@ -71,24 +156,22 @@ defineProps({
 .action-btn:hover {
     text-decoration: underline;
 }
-.gray-btn {
-    color: #888; 
-}
 .like-btn {
-    color: #e63946; 
+    color: #888;
     display: flex;
     align-items: center;
     text-decoration: none;
 }
-.like-btn:hover {
-    text-decoration: none; 
+.like-btn .heart-icon {
+    font-size: 1.2rem;
 }
-.like-count {
-    margin-left: 5px;
-    color: #888;
-    font-weight: bold;
+.like-btn.liked .heart-icon {
+    color: #e63946;
+}
+.like-btn:not(.liked) .heart-icon {
+    color: #ccc;
 }
 .review-content {
-    line-height: 1.5; 
+    line-height: 1.5;
 }
 </style>

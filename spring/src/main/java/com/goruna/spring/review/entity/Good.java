@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "good")
+@Table(name = "good", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_seq", "review_seq"})
+})
 @NoArgsConstructor
 @Getter
 public class Good {
