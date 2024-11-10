@@ -11,6 +11,7 @@ import {fetchShopDetail} from "@/api/shop/ShopReadApi.js";
 const shopDetail = reactive([]);
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
 const loadShopDetail = async (categorySeq, shopSeq) => {
@@ -41,14 +42,13 @@ const checkIfBookmarked = () => {
 const toggleBookmark = async () => {
   try {
     const bookmarkedShop = bookmarkStore.bookmarks.find(bookmark => bookmark.shopSeq === shopDetail.shopSeq);
-
+    const userSeq = userStore.userSeq;
     if (isBookmarked.value) {
-      await bookmarkStore.removeBookmark(1, bookmarkedShop.bookmarkSeq);
+      await bookmarkStore.removeBookmark(userSeq, bookmarkedShop.bookmarkSeq);
       isBookmarked.value = false;
       alert("북마크가 취소되었습니다.");
     } else {
-
-      await bookmarkStore.addBookmark(1, shopDetail.shopSeq, {
+      await bookmarkStore.addBookmark(userSeq, shopDetail.shopSeq, {
         shopName: shopDetail.shopName,
         shopAddress: shopDetail.shopAddress,
         shopImgUrl: shopDetail.shopImgUrl,
@@ -89,8 +89,8 @@ onMounted(async () => {
   const {categorySeq, shopSeq} = route.params;
   await loadShopDetail(categorySeq, shopSeq);
 
-  //const userSeq = userStore.userSeq;
-  const userSeq = 1;
+  const userSeq = userStore.userSeq;
+
   if (!userSeq) {
     console.error('유효하지 않은 사용자 정보입니다.');
     return;
