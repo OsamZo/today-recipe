@@ -1,6 +1,7 @@
 import UserMyPage from "@/views/user/UserMyPage.vue";
 import LoginPage from "@/views/user/LoginPage.vue";
 import LoginUserNickName from "@/views/user/LoginUserNickName.vue";
+import MyPageBook from "@/views/user/MyPageBook.vue";
 
 export default [
     {
@@ -14,5 +15,9 @@ export default [
     {
         path: '/nickname',
         component: LoginUserNickName
+    },
+    {
+        path: '/book',
+        component: MyPageBook
     }
 ];

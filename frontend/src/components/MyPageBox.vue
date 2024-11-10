@@ -40,6 +40,7 @@ const selectMenu = (menu) => {
             나의 리뷰 조회
           </div>
         </div>
+        <slot name="action"></slot>
       </div>
     </div>
   </div>
@@ -71,7 +72,7 @@ const selectMenu = (menu) => {
   background: #FFF;
   box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.13) inset;
   padding: 70px;
-  width: 80%;
+  width: 1260px;
 }
 .menu-content {
   width: 100%;
