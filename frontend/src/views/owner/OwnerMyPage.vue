@@ -11,25 +11,42 @@ import {useShopStore} from "@/store/ShopStore.js";
 // 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
 const shopStore = useShopStore();
+const propsComponent = ref('');
+
+const isComponent = (component) => {
+  propsComponent.value = component;
+}
+
 
 
 const shopData = computed(() => shopStore.shopData);
-const selectMenu = (menu) => {
+const selectMenu = async (menu) => {
   console.log(menu);
   selectedMenu.value = menu;
   if(selectedMenu.value === 'ShopInfo') {
-    shopStore.loadOnwerShopData();
+    await shopStore.loadOnwerShopData();
   }
 };
 
-
-
-
-
-
-
-
-
+const receivedShopData = ref({
+  shopTel: '',
+  shopAddress: '',
+  shopIntroduction: ''
+});
+const updateShopData = async (inputShopData) => {
+  const shopSeq = shopData.value.shopSeq;
+  receivedShopData.value = inputShopData;
+  // console.log(shopSeq, receivedShopData.value);
+  await shopStore.updateOwnerShopData(shopSeq, receivedShopData.value);
+  selectMenu('ShopInfo');
+};
+const deleteShop = async () => {
+  const shopSeq = shopData.value.shopSeq;
+  console.log(shopSeq);
+  await shopStore.deleteOwnerShopData(shopSeq);
+  selectedMenu.value = 'userInfo';
+  isComponent(propsComponent);
+};
 
 </script>
 
@@ -87,7 +104,13 @@ const selectMenu = (menu) => {
           <UserInfo v-if="selectedMenu === 'userInfo'"/>
           <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
           <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'"/>
-          <ShopInfo v-else-if="selectedMenu === 'ShopInfo'" :shopData="shopData"/>
+          <ShopInfo
+              v-else-if="selectedMenu === 'ShopInfo'"
+              :shopData="shopData"
+              :propsComponent="propsComponent"
+              @update-shopInfo="updateShopData"
+              @update-product="selectMenu('OwnerProduct')"
+              @delete-shop="deleteShop"/>
           <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>

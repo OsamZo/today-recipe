@@ -154,6 +154,8 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
         return jpaQueryFactory
                 .selectFrom(shop)
                 .where(shop.user.userSeq.eq(userSeq))
+                .orderBy(shop.regDate.desc())
+                .limit(1)
                 .fetchOne();
     }
 }

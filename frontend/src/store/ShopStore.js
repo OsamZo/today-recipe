@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { fetchShopList } from '@/api/shop/ShopListReadApi';
+import { fetchOwnerShopInfo } from "@/api/shop/ShopReadApi.js";
+import {deleteOwnerShop, updateOwnerShop} from "@/api/shop/shopApi.js";
 
 export const useShopStore = defineStore('shopStore', {
     state: () => ({
@@ -8,6 +10,7 @@ export const useShopStore = defineStore('shopStore', {
             userSeq: '',
             shopSeq: '',
             shopName: '',
+            shopTel: '',
             shopAddress: '',
             shopIntroduction: ''
         }
@@ -35,7 +38,22 @@ export const useShopStore = defineStore('shopStore', {
             } catch (error) {
                 console.log('스토어에서 매장 데이터를 로드하는 중 오류 발생 :', error);
             }
+        },
+        async updateOwnerShopData(shopSeq, updateShopData) {
+            try {
+                await updateOwnerShop(shopSeq, updateShopData);
+            } catch (error) {
+                console.log('스토어에서 매장 데이터를 수정하는 중 오류 발생 :', error);
+            }
+        },
+        async deleteOwnerShopData(shopSeq) {
+            try {
+                await deleteOwnerShop(shopSeq);
+            } catch (error) {
+                console.log('스토어에서 매장 데이터를 삭제하는 중 오류 발생 :', error);
+            }
         }
+
 
 
     }

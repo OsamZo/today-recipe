@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UpdateShopInfoDTO {
 
-    private String shopName;
+    private String shopTel;
     private String shopAddress;
     private String shopIntroduction;
 

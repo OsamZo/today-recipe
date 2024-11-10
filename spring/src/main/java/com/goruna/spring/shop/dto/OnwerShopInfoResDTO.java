@@ -10,6 +10,7 @@ public class OnwerShopInfoResDTO {
     private Long userSeq;
     private Long shopSeq;
     private String shopName;
+    private String shopTel;
     private String shopAddress;
     private String shopIntroduction;
 }
