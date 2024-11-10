@@ -1,6 +1,9 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 import { bookProduct } from "@/api/book/bookApi.js";
+import {useUserStore} from "@/store/UserStore.js";
+
+const userStore = useUserStore();
 
 const props = defineProps({
   productQty: {
@@ -31,7 +34,7 @@ const updateQuantity = (change) => {
 
 const booking = async() => {
   try {
-    const userSeq = 1;
+    const userSeq = userStore.userSeq;
     await bookProduct(props.productSeq, userSeq, selectedQuantity.value);
     alert("예약이 완료되었습니다.");
     emit('close');
