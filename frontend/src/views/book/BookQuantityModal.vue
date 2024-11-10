@@ -1,6 +1,9 @@
 <script setup>
-import {ref} from "vue";
-import axios from "axios";
+import { ref, defineEmits } from "vue";
+import { bookProduct } from "@/api/book/bookApi.js";
+import {useUserStore} from "@/store/UserStore.js";
+
+const userStore = useUserStore();
 
 const props = defineProps({
   productQty: {
@@ -12,6 +15,8 @@ const props = defineProps({
     required: true
   },
 });
+
+const emit = defineEmits();
 
 // 수량 조절
 const selectedQuantity = ref(1);
@@ -29,16 +34,18 @@ const updateQuantity = (change) => {
 
 const booking = async() => {
   try {
-    console.log(props.productSeq)
-    const response = await axios.post(`http://localhost:8100/api/v1/product/${props.productSeq}`, null, {
-      params: {
-        userSeq: 1,
-        bookQty: selectedQuantity.value
-      }
-    });
+    const userSeq = userStore.userSeq;
+    await bookProduct(props.productSeq, userSeq, selectedQuantity.value);
     alert("예약이 완료되었습니다.");
+
+    // 예약 성공 시 부모에게 업데이트된 재고 수량 전달
+    const updatedQty = props.productQty - selectedQuantity.value;
+    emit('updated-quantity', updatedQty);
+
+    emit('close');
   } catch(error) {
-    alert("예약에 실패했습니다.");
+    console.error("예약 중 오류 발생:", error);
+    emit('close');
   }
 }
 </script>

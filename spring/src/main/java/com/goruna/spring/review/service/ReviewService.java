@@ -65,7 +65,7 @@ public class ReviewService {
                         review.getRegDate(),
                         review.getReviewContent(),
                         review.getGoods().size(),
-                        review.getBook().getBookSeq()
+                        review.getReviewSeq()
                 ))
                 .collect(Collectors.toList());
     }

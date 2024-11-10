@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import { categoryApi } from "@/api/Admin/CategoryApi.js"; // composable 임포트
+import { categoryApi } from "@/api/admin/CategoryApi.js"; // composable 임포트
 import AdminNav from "@/components/AdminNav.vue";
 import AdminCategoryBodyTitle from "@/components/AdminCategoryBodyTitle.vue";
 

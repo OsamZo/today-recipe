@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { shopAuthApi } from "@/api/Admin/ShopAuthApi.js";  // 새로운 파일로부터 가져오기
+import { shopAuthApi } from "@/api/admin/ShopAuthApi.js";  // 새로운 파일로부터 가져오기
 import AdminBodyTitle from "@/components/AdminBodyTitle.vue"
 import AdminNav from "@/components/AdminNav.vue"
 

@@ -14,12 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +46,8 @@ public class ShopService {
 
     // 오늘의 특가 리스트 조회
     public List<ShopListReadResDTO> readLatest5ShopsToday() {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         List<Product> shops = shopRepository.readLatest5ShopsToday(startOfDay, endOfDay);
         return getShopListReadResDTOS(shops);
@@ -56,26 +55,36 @@ public class ShopService {
 
     // 전체 매장 목록 조회
     public List<ShopListReadResDTO> readShopsAllToday() {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         List<Product> shops = shopRepository.readShopsAllToday(startOfDay, endOfDay);
         return getShopListReadResDTOS(shops);
     }
 
     // 카테고리 별 매장 목록 조회
-    public List<ShopListReadResDTO> readShopsByCategory(Long categorySeq, Integer page) {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
-
+    public List<ShopListReadResDTO> readShopsByCategory(Long categorySeq, Integer page, String orderBy, String searchKeyword) {
         if (page == null || page < 1) {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
         }
 
-        int pageSize = 6;
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
-        List<Product> shops = shopRepository.readShopByCategorySeq(categorySeq, pageable, startOfDay, endOfDay);
+        // 페이징
+        int pageSize = 6;
+        Pageable pageable;
+
+        // 정렬 기준
+        if ("popular".equals(orderBy)) {
+            // 인기순 정렬 (리뷰 수 기준)
+            pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "bookmarkCount"));
+        } else {
+            // 최신순 정렬 (생성일 기준)
+            pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "product.regDate"));
+        }
+
+        List<Product> shops = shopRepository.readShopsByCategorySeq(categorySeq, pageable, startOfDay, endOfDay, orderBy, searchKeyword);
         return getShopListReadResDTOS(shops);
     }
 
@@ -84,8 +93,8 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.SHOP_NOT_FOUND));
 
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
 
         Product product = productRepository.readLatestProductToday(shopSeq, startOfDay, endOfDay);
 
@@ -93,6 +102,7 @@ public class ShopService {
         int shopReviewCount = Math.toIntExact(shopRepository.countReviewsByShopSeq(shopSeq));
 
         ShopDetailReadResDTO shopDetailReadResDTO = modelMapper.map(shop, ShopDetailReadResDTO.class);
+        shopDetailReadResDTO.setShopSeq(product.getShop().getShopSeq());
         shopDetailReadResDTO.setShopReviewCount(shopReviewCount);
         shopDetailReadResDTO.setProductClosedAt(product.getProductClosedAt());
         shopDetailReadResDTO.setProductSeq(product.getProductSeq());

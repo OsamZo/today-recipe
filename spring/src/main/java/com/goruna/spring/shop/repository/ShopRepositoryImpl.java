@@ -4,6 +4,8 @@ import com.goruna.spring.common.aggregate.ShopApprStatus;
 import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.product.entity.Product;
 import com.goruna.spring.shop.entity.Shop;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.SubQueryExpression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.goruna.spring.book.entity.QBook.book;
+import static com.goruna.spring.bookmark.entity.QBookmark.bookmark;
 import static com.goruna.spring.product.entity.QProduct.product;
 import static com.goruna.spring.review.entity.QReview.review;
 import static com.goruna.spring.shop.entity.QShop.shop;
@@ -49,12 +52,27 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .from(product)
                 .where(combinedCondition) // 결합된 조건을 사용
                 .groupBy(product.shop.shopSeq)
-                .orderBy(product.regDate.desc())
+                //.orderBy(product.regDate.desc())
                 .limit(1);
     }
 
     // 공통 쿼리 로직 - 상품과 매장 조인 및 필터링
-    private List<Product> getProductsWithShopJoin(SubQueryExpression<Long> latestProductSubquery, Pageable pageable) {
+    private List<Product> getProductsWithShopJoin(SubQueryExpression<Long> latestProductSubquery, Pageable pageable, String sortType) {
+        // 정렬 기준 설정
+        // 정렬 조건을 지정하기 위해 OrderSpecifier 클래스 사용
+        OrderSpecifier<?> orderSpecifier;
+        if ("latest".equals(sortType)) {
+            orderSpecifier = product.regDate.desc();
+        } else if ("popular".equals(sortType)) {
+            orderSpecifier = new OrderSpecifier<>(Order.DESC,
+                    JPAExpressions.select(bookmark.count())
+                            .from(bookmark)
+                            .where(bookmark.shop.shopSeq.eq(shop.shopSeq))
+            );
+        } else {
+            orderSpecifier = product.regDate.desc();
+        }
+
         long offset = (pageable != null && !pageable.isUnpaged()) ? pageable.getOffset() : 0;
         int pageSize = (pageable != null && !pageable.isUnpaged()) ? pageable.getPageSize() : Integer.MAX_VALUE;
         return jpaQueryFactory
@@ -64,6 +82,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .where(product.productSeq.in(latestProductSubquery)) // 최신 상품만
                 .where(shop.shopApprStatus.eq(ShopApprStatus.APPROVE)) // 승인된 매장만
                 .where(shop.shopDelStatus.eq(YnType.N)) // 삭제되지 않은 매장만
+                .orderBy(orderSpecifier)
                 .offset(offset)
                 .limit(pageSize)
                 .fetch();
@@ -74,7 +93,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
     public List<Product> readLatest5ShopsToday(LocalDateTime startOfDay, LocalDateTime endOfDay) {
         SubQueryExpression<Long> latestProductSubquery = getLatestProductSubquery(startOfDay, endOfDay, null);
 
-        return getProductsWithShopJoin(latestProductSubquery, Pageable.unpaged()) // 전체 조회는 Pageable.unpaged() 사용
+        return getProductsWithShopJoin(latestProductSubquery, Pageable.unpaged(), "latest") // 전체 조회는 Pageable.unpaged() 사용
                 .stream()
                 .limit(5)
                 .collect(Collectors.toList());
@@ -85,15 +104,29 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
     public List<Product> readShopsAllToday(LocalDateTime startOfDay, LocalDateTime endOfDay) {
         SubQueryExpression<Long> latestProductSubquery = getLatestProductSubquery(startOfDay, endOfDay, null);
 
-        return getProductsWithShopJoin(latestProductSubquery, null); // 전체 조회 시 페이지네이션이 필요 없으면 null
+        return getProductsWithShopJoin(latestProductSubquery, null, "latest"); // 전체 조회 시 페이지네이션이 필요 없으면 null
     }
 
     // 카테고리별 매장 리스트 조회
     @Override
-    public List<Product> readShopByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+    public List<Product> readShopsByCategorySeq(Long categorySeq, Pageable pageable, LocalDateTime startOfDay, LocalDateTime endOfDay, String orderBy, String searchKeyword) {
         SubQueryExpression<Long> latestProductSubquery = getLatestProductSubquery(startOfDay, endOfDay, categorySeq);
 
-        return getProductsWithShopJoin(latestProductSubquery, pageable);
+        List<Product> products = getProductsWithShopJoin(latestProductSubquery, pageable, orderBy);
+
+        // 검색
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+            return products.stream()
+                    .filter(product -> product.getShop().getShopName().contains(searchKeyword) ||
+                            product.getShop().getShopIntroduction().contains(searchKeyword) ||
+                            product.getShop().getShopAddress().contains(searchKeyword) ||
+                            product.getProductName().contains(searchKeyword) ||
+                            product.getProductDescription().contains(searchKeyword)
+                            ) // 매장 설명
+                    .collect(Collectors.toList());
+        }
+
+        return products;
     }
 
     // 매장별 리뷰 개수 카운트
@@ -107,7 +140,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .where(shop.shopSeq.eq(shopSeq))
                 .fetchCount();
     }
-      
+
     @Override
     public Shop getUserShopStatus(Long currentUserSeq) {
         return jpaQueryFactory

@@ -1,13 +1,14 @@
 <script setup>
-import {ref, onMounted, reactive} from 'vue';
-import axios from "axios";
+import {ref, onMounted, reactive, watch} from 'vue';
 import '@/assets/css/reset.css';
 import router from "@/router/index.js";
-import { useShopStore } from "@/store/ShopStore.js";
+import {fetchShopList, fetchTodaySaleList} from "@/api/shop/ShopListReadApi.js";
+import {useShopStore} from "@/store/ShopStore.js";
+
 const shopStore = useShopStore();
 // ========= 지도 관련 기능 =========
-const { VITE_KAKAO_MAP_KEY } = import.meta.env;
-const { VITE_KAKAO_MAP_KEY_ALL } = import.meta.env;
+const {VITE_KAKAO_MAP_KEY} = import.meta.env;
+const {VITE_KAKAO_MAP_KEY_ALL} = import.meta.env;
 const map = ref(null);
 const currentLocation = ref([]);
 const shops = ref([]);
@@ -81,13 +82,13 @@ const addCurrentLocationMarker = (coords, mapInstance) => {
   const markerImage = new window.kakao.maps.MarkerImage(
       'https://goruna.s3.us-west-1.amazonaws.com/a1ea413a-b2f8-4ba6-891d-eb5a0b493316_current-location.png',
       new window.kakao.maps.Size(38, 38), // 마커 크기
-      { offset: new window.kakao.maps.Point(16, 32) }
+      {offset: new window.kakao.maps.Point(16, 32)}
   );
   marker.setImage(markerImage);
 }
 
 // 주소를 위도/경도로 변환하는 함수
-const getCoordinatesFromAddress = async(address) => {
+const getCoordinatesFromAddress = async (address) => {
   try {
     const response = await fetch(
         `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`,
@@ -100,9 +101,9 @@ const getCoordinatesFromAddress = async(address) => {
     const data = await response.json();
 
     if (data.documents && data.documents.length > 0) {
-      const { x: longitude, y: latitude } = data.documents[0].address;
+      const {x: longitude, y: latitude} = data.documents[0].address;
 
-      return { latitude, longitude };
+      return {latitude, longitude};
     }
   } catch (error) {
     console.log("주소 변환 도중 오류 발생", error)
@@ -110,10 +111,9 @@ const getCoordinatesFromAddress = async(address) => {
 }
 
 // 지도 반경에 있는 가게에 마커 표시
-const displayShopMarkers = async(mapInstance) => {
+const displayShopMarkers = async (mapInstance) => {
   try {
-    const response = await axios.get(`http://localhost:8100/api/v1/shop`);
-    shops.value = response.data.data;
+    shops.value = await fetchShopList();
 
     for (const shop of shops.value) {
       const coords = await getCoordinatesFromAddress(shop.shopAddress);
@@ -129,7 +129,7 @@ const displayShopMarkers = async(mapInstance) => {
         // 마커 생성
         const marker = new window.kakao.maps.Marker({
           position: shopLocation,
-          image:markerImage,
+          image: markerImage,
           map: mapInstance,
         })
 
@@ -140,8 +140,8 @@ const displayShopMarkers = async(mapInstance) => {
                 <p style="font-weight: bold; margin: 0 0 10px 0">${shop.shopName}</p>
                 <p>${shop.shopAddress}</p>
                 <div class="flex" style="margin-top: 8px;">
-                    <button id="more_button" @click="seeMore()" style="background-color: var(--yellow); border: none; border-radius: 10px; font-family: 'Gowun Dodum'; cursor: pointer">더보기</button>
-                    <button id="close_button" style="background-color: var(--button-brown); border: none; border-radius: 10px; color: var(--text-white); font-family: 'Gowun Dodum'; cursor: pointer">닫기</button>
+                    <button id="more_button_${shop.shopSeq}" @click="seeMore()" style="background-color: var(--yellow); border: none; border-radius: 10px; font-family: 'Gowun Dodum'; cursor: pointer">더보기</button>
+                    <button id="close_button_${shop.shopSeq}" style="background-color: var(--button-brown); border: none; border-radius: 10px; color: var(--text-white); font-family: 'Gowun Dodum'; cursor: pointer">닫기</button>
                 </div>
             </div>
           </div>
@@ -165,29 +165,27 @@ const displayShopMarkers = async(mapInstance) => {
 
         document.addEventListener('click', (event) => {
           // 닫기 버튼을 누르면 infoWindow 닫히도록 이벤트 등록
-          if (event.target.id === 'close_button') {
+          if (event.target.id === `close_button_${shop.shopSeq}`) {
             customOverlay.setMap(null);
           }
 
           // 더보기 버튼을 누르면 해당 매장 상세 페이지로 라우팅되도록 이벤트 등록
-          if(event.target.id === 'more_button') {
-              router.push(`/category/${shop.categorySeq}/shop/${shop.shopSeq}`);
-
+          if (event.target.id === `more_button_${shop.shopSeq}`) {
+            router.push(`/category/${shop.categorySeq}/shop/${shop.shopSeq}`);
           }
         });
       }
     }
-  } catch(error) {
+  } catch (error) {
     console.log("매장 조회 실패", error);
   }
 }
 
 // ========= 오늘의 특가 리스트 가져오기 =========
 const todaySaleProducts = reactive([]);
-const fetchTodaySaleList = async() => {
+const loadTodaySaleList = async () => {
   try {
-    const response = await axios.get(`http://localhost:8100/api/v1/shop/today`);
-    const todaySaleList = response.data.data;
+    const todaySaleList = await fetchTodaySaleList();
 
     todaySaleList.forEach(product => {
       todaySaleProducts.push({
@@ -196,12 +194,12 @@ const fetchTodaySaleList = async() => {
         shopImgUrl: product.shopImgUrl,
         shopAddress: product.shopAddress,
         categorySeq: product.categorySeq,
-        categoryName:product.categoryName,
+        categoryName: product.categoryName,
         productOriginalPrice: product.productOriginalPrice,
         productSalePrice: product.productSalePrice
       })
     })
-  } catch(error) {
+  } catch (error) {
     console.log("오늘의 특가 리스트를 불러오던 중 오류 발생", error);
   }
 }
@@ -214,14 +212,14 @@ const formatPrice = (price) => {
   return price.toLocaleString();
 }
 
-onMounted(async() => {
+onMounted(async () => {
   try {
-    fetchTodaySaleList();
+    await loadTodaySaleList();
 
     const coords = await getCurrentLocation();
     currentLocation.value = coords;
     loadKakaoMap(map.value, coords); // 지도를 로드하고 위치 전달하여 마커 표시
-    shopStore.loadShopData();
+    await shopStore.loadShopData();
   } catch (error) {
     console.log("현재 위치를 가져오는 데 실패했습니다.", error);
   }
@@ -252,7 +250,7 @@ onMounted(async() => {
           <li v-for="product in todaySaleProducts">
             <RouterLink :to="`/category/${product.categorySeq}/shop/${product.shopSeq}`">
               <div class="product_title_box">
-                <div class="product_name">{{ product.shopName}}</div>
+                <div class="product_name">{{ product.shopName }}</div>
                 <div class="category_name">{{ product.categoryName }}</div>
               </div>
               <div>
@@ -264,7 +262,9 @@ onMounted(async() => {
                   <div class="original_price_box">
                     <div class="original_price">{{ formatPrice(product.productOriginalPrice) }}원</div>
                     <svg width="74" height="16" viewBox="0 0 74 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M73.7071 8.70711C74.0976 8.31658 74.0976 7.68342 73.7071 7.29289L67.3431 0.928932C66.9526 0.538408 66.3195 0.538408 65.9289 0.928932C65.5384 1.31946 65.5384 1.95262 65.9289 2.34315L71.5858 8L65.9289 13.6569C65.5384 14.0474 65.5384 14.6805 65.9289 15.0711C66.3195 15.4616 66.9526 15.4616 67.3431 15.0711L73.7071 8.70711ZM0 9H73V7H0V9Z" fill="#EB4335"/>
+                      <path
+                          d="M73.7071 8.70711C74.0976 8.31658 74.0976 7.68342 73.7071 7.29289L67.3431 0.928932C66.9526 0.538408 66.3195 0.538408 65.9289 0.928932C65.5384 1.31946 65.5384 1.95262 65.9289 2.34315L71.5858 8L65.9289 13.6569C65.5384 14.0474 65.5384 14.6805 65.9289 15.0711C66.3195 15.4616 66.9526 15.4616 67.3431 15.0711L73.7071 8.70711ZM0 9H73V7H0V9Z"
+                          fill="#EB4335"/>
                     </svg>
                   </div>
                   <div class="sale_price">{{ formatPrice(product.productSalePrice) }}원</div>

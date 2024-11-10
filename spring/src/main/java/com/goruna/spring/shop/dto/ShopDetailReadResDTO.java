@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @ToString
 public class ShopDetailReadResDTO {
 
+    private Long shopSeq;
+
     private String shopName;
 
     private int shopReviewCount;
@@ -19,7 +21,11 @@ public class ShopDetailReadResDTO {
 
     private String shopAddress;
 
+    private String shopTel;
+
     private String shopIntroduction;
+
+    private String categoryName;
 
     private Long productSeq;
 

@@ -1,60 +1,57 @@
 <script setup>
 import '@/assets/css/reset.css';
-import axios from "axios";
 import {RouterLink, useRouter} from 'vue-router';
 import {onMounted, reactive, ref} from "vue";
+import {fetchCategoryList, fetchShopListByCategory} from "@/api/shop/ShopListReadApi.js";
 
 const router = useRouter();
 const selectedCategory = ref(1);
 const shopList = reactive([]);
 const categoryList = reactive([]);
+const orderBy = ref('latest');
+const searchKeyword = ref("");
 
 // 매장 리스트 가져오기
-const fetchShopList = async(categorySeq) => {
-  try {
-    const response = await axios.get(`http://localhost:8100/api/v1/category/${selectedCategory.value}/shop`);
-    const shops = response.data.data;
+const loadShopList = async (categorySeq, orderBy, searchKeyword) => {
+  const shops = await fetchShopListByCategory(categorySeq, orderBy, searchKeyword);
 
-    shopList.length = 0;
-    shops.forEach(shop => {
-      shopList.push({
-        shopSeq: shop.shopSeq,
-        shopName: shop.shopName,
-        shopImgUrl: shop.shopImgUrl,
-        shopAddress: shop.shopAddress,
-        categorySeq: shop.categorySeq,
-        categoryName: shop.categoryName,
-        productOriginalPrice: shop.productOriginalPrice,
-        productSalePrice: shop.productSalePrice
-      })
-    })
-  } catch(error) {
-    console.log("매장 리스트를 불러오던 중 오류 발생", error);
-  }
+  shopList.length = 0;
+
+  shops.forEach(shop => {
+    shopList.push({
+      shopSeq: shop.shopSeq,
+      shopName: shop.shopName,
+      shopImgUrl: shop.shopImgUrl,
+      shopAddress: shop.shopAddress,
+      categorySeq: shop.categorySeq,
+      categoryName: shop.categoryName,
+      productOriginalPrice: shop.productOriginalPrice,
+      productSalePrice: shop.productSalePrice
+    });
+  });
+};
+
+const changeOrderBy = () => {
+  loadShopList(selectedCategory.value, orderBy.value);
 }
 
 // 카테고리 리스트 가져오기
-const fetchCategoryList = async() => {
-  try {
-    const response = await axios.get(`http://localhost:8100/api/v1/category`);
-    const categories = response.data.data;
-
-    categories.forEach(category => {
-      categoryList.push({
-        categorySeq: category.categorySeq,
-        categoryName: category.categoryName
-      })
-    })
-  } catch(error) {
-    console.log("카테고리 리스트를 불러오던 중 오류 발생", error);
-  }
-}
+const loadCategoryList = async () => {
+  const categories = await fetchCategoryList();
+  categoryList.length = 0;
+  categories.forEach(category => {
+    categoryList.push({
+      categorySeq: category.categorySeq,
+      categoryName: category.categoryName
+    });
+  });
+};
 
 // 카테고리 버튼 클릭 시 변경
 const changeCategory = (categorySeq) => {
   selectedCategory.value = categorySeq;
   routeByCategory(selectedCategory.value);
-  fetchShopList(categorySeq);
+  loadShopList(categorySeq);
 }
 
 // 가격 포맷팅 함수
@@ -69,16 +66,40 @@ const routeByCategory = (categorySeq) => {
   router.push(`/category/${categorySeq}/shop`);
 }
 
+// 검색어 변경 시 처리
+const search = () => {
+  loadShopList(selectedCategory.value, orderBy.value, searchKeyword.value);
+};
+
 onMounted(() => {
-  fetchCategoryList();
-  fetchShopList(selectedCategory.value);
+  loadCategoryList();
+  loadShopList(selectedCategory.value, orderBy.value);
 })
 </script>
 
 <template>
-  <div class="content flex">
-    <!--검색바, 정렬기준 추가 예정-->
-    <aside></aside>
+  <div class="content">
+    <aside class="flex">
+      <div class="search-bar flex">
+        <input
+            class="search-input"
+            v-model="searchKeyword"
+            type="text"
+            placeholder="찾고있는 정보가 있나요?"
+            required
+            @keydown.enter="search">
+        <div @click="search" type="submit">
+          <img class="search-img" src="https://goruna.s3.us-west-1.amazonaws.com/1c054290-0dda-44f7-b7b4-f9e2f009ec79_search.png" alt="검색 돋보기">
+        </div>
+      </div>
+      <div class="sort-box">
+        <select v-model="orderBy" @change="changeOrderBy" class="sort-box-select">
+          <option value="latest">최신순</option>
+          <option value="popular">인기순</option>
+        </select>
+      </div>
+    </aside>
+    <hr class="brown-hr">
     <article>
       <div class="category_box_list flex">
         <button
@@ -126,10 +147,55 @@ onMounted(() => {
   display: flex;
 }
 
+.search-bar {
+  width: 764px;
+  height: 44px;
+  border-radius: 20px;
+  background-color: var(--box-grey);
+  padding: 0 20px;
+  align-items: center;
+  margin: 0 30px 49px 0;
+}
+
+.search-input {
+  font-family: "Gowun Dodum";
+  width: 740px;
+  border: none;
+  background-color: transparent;
+  text-align: center;
+}
+
+.search-img {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+}
+
+.sort-box-select {
+  padding: 0 30px;
+  font-family: "Gowun Dodum";
+  width: 125px;
+  height: 44px;
+  background-color: var(--yellow);
+  font-size: 16px;
+  border: none;
+  border-radius: 52px;
+}
+
 .content {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   max_width: 1903px;
   width: 100%;
+  margin: 88px 0 0 0;
+}
+
+.brown-hr {
+  border: 1px solid var(--button-brown);
+  width: 948px;
 }
 
 .category_box {
@@ -139,7 +205,7 @@ onMounted(() => {
   font-size: 15px;
   border-radius: 15px;
   justify-content: center;
-  margin: 20px 10px 10px 20px;
+  margin: 25px 10px 25px 20px;
   border: none;
   font-family: "Gowun Dodum";
   cursor: pointer;
@@ -222,5 +288,6 @@ onMounted(() => {
 
 .sale_price {
   font-size: 20px;
+  display: flex;
 }
 </style>

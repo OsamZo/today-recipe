@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +46,19 @@ public class BookService {
             productRepository.save(product);
         } else {
             throw new CustomException(ErrorCodeType.INVALID_VALUE);
+        }
+
+        // 예약된 날짜와 같은 날짜에 같은 매장에서 해당 사용자가 예약한 적이 있는지 체크(취소 제외)
+        // 서울 날짜
+        LocalDateTime startOfDay = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
+
+        Long shopSeq = product.getShop().getShopSeq();
+        Long countBookingToday = bookRepository.CountTodayBookByUserSeqAndShopSeq(userSeq, shopSeq, startOfDay, endOfDay);
+
+        // 이미 예약한 내역이 있으면 예외 처리
+        if (countBookingToday > 0) {
+            throw new CustomException(ErrorCodeType.DUPLICATE_BOOKING);
         }
 
         Book book = Book.builder()
