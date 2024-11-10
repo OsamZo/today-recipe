@@ -2,7 +2,7 @@
 import ShopCard from "@/components/ShopCard.vue";
 import WhiteContentBox from '@/components/WhiteContentBox.vue';
 import BookQuantityModal from "@/views/book/BookQuantityModal.vue";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useBookmarkStore} from "@/store/BookmarkStore.js";
 import {useUserStore} from "@/store/UserStore.js";
@@ -11,13 +11,9 @@ import {fetchShopDetail} from "@/api/shop/ShopReadApi.js";
 const shopDetail = reactive([]);
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 // 매장 상세정보 데이터를 불러오기
-const loadShopDetail = async () => {
-  const categorySeq = route.params.categorySeq;
-  const shopSeq = route.params.shopSeq;
-
+const loadShopDetail = async (categorySeq, shopSeq) => {
   try {
     const data = await fetchShopDetail(categorySeq, shopSeq);
     // 데이터를 shopDetail에 병합
