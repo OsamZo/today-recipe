@@ -168,7 +168,12 @@ onMounted(async () => {
             <div class="product_qty">남은 수량: {{ shopDetail.productQty }}개</div>
           </div>
           <div>
-            <button class="book_button" @click="isModalOpen = true">예약하기</button>
+            <button
+                class="book_button"
+                @click="isModalOpen = true"
+                :disabled="shopDetail.productQty === 0">
+              예약하기
+            </button>
           </div>
         </div>
       </div>
@@ -306,6 +311,10 @@ onMounted(async () => {
   font-family: "Gowun Dodum";
   margin: 42px 10px 0 0;
   cursor: pointer;
+}
+
+.book_button:disabled {
+  background-color: var(--button-gray);
 }
 
 .grey_hr {
