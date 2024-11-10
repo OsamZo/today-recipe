@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 public class BookListReadResDTO {
+
+    private Long bookSeq;
 
     private String shopName;
 
@@ -18,7 +20,7 @@ public class BookListReadResDTO {
 
     private int bookQty;
 
-    private LocalTime shopClosedAt;
+    private LocalDateTime shopClosedAt;
 
     private String shopAddress;
 
