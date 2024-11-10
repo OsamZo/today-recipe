@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import { ShopReviewApi } from "@/api/Admin/ShopReviewApi.js";
+import { ShopReviewApi } from "@/api/admin/ShopReviewApi.js";
 
 const { restaurant, reviews, fetchReviews, deleteReview } = ShopReviewApi();
 

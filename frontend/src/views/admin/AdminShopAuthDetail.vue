@@ -1,9 +1,9 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { authShopDataApi } from '@/api/Admin/AuthShopDataApi.js';
-import { imageModalApi } from '@/api/Admin/ImageModalApi.js';
-import { authBtnApi } from '@/api/Admin/AuthBtnApi.js'
+import { authShopDataApi } from '@/api/admin/AuthShopDataApi.js';
+import { imageModalApi } from '@/api/admin/ImageModalApi.js';
+import { authBtnApi } from '@/api/admin/AuthBtnApi.js'
 
 const route = useRoute();
 const shopSeq = Number(route.params.shopSeq);
