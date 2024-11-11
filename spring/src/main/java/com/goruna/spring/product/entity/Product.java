@@ -48,4 +48,13 @@ public class Product extends BaseTimeEntity {
     public void updateProductQty(int productQty) {
         this.productQty = productQty;
     }
+
+
+    public void addShop(Shop shop) {
+        this.shop = shop;
+    }
+
+    public void addProductImg(String productImg) {
+        this.productImgUrl = productImg;
+    }
 }
