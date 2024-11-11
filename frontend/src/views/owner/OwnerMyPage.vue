@@ -97,6 +97,11 @@ const receivedProduct = async(updateData) => {
   await selectMenu('OwnerBookList');
 }
 
+onMounted(async () => {
+  changedView('/owner/userinfo');
+  await router.push('/owner/userinfo');
+})
+
 </script>
 
 <template>
@@ -109,7 +114,7 @@ const receivedProduct = async(updateData) => {
           <div class="user-info">내 정보</div>
           <div
               class="menu-button"
-              @click="changedView('/owner')">
+              @click="changedView('/owner/userinfo')">
             회원 정보 조회
           </div>
           <div
