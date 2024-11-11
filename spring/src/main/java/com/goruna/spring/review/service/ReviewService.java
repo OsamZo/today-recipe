@@ -47,10 +47,12 @@ public class ReviewService {
 
         return reviews.stream()
                 .map(review -> new ReviewUserReadResDTO(
+                        review.getReviewSeq(),
                         review.getBook().getUser().getUserNickname(),
                         review.getReviewContent(),
                         review.getRegDate(),
-                        review.getGoods().size()
+                        review.getGoods().size(),
+                        review.getReviewStatus()
                 ))
                 .collect(Collectors.toList());
     }
