@@ -10,7 +10,6 @@ import {useShopStore} from "@/store/ShopStore.js";
 import {useUserStore} from "@/store/UserStore.js";
 import {useBookStore} from "@/store/BookStore.js";
 
-// 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
 
 const userStore = useUserStore();
@@ -39,7 +38,6 @@ const receivedShopData = ref({
 const updateShopData = async (inputShopData) => {
   const shopSeq = shopData.value.shopSeq;
   receivedShopData.value = inputShopData;
-  // console.log(shopSeq, receivedShopData.value);
   await shopStore.updateOwnerShopData(shopSeq, receivedShopData.value);
   await selectMenu('ShopInfo');
 };
@@ -47,7 +45,6 @@ const propsComponent = ref('readShop');
 
 const deleteShop = async () => {
   const shopSeq = shopData.value.shopSeq;
-  console.log(shopSeq);
   await shopStore.deleteOwnerShopData(shopSeq);
   selectedMenu.value = 'userInfo';
 };
