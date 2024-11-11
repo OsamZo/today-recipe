@@ -1,7 +1,7 @@
 <script setup>
 import '@/assets/css/reset.css';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {computed} from "vue";
+import {computed, ref} from "vue";
 
 
 const props = defineProps({
@@ -25,6 +25,17 @@ const groupedBooksByDate = computed(() => {
 
 const getBookDate = (dateTime) => {
   return dateTime.split("T")[0];
+}
+
+const updateData = ref({
+  bookSeq: '',
+  bookIsProductReceived: 'Y'
+})
+
+const emit = defineEmits(['received-product']);
+const receivedProduct = (bookSeq) => {
+  updateData.value.bookSeq = bookSeq;
+  emit('received-product', updateData.value);
 }
 
 
@@ -56,7 +67,7 @@ const getBookDate = (dateTime) => {
           <button
               v-if="book.bookIsProductReceived === 'N'"
               class="check-button"
-              @click="">
+              @click="receivedProduct(book.bookSeq)">
             미수령
           </button>
         </div>
