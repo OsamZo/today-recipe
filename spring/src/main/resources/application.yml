@@ -9,11 +9,15 @@ server:
 spring:
   application:
     name: team
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mysql://mysql-service.default.svc.cluster.local:3306/goruna
+#    url: jdbc:mysql://mysql-service.default.svc.cluster.local:3306/goruna
+    url: jdbc:log4jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: ${DRIVER_CLASS_NAME}
   jpa:
     show-sql: true
     hibernate:
