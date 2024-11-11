@@ -32,10 +32,10 @@ public class OwnerShopController {
         return ResponseUtil.successResponse("데이터가 성공적으로 삭제되었습니다.").getBody();
     }
 
-    @GetMapping("/shop")
+    @GetMapping("/{userSeq}/shop")
     @Operation(summary = "(사장) 내 매장 정보 조회", description = "(사장) 나의 매장 정보를 조회합니다.")
-    public ApiResponse<?> getOwnerShopInfo() {
-        OnwerShopInfoResDTO ownerShopInfo = ownerShopService.getOnwerShopInfo();
+    public ApiResponse<?> getOwnerShopInfo(@PathVariable Long userSeq) {
+        OnwerShopInfoResDTO ownerShopInfo = ownerShopService.getOnwerShopInfo(userSeq);
         return ResponseUtil.successResponse("데이터를 성공적으로 조회하였습니다.", ownerShopInfo).getBody();
     }
 }
