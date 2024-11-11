@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Shop extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "shop_seq", nullable = false)
     private Long shopSeq;
 
@@ -71,5 +71,18 @@ public class Shop extends BaseTimeEntity {
 
     public void disapprove(){
         this.shopApprStatus = ShopApprStatus.REJECT;
+    }
+
+    public void addCategroy(ShopCategory category) {
+        this.shopCategory = category;
+    }
+
+
+    public void addShopBusinessImgUrl(String businessImg) {
+        this.shopBusinessImgUrl = businessImg;
+    }
+
+    public void addShopImgUrl(String shopImg) {
+        this.shopImgUrl = shopImg;
     }
 }

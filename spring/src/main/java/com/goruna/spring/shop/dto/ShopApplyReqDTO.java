@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public class ShopApplyReqDTO {
     /* 사업자 등록증, 상호명, 개업일, 매장 전화번호,
      사업장 주소, 사업장 종류, 사업장 소개*/
-    private Long categorySeq;
     private String shopName;
     private String shopBusinessImgUrl;
+    private String shopImgUrl;
     private LocalDateTime shopOpenDate;
     private String shopTel;
     private String shopAddress;
