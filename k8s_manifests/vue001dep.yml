@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: vue001dep
+
+spec:
+  selector:
+    matchLabels:
+      app: vue001kube
+
+  replicas: 2
+
+  template:
+    metadata:
+      labels:
+        app: vue001kube
+
+    spec:
+
+      containers:
+        - name: vue-container
+          image: minijuu/goruna_frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 5
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 40
+            periodSeconds: 20
+            failureThreshold: 3
