@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// (사장) 매장 정보 수정 API (const updateShopData = reactive({});
+// (사장) 매장 정보 수정 API
 export const updateOwnerShop = async (shopSeq, updateShopData) => {
     try {
         // console.log(shopSeq, updateShopData.value);
