@@ -1,8 +1,9 @@
 <script setup>
 import MyPageBox from "@/components/MyPageBox.vue";
 import {fetchBookList} from "@/api/user/UserApi.js";
-import {onMounted, reactive} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
 import {useUserStore} from "@/store/UserStore.js";
+import BookCancelModal from "@/views/book/BookCancelModal.vue";
 
 const userStore = useUserStore();
 const bookList = reactive([]);
@@ -12,8 +13,6 @@ const loadBookList = async (userSeq) => {
   try {
     const data = await fetchBookList(userSeq);
     Object.assign(bookList, data);
-    console.log(data);
-    console.log(bookList);
   } catch (error) {
     console.error("예약 리스트를 불러오는데 실패했습니다.", error);
   }
@@ -28,17 +27,34 @@ const closedTime = (dateTime) => {
 const isCancelAvailable = (book) => {
   const currentTime = new Date();
   const closedAt = new Date(book.shopClosedAt);
+  console.log(currentTime);
   console.log(closedAt);
-  console.log(currentTime)
   const oneHourInMs = 60 * 60 * 1000;
-  return closedAt - currentTime <= oneHourInMs;
+  return closedAt - currentTime >= oneHourInMs;
 }
 
-const cancelBooking = (book) => {
-  if (book.isBookCancelled === 'N' && !isCancelAvailable(book)) {
-    book.isBookCancelled = 'Y';
+// 예약 취소 모달
+const isModalOpen = ref(false);
+const selectedBookSeq = ref(null);
+
+const openModal = (book) => {
+  if (isCancelAvailable(book) && book.isBookCancelled === 'N') {
+    isModalOpen.value = true;
+    selectedBookSeq.value = book.bookSeq;
   }
 };
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedBookSeq.value = null;
+}
+
+const updateIsBookCancelled =  (bookSeq) => {
+  const book = bookList.find(b => b.bookSeq === bookSeq);
+  if (book) {
+    book.isBookCancelled = 'Y'; // 취소 상태로 업데이트
+  }
+}
 
 onMounted(async () => {
   const userSeq = userStore.userSeq;
@@ -58,6 +74,14 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div v-if="isModalOpen" class="modal-background" @click="closeModal">
+    <BookCancelModal
+        :bookSeq="selectedBookSeq"
+        @close="closeModal"
+        @bookingCancelled="updateIsBookCancelled"
+        @click.stop
+    />
+  </div>
   <MyPageBox>
     <template #action>
       <div>
@@ -80,18 +104,19 @@ onMounted(async () => {
               </div>
             </div>
             <div class="flex book-cancel-button">
-              <div v-if="isCancelAvailable(book)" class="unavailable-message flex">
-                <div>예약 취소 가능 시간이</div>
-                <div>지났습니다.</div>
-              </div>
               <button
-                  v-else
+                  v-if="isCancelAvailable(book)"
                   class="cancel-button"
-                  :disabled="!isCancelAvailable(book) || book.isBookCancelled === 'Y'"
-                  @click="cancelBooking(book)"
+                  :disabled="book.isBookCancelled === 'Y'"
+                  @click="openModal(book)"
               >
                 {{ book.isBookCancelled === 'Y' ? "취소 완료" : "예약 취소" }}
               </button>
+              <div v-else class="unavailable-message flex">
+                <div>예약 취소 가능 시간이</div>
+                <div>지났습니다.</div>
+              </div>
+
             </div>
           </div>
           <hr class="grey-hr">
@@ -104,6 +129,19 @@ onMounted(async () => {
 <style scoped>
 .flex {
   display: flex;
+}
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .book-list-title {
@@ -122,7 +160,7 @@ onMounted(async () => {
 }
 
 .shop-img {
-  width: 110px;
+  width: 121px;
   height: 121px;
   margin-right: 31px;
 }
@@ -175,14 +213,16 @@ onMounted(async () => {
   background-color: var(--button-brown);
   color: var(--text-white);
   margin-left: 18px;
+  cursor: pointer;
 }
 
 .book-cancel-button {
   align-items: center;
 }
 
-.book-cancel-button:disabled {
-  background-color: var(--button-gray);
+.cancel-button:disabled {
+  background-color: var(--button-dark-gray);
+  cursor: auto;
 }
 
 .grey-hr {

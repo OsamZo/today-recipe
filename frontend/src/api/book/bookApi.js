@@ -19,3 +19,11 @@ export const bookProduct = async(productSeq, userSeq, bookQty) => {
         throw error;
     }
 }
+
+export const cancelBookingProduct = async(bookSeq) => {
+    try {
+        return await axios.put(`http://localhost:8100/api/v1/book/${bookSeq}`);
+    } catch(error) {
+        console.log("예약 취소를 하던 도중 에러 발생", error);
+    }
+}
