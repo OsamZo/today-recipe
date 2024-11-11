@@ -3,6 +3,7 @@ import LoginPage from "@/views/user/LoginPage.vue";
 import LoginUserNickName from "@/views/user/LoginUserNickName.vue";
 import MyPageBook from "@/views/user/MyPageBook.vue";
 import MyPageHistory from "@/views/user/MyPageHistory.vue";
+import MyPageReview from "@/views/user/MyPageReview.vue";
 
 export default [
     {
@@ -24,5 +25,9 @@ export default [
     {
         path: '/history',
         component: MyPageHistory
+    },
+    {
+        path: '/user/review',
+        component: MyPageReview
     }
 ];
