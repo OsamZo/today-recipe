@@ -38,8 +38,10 @@ public class OwnerShopService {
     // 내 매장 정보 조회
     @Transactional
     public OnwerShopInfoResDTO getOnwerShopInfo(Long userSeq) {
-
         Shop shop = ShopRepository.findShopByUserSeq(userSeq);
+        if (shop == null) {
+            return null;
+        }
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
     }
 }

@@ -1,5 +1,6 @@
 package com.goruna.spring.shop.dto;
 
+import com.goruna.spring.common.aggregate.ShopApprStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class OnwerShopInfoResDTO {
     private String shopTel;
     private String shopAddress;
     private String shopIntroduction;
+    private ShopApprStatus shopApprStatus;
 }
