@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { fetchShopList } from '@/api/shop/ShopListReadApi';
 import { fetchOwnerShopInfo } from "@/api/shop/ShopReadApi.js";
-import {deleteOwnerShop, updateOwnerShop} from "@/api/shop/shopApi.js";
+import {deleteOwnerShop, updateOwnerShop} from "@/api/shop/ShopApi.js";
 
 export const useShopStore = defineStore('shopStore', {
     state: () => ({
