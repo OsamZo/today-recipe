@@ -12,7 +12,10 @@ import {useRouter} from 'vue-router';
 
 // 메뉴 선택 시 화면 전환
 const router = useRouter();
+const isUserInfo = ref(false);
 const changedView = (viewUrl) => {
+  isUserInfo.value = true;
+  // selectMenu('');
   router.push(viewUrl);
 }
 
@@ -22,7 +25,9 @@ const userStore = useUserStore();
 const bookStore = useBookStore();
 
 const selectMenu = async (menu) => {
-  console.log(menu);
+  isUserInfo.value = false;
+  console.log(isUserInfo);
+  await router.push('/owner');
   selectedMenu.value = menu;
   if (selectedMenu.value === 'ShopInfo') {
     await shopStore.loadOnwerShopData(userStore.userSeq);
@@ -117,7 +122,7 @@ const receivedProduct = async(updateData) => {
 
           <br>
 
-          <div class="user-info">내 정보</div>
+          <div class="shop-info">매장 정보</div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerBookList' }"
@@ -139,20 +144,23 @@ const receivedProduct = async(updateData) => {
         </div>
 
         <div class="menu-content">
-          <RouterView/>
-          <OwnerBookList
-              v-if="selectedMenu === 'OwnerBookList'"
-              :books="bookList"
-              @received-product="receivedProduct"
-              />
-          <ShopInfo
-              v-else-if="selectedMenu === 'ShopInfo'"
-              :shopData="shopData"
-              :propsComponent="propsComponent"
-              @update-shopInfo="updateShopData"
-              @update-product="selectMenu('OwnerProduct')"
-              @delete-shop="deleteShop"/>
-          <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
+          <RouterView v-if="isUserInfo"/>
+          <div v-if="isUserInfo === false">
+            <OwnerBookList
+                v-if="selectedMenu === 'OwnerBookList'"
+                :books="bookList"
+                @received-product="receivedProduct"
+            />
+            <ShopInfo
+                v-else-if="selectedMenu === 'ShopInfo'"
+                :shopData="shopData"
+                :propsComponent="propsComponent"
+                @update-shopInfo="updateShopData"
+                @update-product="selectMenu('OwnerProduct')"
+                @delete-shop="deleteShop"/>
+            <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
+          </div>
+
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>
       </div>
@@ -165,7 +173,7 @@ const receivedProduct = async(updateData) => {
   margin-right: 70px;
 }
 
-.user-info {
+.user-info, .shop-info {
   font-size: 30px;
   color: var(--text-black);
   margin-bottom: 15px;
