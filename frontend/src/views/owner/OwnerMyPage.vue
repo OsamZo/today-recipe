@@ -73,6 +73,14 @@ const loadBookList = async (userSeq) => {
   });
 };
 
+const receivedProduct = async(updateData) => {
+  // console.log(updateData); // 정상 로그
+  const bookSeq = updateData.bookSeq;
+  const bookIsProductReceived = { bookIsProductReceived: updateData.bookIsProductReceived };
+  await bookStore.updateReceivedStatus(bookSeq, bookIsProductReceived);
+  await selectMenu('OwnerBookList');
+}
+
 </script>
 
 <template>
@@ -131,6 +139,7 @@ const loadBookList = async (userSeq) => {
           <OwnerBookList
               v-else-if="selectedMenu === 'OwnerBookList'"
               :books="bookList"
+              @received-product="receivedProduct"
               />
           <ShopInfo
               v-else-if="selectedMenu === 'ShopInfo'"
