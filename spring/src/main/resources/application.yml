@@ -4,23 +4,21 @@ server:
   servlet:
     encoding:
       charset: UTF-8
+
 # mysql, jpa 관련
 spring:
   application:
     name: team
-  config:
-    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:log4jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    url: jdbc:mysql://mysql-service.default.svc.cluster.local:3306/goruna
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
-    driver-class-name: ${DRIVER_CLASS_NAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
       naming:
-        # JPA 변수 명명규칙을 카멜 케이스로 설정
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
@@ -41,7 +39,6 @@ spring:
             client-id: ${GOOGLE_ID}
             client-secret: ${GOOGLE_PW}
 
-
 cloud:
   aws:
     s3:
@@ -54,11 +51,10 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
 
-
-# logging setting
+# logging 설정 (배포 환경용)
 logging:
   file:
-    path: C:/logs/team
+    path: /var/logs/team
   level:
     root: info
     org.springframework.web: info
@@ -68,10 +64,9 @@ logging:
     jdbc.resultsettable: info
     jdbc.connection: info
 
-
 springdoc:
   swagger-ui:
     path: /
     tags-sorter: alpha
     operations-sorter: method
-    doc-expansion : none
+    doc-expansion: none
