@@ -1,14 +1,20 @@
 <script setup>
 import '@/assets/css/reset.css';
-import UserInfo from "@/views/user/UserInfo.vue";
 import {computed, reactive, ref} from "vue";
-import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 import {useShopStore} from "@/store/ShopStore.js";
 import {useUserStore} from "@/store/UserStore.js";
 import {useBookStore} from "@/store/BookStore.js";
+import {useRouter} from 'vue-router';
+
+
+// 메뉴 선택 시 화면 전환
+const router = useRouter();
+const changedView = (viewUrl) => {
+  router.push(viewUrl);
+}
 
 // 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
@@ -93,21 +99,23 @@ const receivedProduct = async(updateData) => {
           <div class="user-info">내 정보</div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === 'userInfo' }"
-              @click="selectMenu('userInfo')">
+              @click="changedView('/owner')">
             회원 정보 조회
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === '예약 내역' }"
-              @click="selectMenu('예약 내역')">
+              @click="changedView('/owner/book')">
             예약 내역
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === '나의 이용 내역' }"
-              @click="selectMenu('나의 이용 내역')">
+              @click="changedView('/owner/history')">
             나의 이용 내역
+          </div>
+          <div
+              class="menu-button"
+              @click="changedView('/owner/review')">
+            나의 리뷰 조회
           </div>
 
           <br>
@@ -134,10 +142,9 @@ const receivedProduct = async(updateData) => {
         </div>
 
         <div class="menu-content">
-          <UserInfo v-if="selectedMenu === 'userInfo'"/>
-          <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
+          <RouterView/>
           <OwnerBookList
-              v-else-if="selectedMenu === 'OwnerBookList'"
+              v-if="selectedMenu === 'OwnerBookList'"
               :books="bookList"
               @received-product="receivedProduct"
               />
