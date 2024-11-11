@@ -18,25 +18,24 @@ const selectMenu = (menu) => {
         <div class="left-menu">
           <div class="user-info">내 정보</div>
           <div
-              class="menu-button"
+              class="menu-button-user"
               :class="{ 'active': selectedMenu === 'userInfo' }"
-              @click="selectMenu('userInfo')">
+              onclick="window.location.href='/user'">
             회원 정보 조회
           </div>
           <div
-              class="menu-button"
+              class="menu-button-book"
               :class="{ 'active': selectedMenu === 'ReviewPage' }"
-              @click="selectMenu('friends')">
+              onclick="window.location.href='/book'">
             예약 내역
           </div>
           <div
-              class="menu-button"
+              class="menu-button-history"
               :class="{ 'active': selectedMenu === '' }"
-          >
+              onclick="window.location.href='/history'">
             나의 이용 내역
           </div>
-          <div
-              class="menu-button">
+          <div class="menu-button-review" onclick="window.location.href='/user/review'">
             나의 리뷰 조회
           </div>
         </div>
@@ -74,15 +73,23 @@ const selectMenu = (menu) => {
   padding: 70px;
   width: 1260px;
 }
+
 .menu-content {
   width: 100%;
 }
+
 .menu-container{
   display: flex;
 }
-.menu-button{
+
+.menu-button-user,
+.menu-button-book,
+.menu-button-history,
+.menu-button-review{
   font-size: 28px;
   white-space: nowrap;
   margin: 20px 0 20px 45px;
+  cursor: pointer;
 }
+
 </style>
