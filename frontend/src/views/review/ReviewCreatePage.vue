@@ -15,21 +15,30 @@
 import { useReviewStore } from '@/store/ReviewStore';
 import { useUserStore } from '@/store/UserStore'; 
 import { onMounted, computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import ReviewPageContent from '@/components/WhiteContentBox.vue';
 import ShopCard from '@/components/ShopCard.vue';
 
+const route = useRoute();
 const reviewStore = useReviewStore();
 const userStore = useUserStore(); 
 const reviewContent = ref('');
 
 onMounted(() => {
-    reviewStore.loadShopData(1);
+  const shopSeq = route.query.shopSeq;
+  if (shopSeq) {
+    reviewStore.loadShopData(shopSeq);
+  } else {
+    console.error("유효하지 않은 shopSeq입니다.");
+  }
 });
 
 const shopData = computed(() => reviewStore.shopData || { shopImgUrl: '', shopName: '' });
 
 const saveReview = () => {
     const userSeq = userStore.userSeq;
+    const bookSeq = route.query.bookSeq;
+    console.log(bookSeq);
     if (!userSeq) {
         alert('유효하지 않은 사용자 정보입니다.');
         return;
@@ -39,8 +48,12 @@ const saveReview = () => {
         alert('리뷰 내용을 입력해주세요.');
         return;
     }
-    
-    reviewStore.createReview(userSeq, reviewContent.value)
+  const reviewData = {
+    reviewContent: reviewContent.value,
+    reviewStatus: 'Y'
+  };
+
+  reviewStore.createReview(userSeq, bookSeq, reviewData)
         .then(() => {
             alert('리뷰가 성공적으로 등록되었습니다.');
             reviewContent.value = ''; 

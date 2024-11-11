@@ -52,6 +52,7 @@ public class UserInfoService {
         return books.stream()
                 .map(book -> {
                     BookListReadResDTO bookListReadResDTO = modelMapper.map(book, BookListReadResDTO.class);
+                    bookListReadResDTO.setShopSeq(book.getProduct().getShop().getShopSeq());
                     bookListReadResDTO.setShopName(book.getProduct().getShop().getShopName());
                     bookListReadResDTO.setShopClosedAt(book.getProduct().getProductClosedAt());
                     bookListReadResDTO.setShopAddress(book.getProduct().getShop().getShopAddress());

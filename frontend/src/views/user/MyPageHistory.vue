@@ -3,7 +3,9 @@ import MyPageBox from "@/components/MyPageBox.vue";
 import {fetchUserHistory, fetchUserInfo} from "@/api/user/UserApi.js";
 import {onMounted, reactive} from "vue";
 import {useUserStore} from "@/store/UserStore.js";
+import {useRouter} from 'vue-router';
 
+const router = useRouter();
 const userStore = useUserStore();
 const userInfo = reactive([]);
 const userHistoryList = reactive([]);
@@ -38,6 +40,10 @@ const formatPrice = (price) => {
 const getBookDate = (dateTime) => {
   return dateTime.split("T")[0];
 }
+
+const goToWritingReview = (shopSeq, bookSeq) => {
+  router.push({ path: '/review/add', query: { shopSeq, bookSeq } });
+};
 
 onMounted(async () => {
   const userSeq = userStore.userSeq;
@@ -79,7 +85,7 @@ onMounted(async () => {
                   <div>{{ getBookDate(userHistory.regDate) }}</div>
                   <div class="flex shop-name-box">
                     <div class="shop-name">{{ userHistory.shopName }}</div>
-                    <button class="write-review-button">리뷰 쓰기</button>
+                    <button class="write-review-button" @click="goToWritingReview(userHistory.shopSeq, userHistory.bookSeq)">리뷰 쓰기</button>
                   </div>
                   <div class="flex">
                     <div>{{ userHistory.productName }}</div>
@@ -207,6 +213,7 @@ onMounted(async () => {
   border: 1px solid var(--button-brown);
   background-color: var(--white-background);
   margin: 0 10px;
+  cursor: pointer;
 }
 
 .book-qty {
