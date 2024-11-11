@@ -6,6 +6,7 @@ import com.goruna.spring.common.aggregate.YnType;
 import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.review.entity.Good;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -54,5 +55,16 @@ public class User extends BaseTimeEntity {
 
     public void UserEmail(String email) {
         this.userEmail = email;
+    }
+
+    @Builder
+    public static User createUser(long userSeq, String userEmail, String userNickname, UserRole userRole, int userSavedMoney) {
+        User user = new User();
+        user.userSeq = userSeq;
+        user.userEmail = userEmail;
+        user.userNickname = userNickname;
+        user.userRole = userRole;
+        user.userSavedMoney = userSavedMoney;
+        return user;
     }
 }

@@ -29,9 +29,8 @@ public class OwnerBookService {
         modelMapper.map(updateBookInfoReqDTO, book);
     }
 
-    public List<OwnerShopBooksResDTO> getOwnerShopBooks() {
-
-        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
+    @Transactional
+    public List<OwnerShopBooksResDTO> getOwnerShopBooks(Long userSeq) {
         List<OwnerShopBooksResDTO> books = bookRepository.findOwnerShopBooksByUserSeq(userSeq);
 
         return books;

@@ -1,47 +1,82 @@
 <script setup>
 import '@/assets/css/reset.css';
 import UserInfo from "@/views/user/UserInfo.vue";
-import {computed, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import ReviewPage from "@/views/review/ReviewReadPage.vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 import {useShopStore} from "@/store/ShopStore.js";
 import {useUserStore} from "@/store/UserStore.js";
+import {useBookStore} from "@/store/BookStore.js";
 
 const selectedMenu = ref('userInfo');
-const shopStore = useShopStore();
-const userStore = useUserStore();
-const propsComponent = ref('readShop');
 
-const shopData = computed(() => shopStore.shopData);
+const userStore = useUserStore();
+const bookStore = useBookStore();
+
 const selectMenu = async (menu) => {
   console.log(menu);
   selectedMenu.value = menu;
-  if(selectedMenu.value === 'ShopInfo') {
+  if (selectedMenu.value === 'ShopInfo') {
     await shopStore.loadOnwerShopData(userStore.userSeq);
+  } else if (selectedMenu.value === 'OwnerBookList') {
+    await loadBookList(userStore.userSeq);
+    // receiveOwnerShopBooks(userStore.userSeq);
   }
 };
+
+// (사장) 매장 정보 조회, 수정, 삭제
+const shopStore = useShopStore();
+const shopData = computed(() => shopStore.shopData);
 
 const receivedShopData = ref({
   shopTel: '',
   shopAddress: '',
   shopIntroduction: ''
 });
-
 const updateShopData = async (inputShopData) => {
   const shopSeq = shopData.value.shopSeq;
   receivedShopData.value = inputShopData;
   await shopStore.updateOwnerShopData(shopSeq, receivedShopData.value);
   await selectMenu('ShopInfo');
 };
-
+const propsComponent = ref('readShop');
 
 const deleteShop = async () => {
   const shopSeq = shopData.value.shopSeq;
   await shopStore.deleteOwnerShopData(shopSeq);
   selectedMenu.value = 'userInfo';
 };
+
+// (사장) 내 매장 예약 목록
+const bookList = reactive([]);
+
+const loadBookList = async (userSeq) => {
+  const books = await bookStore.loadReceivedBooks(userSeq);
+
+  bookList.length = 0;
+  // console.log(books) 로그 정상
+  books.forEach(book => {
+    bookList.push({
+      bookSeq: book.bookSeq,
+      userNickname: book.userNickname,
+      productName: book.productName,
+      bookQty: book.bookQty,
+      totalPrice: book.totalPrice,
+      regDate: book.regDate,
+      bookIsProductReceived: book.bookIsProductReceived
+    });
+  });
+};
+
+const receivedProduct = async(updateData) => {
+  // console.log(updateData); // 정상 로그
+  const bookSeq = updateData.bookSeq;
+  const bookIsProductReceived = { bookIsProductReceived: updateData.bookIsProductReceived };
+  await bookStore.updateReceivedStatus(bookSeq, bookIsProductReceived);
+  await selectMenu('OwnerBookList');
+}
 
 </script>
 
@@ -98,7 +133,11 @@ const deleteShop = async () => {
         <div class="menu-content">
           <UserInfo v-if="selectedMenu === 'userInfo'"/>
           <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
-          <OwnerBookList v-else-if="selectedMenu === 'OwnerBookList'"/>
+          <OwnerBookList
+              v-else-if="selectedMenu === 'OwnerBookList'"
+              :books="bookList"
+              @received-product="receivedProduct"
+              />
           <ShopInfo
               v-else-if="selectedMenu === 'ShopInfo'"
               :shopData="shopData"

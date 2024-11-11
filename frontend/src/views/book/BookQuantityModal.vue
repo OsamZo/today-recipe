@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineEmits } from "vue";
-import { bookProduct } from "@/api/book/bookApi.js";
+import { bookProduct } from "@/api/book/BookApi.js";
 import {useUserStore} from "@/store/UserStore.js";
 
 const userStore = useUserStore();
