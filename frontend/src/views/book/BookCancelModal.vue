@@ -1,5 +1,5 @@
 <script setup>
-import {cancelBookingProduct} from "@/api/book/bookApi.js";
+import {cancelBookingProduct} from "@/api/book/BookApi.js";
 
 const props = defineProps({
   bookSeq: {
