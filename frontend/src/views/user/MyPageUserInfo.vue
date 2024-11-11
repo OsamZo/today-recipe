@@ -5,15 +5,19 @@ import {onMounted, reactive, ref} from "vue";
 import {fetchUserInfo} from "@/api/user/UserApi.js";
 import {useUserStore} from "@/store/UserStore.js";
 import {fetchOwnerShopInfo} from "@/api/shop/ShopReadApi.js";
+import UserInfoUpdateModal from "@/components/UserInfoUpdateModal.vue";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const userStore = useUserStore();
 const userInfo = reactive([]);
+
+const userSeq = userStore.userSeq;
 
 const loadUserInfo = async(userSeq) => {
   try {
     const data = await fetchUserInfo(userSeq);
     Object.assign(userInfo, data);
-    console.log(userInfo);
   } catch(error) {
     console.log("회원 정보를 불러오는데 실패했습니다.", error);
   }
@@ -31,6 +35,23 @@ const loadShopData = async (userSeq) => {
   }
 };
 
+// 모달
+const isModalOpen = ref(false);
+const modalType = ref('');
+
+const openModal = (type) => {
+  modalType.value = type;
+  isModalOpen.value = true;
+}
+
+const closeModal = () => {
+  isModalOpen.value = false;
+}
+
+const goToAddShop = () => {
+  router.push("/user/shop/apply");
+}
+
 onMounted(() => {
   const userSeq = userStore.userSeq;
 
@@ -45,19 +66,29 @@ onMounted(() => {
 </script>
 
 <template>
+  <div v-if="isModalOpen" class="modal-background" @click="closeModal">
+    <UserInfoUpdateModal
+        :modalType="modalType"
+        :userSeq="userSeq"
+        @close="closeModal"
+        @click.stop
+    />
+  </div>
   <MyPageBox>
     <template #action>
       <div class="user-info-box">
         <div class="flex title-box">
           <div class="content-title">회원 정보</div>
-          <div class="leave">회원 탈퇴</div>
+          <div class="leave" @click="openModal('leave')">회원 탈퇴</div>
         </div>
         <hr class="brown-hr">
         <div class="content-box">
           <div class="flex">
             <div class="sub-title">닉네임</div>
             <div class="text-content">{{ userInfo.userNickname }}</div>
-            <button class="button brown-button change-button">변경하기</button>
+            <button
+                class="button brown-button change-button"
+                @click="openModal('nickname')">변경하기</button>
           </div>
           <div class="flex">
             <div class="sub-title">이메일</div>
@@ -86,7 +117,7 @@ onMounted(() => {
                 <button class="button brown-button">수정하기</button>
                 <button class="button brown-button">삭제하기</button>
               </div>
-              <button v-else class="button brown-button">등록하기</button>
+              <button v-else class="button brown-button" @click="goToAddShop">등록하기</button>
             </div>
           </div>
         </div>
@@ -98,6 +129,19 @@ onMounted(() => {
 <style scoped>
 .flex {
   display: flex;
+  align-items: center;
+}
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 

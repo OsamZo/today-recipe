@@ -67,3 +67,28 @@ export const fetchUserHistory = async(userSeq) => {
     return [];
   }
 }
+
+// 회원 정보 수정
+export const updateUserInfo = async(userSeq, userNickname) => {
+  try {
+    console.log(userNickname);
+    const response = await axios.put(`http://localhost:8100/api/v1/user/${userSeq}/info`, {
+      userNickname,
+    });
+    return response.data;
+  } catch(error) {
+    console.log("회원 정보 수정 중 오류 발생", error);
+    return [];
+  }
+}
+
+// 회원 탈퇴
+export const deleteUser = async(userSeq) => {
+  try {
+    const response = await axios.delete(`http://localhost:8100/api/v1/user/${userSeq}`);
+    return response.data;
+  } catch(error){
+    console.log("회원 탈퇴 도중 오류 발생", error);
+    return [];
+  }
+}
