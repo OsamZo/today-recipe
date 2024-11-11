@@ -2,7 +2,6 @@ package com.goruna.spring.shop.service;
 
 import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
-import com.goruna.spring.common.util.CustomUserUtils;
 import com.goruna.spring.shop.dto.OnwerShopInfoResDTO;
 import com.goruna.spring.shop.dto.UpdateShopInfoDTO;
 import com.goruna.spring.shop.entity.Shop;
@@ -38,12 +37,9 @@ public class OwnerShopService {
 
     // 내 매장 정보 조회
     @Transactional
-    public OnwerShopInfoResDTO getOnwerShopInfo() {
+    public OnwerShopInfoResDTO getOnwerShopInfo(Long userSeq) {
 
-        Long userSeq = CustomUserUtils.getCurrentUserSeq();   // 토큰에서 추출
-        System.out.println(userSeq);
         Shop shop = ShopRepository.findShopByUserSeq(userSeq);
-
         return modelMapper.map(shop, OnwerShopInfoResDTO.class);
     }
 }
