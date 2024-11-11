@@ -20,7 +20,7 @@ public class JwtUtil {
     private final CustomUserDetailsService userDetailsService;
 
     public JwtUtil(
-            @Value("${spring.token.secret}") String secretKey,
+            @Value("${TOKEN_SECRET}") String secretKey,
             CustomUserDetailsService userDetailsService
     ){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
