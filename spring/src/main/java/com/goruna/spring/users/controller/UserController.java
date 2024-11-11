@@ -1,5 +1,7 @@
 package com.goruna.spring.users.controller;
 
+import com.goruna.spring.book.dto.BookListReadResDTO;
+import com.goruna.spring.book.service.BookService;
 import com.goruna.spring.common.response.ApiResponse;
 import com.goruna.spring.common.response.ResponseUtil;
 import com.goruna.spring.users.dto.NickNameRequestDto;
@@ -10,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -43,5 +47,13 @@ public class UserController {
     public ApiResponse<?> updateUserInfo(@PathVariable Long userSeq, @RequestBody UserInfoRequestDto userInfoRequestDto) {
          userInfoService.updateUserInfo(userInfoRequestDto);
         return ResponseUtil.successResponse("회원이 성공적으로 수정되었습니다.",userInfoRequestDto).getBody();
+    }
+
+    // 회원 이용 내역 조회
+    @GetMapping("/{userSeq}/history")
+    @Operation(summary="회원 이용 내역 조회", description="회원 이용 내역을 조회합니다.")
+    public ApiResponse<?> getUserHistory(@PathVariable(value="userSeq") Long userSeq) {
+        List<BookListReadResDTO> bookListReadResDTOs = userInfoService.readUserHistory(userSeq);
+        return ResponseUtil.successResponse("회원 예약 내역 조회가 성공적으로 완료되었습니다.", bookListReadResDTOs).getBody();
     }
 }
