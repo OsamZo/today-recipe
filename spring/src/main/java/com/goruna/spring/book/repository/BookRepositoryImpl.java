@@ -26,17 +26,20 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
         return jpaQueryFactory
                 .select(Projections.constructor(
                         OwnerShopBooksResDTO.class,
-                        user.userNickname, // 예약자 닉네임
-                        product.productName, // 제품 이름
+                        book.bookSeq,
+                        book.user.userNickname, // 예약자 닉네임
+                        book.product.productName, // 제품 이름
                         book.bookQty, // 예약 수량
                         book.bookQty.multiply(product.productSalePrice).as("totalPrice"), // 총 가격
-                        book.bookIsProductReceived // 제품 수령 여부
+                        book.bookIsProductReceived, // 제품 수령 여부
+                        book.regDate // 예약 생성 날짜
                 ))
                 .from(book)
                 .join(product).on(book.product.productSeq.eq(product.productSeq))
                 .join(shop).on(product.shop.shopSeq.eq(shop.shopSeq))
                 .join(user).on(book.user.userSeq.eq(user.userSeq))
                 .where(shop.user.userSeq.eq(userSeq))
+                .orderBy(book.regDate.desc())
                 .fetch();
     }
 
