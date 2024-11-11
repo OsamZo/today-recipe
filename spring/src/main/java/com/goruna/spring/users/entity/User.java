@@ -8,6 +8,7 @@ import com.goruna.spring.review.entity.Good;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql="UPDATE users SET user_deleted_status='Y' WHERE user_seq=?")
 public class User extends BaseTimeEntity {
 
     @Id

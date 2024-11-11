@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping("/{userSeq}/info")
     @Operation(summary = "회원 정보 수정", description = "회원의 정보를 수정합니다.")
     public ApiResponse<?> updateUserInfo(@PathVariable Long userSeq, @RequestBody UserInfoRequestDto userInfoRequestDto) {
-         userInfoService.updateUserInfo(userInfoRequestDto);
+         userInfoService.updateUserInfo(userSeq, userInfoRequestDto);
         return ResponseUtil.successResponse("회원이 성공적으로 수정되었습니다.",userInfoRequestDto).getBody();
     }
 
@@ -55,5 +55,13 @@ public class UserController {
     public ApiResponse<?> getUserHistory(@PathVariable(value="userSeq") Long userSeq) {
         List<BookListReadResDTO> bookListReadResDTOs = userInfoService.readUserHistory(userSeq);
         return ResponseUtil.successResponse("회원 예약 내역 조회가 성공적으로 완료되었습니다.", bookListReadResDTOs).getBody();
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/{userSeq}")
+    @Operation(summary="회원 탈퇴", description="회원을 탈퇴합니다.")
+    public ApiResponse<?> deleteUser(@PathVariable(value="userSeq") Long userSeq) {
+        userInfoService.deleteUser(userSeq);
+        return ResponseUtil.successResponse("회원 탈퇴가 성공적으로 진행되었습니다.", null).getBody();
     }
 }

@@ -3,6 +3,8 @@ package com.goruna.spring.users.service;
 import com.goruna.spring.book.dto.BookListReadResDTO;
 import com.goruna.spring.book.entity.Book;
 import com.goruna.spring.book.repository.BookRepository;
+import com.goruna.spring.common.exception.CustomException;
+import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.common.util.CustomUserUtils;
 import com.goruna.spring.users.dto.NickNameRequestDto;
 import com.goruna.spring.users.dto.UserInfoRequestDto;
@@ -41,8 +43,8 @@ public class UserInfoService {
     }
 
     @Transactional
-    public UserInfoRequestDto updateUserInfo(UserInfoRequestDto userInfoRequestDto) {
-        User user = userRepository.getUserNickName(CustomUserUtils.getCurrentUserSeq(), userInfoRequestDto);
+    public UserInfoRequestDto updateUserInfo(Long userSeq, UserInfoRequestDto userInfoRequestDto) {
+        User user = userRepository.getUserNickName(userSeq, userInfoRequestDto);
         return modelMapper.map(user, UserInfoRequestDto.class);
     }
 
@@ -63,5 +65,14 @@ public class UserInfoService {
                     return bookListReadResDTO;
                 })
                 .collect(Collectors.toList());
+    }
+
+    // 회원 탈퇴
+    public void deleteUser(Long userSeq) {
+        if (userRepository.existsById(userSeq)) {
+            userRepository.deleteById(userSeq);
+        } else {
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
     }
 }
