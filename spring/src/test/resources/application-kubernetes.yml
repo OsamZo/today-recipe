@@ -1,0 +1,77 @@
+# 서버 포트 설정
+server:
+  port: 8100
+  servlet:
+    encoding:
+      charset: UTF-8
+# mysql, jpa 관련
+spring:
+  application:
+    name: team
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:log4jdbc:mysql://mysql:3307/goruna
+    username: goruna
+    password: 1234
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        # JPA 변수 명명규칙을 카멜 케이스로 설정
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  token:
+    secret: AzRJ7oSv3xs57kp24tP14auQRW92Mq52sp9cPqzvba7zja0H0O7aJj8SRZJMrIyQtSOdcPzOiOoSHygUt9A3LQ==
+    expiration: 43200000
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_ID}
+            client-secret: ${GOOGLE_PW}
+
+
+cloud:
+  aws:
+    s3:
+      bucket: goruna
+    stack:
+      auto: false
+    region:
+      static: us-west-1
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+
+
+# logging setting
+logging:
+  file:
+    path: C:/logs/team
+  level:
+    root: info
+    org.springframework.web: info
+    com.zaxxer.hikari: info
+    log4jdbc.log4j2: error
+    jdbc.sqlonly: info
+    jdbc.resultsettable: info
+    jdbc.connection: info
+
+
+springdoc:
+  swagger-ui:
+    path: /
+    tags-sorter: alpha
+    operations-sorter: method
+    doc-expansion : none
