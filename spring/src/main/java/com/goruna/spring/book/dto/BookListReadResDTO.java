@@ -14,11 +14,19 @@ public class BookListReadResDTO {
 
     private Long bookSeq;
 
+    private Long shopSeq;
+
     private String shopName;
 
     private String productName;
 
+    private int productOriginalPrice;
+
+    private int productSalePrice;
+
     private int bookQty;
+
+    private LocalDateTime regDate;
 
     private LocalDateTime shopClosedAt;
 

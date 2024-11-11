@@ -19,12 +19,10 @@ export const useBookmarkStore = defineStore('bookmark', {
 
     async addBookmark(userSeq, shopSeq, shopInfo){
       try {
-        console.log(shopInfo)
         const response = await addBookmark(userSeq, shopSeq);
-        console.log(response.data);
         const bookmarkSeq = response.data.data.bookmarkSeq;
         const {categoryName, shopAddress, shopImgUrl, shopName, shopTel } = shopInfo;
-        // const bookmarkSeq = response.data.bookmarkSeq;
+
         this.bookmarks.push({
           bookmarkSeq,
           shopSeq,
@@ -35,7 +33,6 @@ export const useBookmarkStore = defineStore('bookmark', {
           shopAddress,
         });
         console.log('북마크가 등록되었습니다.');
-        console.log(this.bookmarks)
       } catch(error) {
         console.error('북마크 추가 중 오류: ', error);
       }

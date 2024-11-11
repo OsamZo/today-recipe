@@ -41,7 +41,29 @@ export const fetchBookList = async(userSeq) => {
     const response = await axios.get(`http://localhost:8100/api/v1/user/${userSeq}/book`);
     return response.data.data;
   } catch (error) {
-    console.log("예약 내역 조회", error);
+    console.log("예약 내역 조회 중 오류 발생", error);
+    return [];
+  }
+}
+
+// 회원 정보 조회
+export const fetchUserInfo = async(userSeq) => {
+  try {
+    const response = await axios.get(`http://localhost:8100/api/v1/user/${userSeq}/info`);
+    return response.data.data;
+  } catch (error) {
+    console.log("회원 정보 조회 중 오류", error);
+    return [];
+  }
+}
+
+// 회원 이용 내역 조회
+export const fetchUserHistory = async(userSeq) => {
+  try {
+    const response = await axios.get(`http://localhost:8100/api/v1/user/${userSeq}/history`);
+    return response.data.data;
+  } catch(error) {
+    console.log("회원 이용 내역 조회 중 오류", error);
     return [];
   }
 }

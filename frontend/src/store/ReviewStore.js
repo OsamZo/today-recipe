@@ -42,6 +42,22 @@ export const useReviewStore = defineStore('reviewStore', {
                 console.error('스토어에서 리뷰 데이터를 로드하는 중 오류 발생:', error);
             }
         },
+        async createReview(userSeq, bookSeq, reviewContent) {
+            try {
+                const response = await createReview(userSeq, bookSeq, reviewContent);
+                this.reviews.push({
+                    reviewSeq: response.reviewSeq,
+                    content: reviewContent,
+                    userSeq,
+                    bookSeq,
+                    isLiked: false,
+                    likeCount: 0,
+                });
+                console.log('리뷰가 성공적으로 등록되었습니다.');
+            } catch(error) {
+                console.error('리뷰를 등록하던 중 오류 발생', error);
+            }
+        },
         async checkLikeStatus(userSeq, reviewSeq) {
             try {
                 const likeStatus = await checkLikeStatus(this.currentShopSeq, userSeq, reviewSeq);
