@@ -5,11 +5,12 @@ import MyPageBook from "@/views/user/MyPageBook.vue";
 import UserShopApply from "@/views/user/UserShopApply.vue";
 import MyPageHistory from "@/views/user/MyPageHistory.vue";
 import MyPageReview from "@/views/user/MyPageReview.vue";
+import MyPageUserInfo from "@/views/user/MyPageUserInfo.vue";
 
 export default [
     {
         path: '/user',
-        component: UserMyPage
+        component: MyPageUserInfo
     },
     {
         path: '/login',
