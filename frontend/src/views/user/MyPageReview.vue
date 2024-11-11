@@ -20,7 +20,6 @@ const fetchUserReviews = async () => {
   }
 };
 
-// 리뷰 삭제 함수
 const deleteReview = async (reviewSeq) => {
   try {
     const response = await axios.delete(`http://localhost:8100/api/v1/admin/review/${reviewSeq}`);
