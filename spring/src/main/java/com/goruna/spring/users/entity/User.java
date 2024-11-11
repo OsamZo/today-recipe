@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
     private LocalDateTime userDeletedTime;
 
     @Column(name = "user_saved_money", nullable = true)
-    private int userSavedMoney;
+    private int userSavedMoney = 0;
 
     @Column(name = "user_usage_count", nullable = true)
     private int userUsageCount = 0;
