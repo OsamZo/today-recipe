@@ -4,6 +4,7 @@ import com.goruna.spring.common.aggregate.entity.BaseTimeEntity;
 import com.goruna.spring.shop.entity.Shop;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -47,5 +48,19 @@ public class Product extends BaseTimeEntity {
 
     public void updateProductQty(int productQty) {
         this.productQty = productQty;
+    }
+
+    @Builder
+    public Product(Long productSeq, Shop shop, String productName, String productDescription, Integer productQty,
+                   Integer productOriginalPrice, Integer productSalePrice, LocalDateTime productClosedAt, String productImgUrl) {
+        this.productSeq = productSeq;
+        this.shop = shop;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productQty = productQty;
+        this.productOriginalPrice = productOriginalPrice;
+        this.productSalePrice = productSalePrice;
+        this.productClosedAt = productClosedAt;
+        this.productImgUrl = productImgUrl;
     }
 }
