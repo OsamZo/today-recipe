@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boot001dep
+spec:
+  selector:
+    matchLabels:
+      app: boot001kube
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: boot001kube
+    spec:
+      containers:
+        - name: boot-container
+          image: minijuu/goruna_backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8100
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes
+
+            # JWT Secret
+            - name: TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: TOKEN_SECRET
+
+            # MySQL 설정
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: DATABASE_URL
+
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+
+            # Google OAuth2 설정
+            - name: GOOGLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: GOOGLE_ID
+
+            - name: GOOGLE_PW
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: GOOGLE_PW
+
+            # AWS 자격 증명 설정
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: AWS_ACCESS_KEY
+
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: AWS_SECRET_KEY

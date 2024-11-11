@@ -4,21 +4,23 @@ server:
   servlet:
     encoding:
       charset: UTF-8
-
 # mysql, jpa 관련
 spring:
   application:
     name: team
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mysql://mysql-service.default.svc.cluster.local:3306/goruna
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:log4jdbc:mysql://mysql:3307/goruna
+    username: goruna
+    password: 1234
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
       naming:
+        # JPA 변수 명명규칙을 카멜 케이스로 설정
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
@@ -29,7 +31,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   token:
-    secret: ${TOKEN_SECRET}
+    secret: AzRJ7oSv3xs57kp24tP14auQRW92Mq52sp9cPqzvba7zja0H0O7aJj8SRZJMrIyQtSOdcPzOiOoSHygUt9A3LQ==
     expiration: 43200000
   security:
     oauth2:
@@ -38,6 +40,7 @@ spring:
           google:
             client-id: ${GOOGLE_ID}
             client-secret: ${GOOGLE_PW}
+
 
 cloud:
   aws:
@@ -51,10 +54,11 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
 
-# logging 설정 (배포 환경용)
+
+# logging setting
 logging:
   file:
-    path: /var/logs/team
+    path: C:/logs/team
   level:
     root: info
     org.springframework.web: info
@@ -64,9 +68,10 @@ logging:
     jdbc.resultsettable: info
     jdbc.connection: info
 
+
 springdoc:
   swagger-ui:
     path: /
     tags-sorter: alpha
     operations-sorter: method
-    doc-expansion: none
+    doc-expansion : none
