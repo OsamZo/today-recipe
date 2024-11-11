@@ -9,7 +9,6 @@ import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 import {useShopStore} from "@/store/ShopStore.js";
 import {useUserStore} from "@/store/UserStore.js";
 
-// 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
 const shopStore = useShopStore();
 const userStore = useUserStore();
@@ -33,7 +32,6 @@ const receivedShopData = ref({
 const updateShopData = async (inputShopData) => {
   const shopSeq = shopData.value.shopSeq;
   receivedShopData.value = inputShopData;
-  // console.log(shopSeq, receivedShopData.value);
   await shopStore.updateOwnerShopData(shopSeq, receivedShopData.value);
   await selectMenu('ShopInfo');
 };
@@ -41,7 +39,6 @@ const updateShopData = async (inputShopData) => {
 
 const deleteShop = async () => {
   const shopSeq = shopData.value.shopSeq;
-  console.log(shopSeq);
   await shopStore.deleteOwnerShopData(shopSeq);
   selectedMenu.value = 'userInfo';
 };
