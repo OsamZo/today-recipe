@@ -7,24 +7,24 @@ import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 import {useShopStore} from "@/store/ShopStore.js";
+import {useUserStore} from "@/store/UserStore.js";
 
 // 메뉴 선택 시 component 전환
 const selectedMenu = ref('userInfo');
 const shopStore = useShopStore();
+const userStore = useUserStore();
 const propsComponent = ref('');
 
 const isComponent = (component) => {
   propsComponent.value = component;
 }
 
-
-
 const shopData = computed(() => shopStore.shopData);
 const selectMenu = async (menu) => {
   console.log(menu);
   selectedMenu.value = menu;
   if(selectedMenu.value === 'ShopInfo') {
-    await shopStore.loadOnwerShopData();
+    await shopStore.loadOnwerShopData(userStore.userSeq);
   }
 };
 
