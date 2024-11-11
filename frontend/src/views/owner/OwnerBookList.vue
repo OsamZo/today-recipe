@@ -27,9 +27,7 @@ const getBookDate = (dateTime) => {
   return dateTime.split("T")[0];
 }
 
-const productReceived = () => {
-  book.bookIsProductReceived.value = 'Y';
-}
+
 
 </script>
 
@@ -52,9 +50,14 @@ const productReceived = () => {
           <div>{{ book.totalPrice }}</div>
           <button
               v-if="book.bookIsProductReceived === 'Y'"
+              class="check-button">
+            수령
+          </button>
+          <button
+              v-if="book.bookIsProductReceived === 'N'"
               class="check-button"
-              @click="productReceived">
-            {{ book.bookIsProductReceived === 'Y' ? '수령' : '미수령' }}
+              @click="">
+            미수령
           </button>
         </div>
       </div>

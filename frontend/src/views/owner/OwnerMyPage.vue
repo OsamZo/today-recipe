@@ -131,7 +131,7 @@ const loadBookList = async (userSeq) => {
           <OwnerBookList
               v-else-if="selectedMenu === 'OwnerBookList'"
               :books="bookList"
-              @product-received="handleProductReceived"/>
+              />
           <ShopInfo
               v-else-if="selectedMenu === 'ShopInfo'"
               :shopData="shopData"
