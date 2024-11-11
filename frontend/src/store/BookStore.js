@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
-import {fetchOwnerShopBooks} from "@/api/shop/BookApi.js";
+import {fetchOwnerShopBooks} from "@/api/book/BookApi.js";
+import {updateBookStatus} from "@/api/book/BookApi.js";
 
 export const useBookStore = defineStore('bookStore', {
    state: () => ({
@@ -24,9 +25,9 @@ export const useBookStore = defineStore('bookStore', {
            }
        },
 
-       async updateReceivedStatus(bookSeq, updateBookStatus) {
+       async updateReceivedStatus(bookSeq, bookIsProductReceived) {
            try {
-               await fetchOwnerShopBooks(bookSeq, updateBookStatus);
+               await updateBookStatus(bookSeq, bookIsProductReceived);
            } catch (error) {
                console.log('스토어에서 예약 정보를 수정하는 중 오류 발생 :', error);
            }
