@@ -24,6 +24,14 @@ const selectedMenu = ref('userInfo');
 const userStore = useUserStore();
 const bookStore = useBookStore();
 
+const clickEvent = async (menu, isViewUp) => {
+
+  isUserInfo.value = isViewUp;
+
+  await selectMenu(menu);
+
+}
+
 const selectMenu = async (menu) => {
   isUserInfo.value = false;
   console.log(isUserInfo);
@@ -126,19 +134,19 @@ const receivedProduct = async(updateData) => {
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerBookList' }"
-              @click="selectMenu('OwnerBookList')">
+              @click="clickEvent('OwnerBookList', false)">
             예약 정보 확인
           </div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'ShopInfo' }"
-              @click="selectMenu('ShopInfo')">
+              @click="clickEvent('ShopInfo', false)">
             매장 정보
           </div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerProduct' }"
-              @click="selectMenu('OwnerProduct')">
+              @click="clickEvent('OwnerProduct', false)">
             매장 관리
           </div>
         </div>
