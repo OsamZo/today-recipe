@@ -13,13 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateProductReqDTO {
 
-    private Long productSeq;
-    private Long shopSeq;
     private String productName;
     private String productDescription;
     private Integer productOriginalPrice;
     private Integer productSalePrice;
     private Integer productQty;
     private LocalDateTime productClosedAt;
-    private String productImgUrl;
 }
