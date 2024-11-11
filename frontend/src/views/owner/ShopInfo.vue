@@ -30,8 +30,8 @@ const receivedShopData = ref({
 const forwardShopData = async (inputShopData) => {
   receivedShopData.value = inputShopData;
   // console.log(receivedShopData.value.shopTel);
-  await emit('update-shopInfo', receivedShopData);
-  console.log(props.propsComponent);
+  emit('update-shopInfo', receivedShopData);
+  // console.log(props.propsComponent);
   showComponent(props.propsComponent);
 };
 

@@ -13,11 +13,7 @@ import {useUserStore} from "@/store/UserStore.js";
 const selectedMenu = ref('userInfo');
 const shopStore = useShopStore();
 const userStore = useUserStore();
-const propsComponent = ref('');
-
-const isComponent = (component) => {
-  propsComponent.value = component;
-}
+const propsComponent = ref('readShop');
 
 const shopData = computed(() => shopStore.shopData);
 const selectMenu = async (menu) => {
@@ -33,19 +29,21 @@ const receivedShopData = ref({
   shopAddress: '',
   shopIntroduction: ''
 });
+
 const updateShopData = async (inputShopData) => {
   const shopSeq = shopData.value.shopSeq;
   receivedShopData.value = inputShopData;
   // console.log(shopSeq, receivedShopData.value);
   await shopStore.updateOwnerShopData(shopSeq, receivedShopData.value);
-  selectMenu('ShopInfo');
+  await selectMenu('ShopInfo');
 };
+
+
 const deleteShop = async () => {
   const shopSeq = shopData.value.shopSeq;
   console.log(shopSeq);
   await shopStore.deleteOwnerShopData(shopSeq);
   selectedMenu.value = 'userInfo';
-  isComponent(propsComponent);
 };
 
 </script>
