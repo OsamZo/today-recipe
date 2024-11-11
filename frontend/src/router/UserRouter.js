@@ -24,8 +24,10 @@ export default [
         component: MyPageBook
     },
     {
-        path:'/user/shop/apply',
+        path: '/user/shop/apply',
         component: UserShopApply
+    },
+    {
         path: '/history',
         component: MyPageHistory
     },
