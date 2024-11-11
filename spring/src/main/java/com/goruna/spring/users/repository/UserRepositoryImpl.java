@@ -35,5 +35,4 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .where(user.userSeq.eq(currentUserSeq))
                 .fetchOne();
     }
-
 }

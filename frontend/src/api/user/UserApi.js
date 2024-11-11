@@ -34,3 +34,14 @@ export const submitNickname = async (userSeq, nickname) => {
     throw error;
   }
 };
+
+// 마이페이지 예약 내역 조회
+export const fetchBookList = async(userSeq) => {
+  try {
+    const response = await axios.get(`http://localhost:8100/api/v1/user/${userSeq}/book`);
+    return response.data.data;
+  } catch (error) {
+    console.log("예약 내역 조회", error);
+    return [];
+  }
+}

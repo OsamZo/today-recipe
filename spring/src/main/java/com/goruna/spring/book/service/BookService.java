@@ -7,7 +7,6 @@ import com.goruna.spring.common.exception.CustomException;
 import com.goruna.spring.common.exception.ErrorCodeType;
 import com.goruna.spring.product.entity.Product;
 import com.goruna.spring.product.repository.ProductRepository;
-import com.goruna.spring.shop.repository.ShopRepository;
 import com.goruna.spring.users.entity.User;
 import com.goruna.spring.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +76,7 @@ public class BookService {
                 .map(book -> {
                     BookListReadResDTO bookListReadResDTO = modelMapper.map(book, BookListReadResDTO.class);
                     bookListReadResDTO.setShopName(book.getProduct().getShop().getShopName());
+                    bookListReadResDTO.setShopClosedAt(book.getProduct().getProductClosedAt());
                     bookListReadResDTO.setShopAddress(book.getProduct().getShop().getShopAddress());
                     bookListReadResDTO.setShopImgUrl(book.getProduct().getShop().getShopImgUrl());
                     bookListReadResDTO.setIsBookCancelled(book.getIsBookCancelled());

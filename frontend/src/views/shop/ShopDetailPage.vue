@@ -112,7 +112,7 @@ onMounted(async () => {
 <template>
   <div v-if="isModalOpen" class="modal-background" @click="closeModal">
     <BookQuantityModal
-        :product-seq="shopDetail.productSeq"
+        :productSeq="shopDetail.productSeq"
         :productQty="shopDetail.productQty"
         @close="closeModal"
         @updated-quantity = "updateQuantity"
