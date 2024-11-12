@@ -134,4 +134,29 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        // refreshToken 쿠키 삭제
+        ResponseCookie deleteRefreshTokenCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0) // 즉시 만료시켜 삭제
+                .build();
+
+        // token 쿠키 삭제
+        ResponseCookie deleteAccessTokenCookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0) // 즉시 만료시켜 삭제
+                .build();
+
+        // 응답에 쿠키 추가
+        response.addHeader("Set-Cookie", deleteRefreshTokenCookie.toString());
+        response.addHeader("Set-Cookie", deleteAccessTokenCookie.toString());
+
+        System.out.println("Logout complete: Cookies cleared");
+
+        return ResponseEntity.noContent().build(); // 상태 코드 204 (No Content)
+    }
 }
