@@ -3,7 +3,8 @@ import ReviewCreatePage from "@/views/review/ReviewCreatePage.vue";
 
 export default [
     {
-        path: '/review',
+        path: '/review/:shopSeq',
+        name: 'review',
         component: ReviewReadPage
     },
     {

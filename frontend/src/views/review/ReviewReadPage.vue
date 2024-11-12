@@ -26,7 +26,6 @@ const router = useRouter();
 const route = useRoute();
 const reviewStore = useReviewStore();
 const userStore = useUserStore();
-
 const shopSeq = route.params.shopSeq;
 
 onMounted(() => {
