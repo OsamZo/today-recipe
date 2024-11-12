@@ -96,11 +96,34 @@
 
 ![로그아웃](/img/preview/user/logout.gif)
 
+<summary><strong>닉네임 변경</strong></summary>
+
+![닉네임 변경](/img/preview/user/changeNickname.gif)
+
+### 메인 화면
+<details>
+
+<summary><strong>메인화면</strong></summary>
+
+![메인페이지](/img/preview/user/mainMap.gif)
+
+</details>
+
+### 가게
+<details>
+
+<summary><strong>유저 가게조회</strong></summary>
+
+![가게조회](/img/preview/user/shopSearch.gif)
+
+</details>
+
 ### 예약
 <details>
 <summary><strong> 예약하기 </strong></summary>
 
 ![예약하기](/img/preview/book/book.gif)
+</details>
 
 ### 북마크
 <details>
@@ -109,4 +132,55 @@
 ![북마크](/img/preview/bookmark/bookmark.gif)
 
 </details>
-<br>
+
+### 매장 등록
+<details>
+<summary><strong> 매장 등록 </strong></summary>
+
+![매장 등록](/img/preview/user/shopApply%201.gif)
+![매장 등록](/img/preview/user/shopApply%202.gif)
+
+<summary><strong> 관리자 매장 승인 </strong></summary>
+
+![매장 등록](/img/preview/admin/(admin)%20updateShopAuth.gif)
+
+</details>
+
+### (사장) 매장 수정
+<details>
+
+<summary><strong> 메장 수정 </strong></summary>
+
+![매장](/img/preview/owner/(owner)updateShopData.gif)
+
+<summary><strong> 메뉴 수정 </strong></summary>
+
+![매장 수정](/img/preview/owner/(owner)updateProduct.gif)
+
+<summary><strong> 수령 정보 업데이트 </strong></summary>
+
+![매장 등록](/img/preview/owner/(owner)getCustomer,%20applyGet.gif)
+
+</details>
+
+### 관리자 
+<details>
+
+<summary><strong> 매장 관리 검색 </strong></summary>
+
+![매장 조회](/img/preview/admin/(admin)shopSearch.gif)
+
+<summary><strong> 매장 삭제 </strong></summary>
+
+![매장 삭제](/img/preview/admin/(admin)%20deleteShop.gif)
+
+
+<summary><strong> 카테고리 추가 </strong></summary>
+
+![카테고리추가](/img/preview/admin/(admin)%20addCategory.gif)
+
+<summary><strong> 카테고리 삭제 </strong></summary>
+
+![카테고리삭제](/img/preview/admin/(admin)deleteCategory.gif)
+
+</details>
