@@ -1,22 +1,41 @@
 <script setup>
 import '@/assets/css/reset.css';
-import UserInfo from "@/views/user/UserInfo.vue";
-import {computed, reactive, ref} from "vue";
-import ReviewPage from "@/views/review/ReviewReadPage.vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import OwnerBookList from "@/views/owner/OwnerBookList.vue";
 import ShopInfo from "@/views/owner/ShopInfo.vue";
 import OwnerProduct from "@/views/owner/OwnerProduct.vue";
 import {useShopStore} from "@/store/ShopStore.js";
 import {useUserStore} from "@/store/UserStore.js";
 import {useBookStore} from "@/store/BookStore.js";
+import {useRouter} from 'vue-router';
+
+
+// 메뉴 선택 시 화면 전환
+const router = useRouter();
+const isUserInfo = ref(false);
+const changedView = (viewUrl) => {
+  isUserInfo.value = true;
+  // selectMenu('');
+  router.push(viewUrl);
+}
 
 const selectedMenu = ref('userInfo');
 
 const userStore = useUserStore();
 const bookStore = useBookStore();
 
+const clickEvent = async (menu, isViewUp) => {
+
+  isUserInfo.value = isViewUp;
+
+  await selectMenu(menu);
+
+}
+
 const selectMenu = async (menu) => {
-  console.log(menu);
+  isUserInfo.value = false;
+  console.log(isUserInfo);
+  await router.push('/owner');
   selectedMenu.value = menu;
   if (selectedMenu.value === 'ShopInfo') {
     await shopStore.loadOnwerShopData(userStore.userSeq);
@@ -78,6 +97,11 @@ const receivedProduct = async(updateData) => {
   await selectMenu('OwnerBookList');
 }
 
+onMounted(async () => {
+  changedView('/owner/userinfo');
+  await router.push('/owner/userinfo');
+})
+
 </script>
 
 <template>
@@ -90,62 +114,66 @@ const receivedProduct = async(updateData) => {
           <div class="user-info">내 정보</div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === 'userInfo' }"
-              @click="selectMenu('userInfo')">
+              @click="changedView('/owner/userinfo')">
             회원 정보 조회
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === '예약 내역' }"
-              @click="selectMenu('예약 내역')">
+              @click="changedView('/owner/book')">
             예약 내역
           </div>
           <div
               class="menu-button"
-              :class="{ 'active': selectedMenu === '나의 이용 내역' }"
-              @click="selectMenu('나의 이용 내역')">
+              @click="changedView('/owner/history')">
             나의 이용 내역
+          </div>
+          <div
+              class="menu-button"
+              @click="changedView('/owner/review')">
+            나의 리뷰 조회
           </div>
 
           <br>
 
-          <div class="user-info">내 정보</div>
+          <div class="shop-info">매장 정보</div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerBookList' }"
-              @click="selectMenu('OwnerBookList')">
+              @click="clickEvent('OwnerBookList', false)">
             예약 정보 확인
           </div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'ShopInfo' }"
-              @click="selectMenu('ShopInfo')">
+              @click="clickEvent('ShopInfo', false)">
             매장 정보
           </div>
           <div
               class="menu-button"
               :class="{ 'active': selectedMenu === 'OwnerProduct' }"
-              @click="selectMenu('OwnerProduct')">
+              @click="clickEvent('OwnerProduct', false)">
             매장 관리
           </div>
         </div>
 
         <div class="menu-content">
-          <UserInfo v-if="selectedMenu === 'userInfo'"/>
-          <ReviewPage v-else-if="selectedMenu === 'ReviewPage'"/>
-          <OwnerBookList
-              v-else-if="selectedMenu === 'OwnerBookList'"
-              :books="bookList"
-              @received-product="receivedProduct"
-              />
-          <ShopInfo
-              v-else-if="selectedMenu === 'ShopInfo'"
-              :shopData="shopData"
-              :propsComponent="propsComponent"
-              @update-shopInfo="updateShopData"
-              @update-product="selectMenu('OwnerProduct')"
-              @delete-shop="deleteShop"/>
-          <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
+          <RouterView v-if="isUserInfo"/>
+          <div v-if="isUserInfo === false">
+            <OwnerBookList
+                v-if="selectedMenu === 'OwnerBookList'"
+                :books="bookList"
+                @received-product="receivedProduct"
+            />
+            <ShopInfo
+                v-else-if="selectedMenu === 'ShopInfo'"
+                :shopData="shopData"
+                :propsComponent="propsComponent"
+                @update-shopInfo="updateShopData"
+                @update-product="selectMenu('OwnerProduct')"
+                @delete-shop="deleteShop"/>
+            <OwnerProduct v-else-if="selectedMenu === 'OwnerProduct'"/>
+          </div>
+
           <!-- 다른 컴포넌트들 추가해서 사용하세요 -->
         </div>
       </div>
@@ -158,7 +186,7 @@ const receivedProduct = async(updateData) => {
   margin-right: 70px;
 }
 
-.user-info {
+.user-info, .shop-info {
   font-size: 30px;
   color: var(--text-black);
   margin-bottom: 15px;
