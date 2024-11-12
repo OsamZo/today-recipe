@@ -60,7 +60,7 @@ onMounted(() => {
     return;
   }
 
-  loadUserInfo(2);
+  loadUserInfo(userSeq);
   loadShopData(userSeq);
 })
 </script>
