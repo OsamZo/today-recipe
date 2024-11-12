@@ -88,9 +88,13 @@
 
 ### 회원
 <details>
-<summary><strong> 소셜로그인 </strong></summary>
+<summary><strong> 소셜 로그인 </strong></summary>
 
 ![소셜로그인](/img/preview/user/login.gif)
+
+<summary><strong> 로그아웃</strong></summary>
+
+![로그아웃](/img/preview/user/logout.gif)
 
 ### 예약
 <details>
