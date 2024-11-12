@@ -91,16 +91,21 @@
 <summary><strong> 소셜 로그인 </strong></summary>
 
 ![소셜로그인](/img/preview/user/login.gif)
+</details>
 
+<details>
 <summary><strong> 로그아웃</strong></summary>
 
 ![로그아웃](/img/preview/user/logout.gif)
+</details>
 
+<details>
 <summary><strong>닉네임 변경</strong></summary>
 
 ![닉네임 변경](/img/preview/user/changeNickname.gif)
+</details>
 
-### 메인 화면
+### 메인화면
 <details>
 
 <summary><strong>메인화면</strong></summary>
@@ -109,20 +114,64 @@
 
 </details>
 
-### 가게
+### 매장
 <details>
+<summary><strong>유저 매장 조회</strong></summary>
 
-<summary><strong>유저 가게조회</strong></summary>
-
-![가게조회](/img/preview/user/shopSearch.gif)
+![매장조회](/img/preview/user/shopSearch.gif)
 
 </details>
+
+<details>
+<summary><strong> 매장 등록 </strong></summary>
+
+![매장 등록](/img/preview/user/shopApply%201.gif)
+![매장 등록](/img/preview/user/shopApply%202.gif)
+</details>
+
+<details>
+<summary><strong> 관리자 매장 승인 </strong></summary>
+
+![매장 등록](/img/preview/admin/(admin)%20updateShopAuth.gif)
+</details>
+
+<details>
+<summary><strong> (사장) 매장 수정 </strong></summary>
+
+![매장](/img/preview/owner/(owner)updateShopData.gif)
+</details>
+
+<details>
+<summary><strong> (사장) 메뉴 수정 </strong></summary>
+
+![매장 수정](/img/preview/owner/(owner)updateProduct.gif)
+</details>
+
+<details>
+<summary><strong> (사장) 수령 정보 업데이트 </strong></summary>
+
+![매장 등록](/img/preview/owner/(owner)getCustomer,%20applyGet.gif)
+</details>
+g
 
 ### 예약
 <details>
 <summary><strong> 예약하기 </strong></summary>
 
 ![예약하기](/img/preview/book/book.gif)
+</details>
+
+<details>
+<summary><strong> 예약 취소하기 </strong></summary>
+
+![예약 취소하기](/img/preview/book/book-cancel.gif)
+</details>
+
+### 리뷰
+<details>
+<summary><strong> 리뷰 작성 및 조회하기 </strong></summary>
+
+![리뷰 작성 및 조회하기](/img/preview/review/write-review.gif)
 </details>
 
 ### 북마크
@@ -133,35 +182,8 @@
 
 </details>
 
-### 매장 등록
-<details>
-<summary><strong> 매장 등록 </strong></summary>
 
-![매장 등록](/img/preview/user/shopApply%201.gif)
-![매장 등록](/img/preview/user/shopApply%202.gif)
 
-<summary><strong> 관리자 매장 승인 </strong></summary>
-
-![매장 등록](/img/preview/admin/(admin)%20updateShopAuth.gif)
-
-</details>
-
-### (사장) 매장 수정
-<details>
-
-<summary><strong> 메장 수정 </strong></summary>
-
-![매장](/img/preview/owner/(owner)updateShopData.gif)
-
-<summary><strong> 메뉴 수정 </strong></summary>
-
-![매장 수정](/img/preview/owner/(owner)updateProduct.gif)
-
-<summary><strong> 수령 정보 업데이트 </strong></summary>
-
-![매장 등록](/img/preview/owner/(owner)getCustomer,%20applyGet.gif)
-
-</details>
 
 ### 관리자 
 <details>
