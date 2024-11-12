@@ -2,11 +2,10 @@ import axios from 'axios';
 
 export const bookProduct = async(productSeq, userSeq, bookQty) => {
     try {
-        return await axios.post(`http://localhost:8100/api/v1/product/${productSeq}`,
+        return await axios.post(`http://localhost:8100/api/v1/user/${userSeq}/product/${productSeq}`,
             null,
             {
                 params: {
-                    userSeq,
                     bookQty,
                 },
             });

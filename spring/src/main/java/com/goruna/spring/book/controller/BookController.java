@@ -21,14 +21,14 @@ public class BookController {
     private final BookService bookService;
 
     // 예약 신청
-    @PostMapping("/product/{productSeq}")
+    @PostMapping("/user/{userSeq}/product/{productSeq}")
     @Operation(summary = "예약 신청", description = "예약을 신청합니다.")
     public ApiResponse<?> createBook(
+            @PathVariable(value = "userSeq") Long userSeq,
             @PathVariable(value = "productSeq") Long productSeq,
             @RequestParam int bookQty
     ) {
-        Long userSeq = CustomUserUtils.getCurrentUserSeq();
-        bookService.createBook(productSeq, 1L, bookQty);
+        bookService.createBook(productSeq, userSeq, bookQty);
         return ResponseUtil.successResponse("예약이 성공적으로 생성되었습니다.").getBody();
     }
 

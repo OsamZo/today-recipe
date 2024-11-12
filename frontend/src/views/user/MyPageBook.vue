@@ -27,8 +27,6 @@ const closedTime = (dateTime) => {
 const isCancelAvailable = (book) => {
   const currentTime = new Date();
   const closedAt = new Date(book.shopClosedAt);
-  console.log(currentTime);
-  console.log(closedAt);
   const oneHourInMs = 60 * 60 * 1000;
   return closedAt - currentTime >= oneHourInMs;
 }
