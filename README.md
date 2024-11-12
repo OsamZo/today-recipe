@@ -86,12 +86,23 @@
 
 ## 📌 주요 기능
 
+### 회원
 <details>
-<summary><strong> 회원가입 </strong></summary>
+<summary><strong> 소셜로그인 </strong></summary>
 
-![]()
-> 설명
+![소셜로그인](/img/preview/user/login.gif)
 
-![]()
+### 예약
+<details>
+<summary><strong> 예약하기 </strong></summary>
+
+![예약하기](/img/preview/book/book.gif)
+
+### 북마크
+<details>
+<summary><strong> 북마크 등록 및 조회하기 </strong></summary>
+
+![북마크](/img/preview/bookmark/bookmark.gif)
+
 </details>
 <br>
