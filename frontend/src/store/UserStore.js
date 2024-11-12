@@ -29,25 +29,24 @@ export const useUserStore = defineStore('user', {
     },
     async restoreSession() {
       try {
-        // 리프레시 토큰을 사용해 새로운 액세스 토큰 요청
         const response = await fetch('http://localhost:8100/api/v1/auth/refresh', {
           method: 'POST',
           credentials: 'include' // 쿠키 포함 요청
         });
-    
+
         if (response.ok) {
           const data = await response.json();
           const newAccessToken = data.accessToken;
-          this.userSeq = decodeJwt(newAccessToken).userSeq; // 토큰 디코딩하여 userSeq 설정
-          localStorage.setItem('userSeq', this.userSeq); // 로컬 스토리지에 저장
+          this.userSeq = decodeJwt(newAccessToken).userSeq;
+          localStorage.setItem('userSeq', this.userSeq);
           console.log('세션 복원 성공:', this.userSeq);
         } else {
           console.warn('리프레시 토큰으로 새 액세스 토큰 발급 실패');
-          localStorage.removeItem('userSeq'); // 실패 시 로컬 스토리지에서 제거
+          this.clearUserSeq();
         }
       } catch (error) {
         console.error('세션 복원 중 오류 발생:', error);
-        localStorage.removeItem('userSeq'); // 오류 시 로컬 스토리지에서 제거
+        this.clearUserSeq();
       }
     },
     async addNickname(userSeq, nickname) {
@@ -62,9 +61,23 @@ export const useUserStore = defineStore('user', {
         throw error;
       }
     },
+    async handleLogout() {
+      try {
+        // logoutUser API 함수 호출
+        await logoutUser();
+        // 클라이언트 상태 초기화
+        this.clearUserSeq();
+        alert('로그아웃 되었습니다.');
+        // 로그아웃 후 홈 페이지로 리다이렉트
+        window.location.href = '/';
+      } catch (error) {
+        console.error('로그아웃 실패:', error);
+        alert('로그아웃 중 문제가 발생했습니다.');
+      }
+    },
     clearUserSeq() {
       this.userSeq = null;
-      localStorage.removeItem('userSeq'); // 로그아웃 시 로컬 스토리지에서 제거
+      localStorage.removeItem('userSeq'); // 로컬 스토리지에서 제거
     }
   }
 });
