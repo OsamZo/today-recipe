@@ -4,9 +4,6 @@
       :shopImgUrl="shopData.shopImgUrl"
       :shopName="shopData.shopName"
     >
-      <template v-slot:action>
-        <button class="review-button" @click="goToReviewAdd">리뷰 작성</button>
-      </template>
     </ShopCard>
     <div class="separator"></div>
     <ReviewList :reviews="reviews" />
