@@ -8,7 +8,7 @@ export const useBookmarkStore = defineStore('bookmark', {
   actions: {
     async loadBookmarks(userSeq) {
       try {
-        const response = await fetchBookmarks(1);
+        const response = await fetchBookmarks(userSeq);
         console.log(response.data)
         this.bookmarks = response.data;
         return response;
