@@ -226,5 +226,6 @@ onMounted(async () => {
   font-size: 25px;
   white-space: nowrap;
   margin-top: 10px;
+  cursor: pointer;
 }
 </style>
