@@ -1,5 +1,6 @@
 package com.goruna.spring.users.dto;
 
+import com.goruna.spring.common.aggregate.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +15,6 @@ public class UserInfoResponse {
     private int userSavedMoney;
 
     private int userUsageCount;
+
+    private UserRole userRole;
 }
