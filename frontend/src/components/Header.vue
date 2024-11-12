@@ -23,17 +23,13 @@ const handleLogout = async () => {
   }
 };
 
-const handleBookmarkClick = () => {
+const handleBookmark = () => {
   if (userStore.userSeq) {
     router.push('/bookmark');
   } else {
     alert('로그인이 필요합니다.');
     router.push('/login');
   }
-};
-
-const handleBookmark = () => {
-  router.push('/bookmark');
 }
 
 const handleMyPage = async () => {
@@ -47,6 +43,9 @@ const handleMyPage = async () => {
       await router.push('/user');
     } else if(userRole === 'ADMIN') {
       await router.push('/admin/shopCategory');
+    } else {
+      alert('로그인이 필요합니다.');
+      await router.push('/login');
     }
   } catch (error) {
     console.log("회원 정보 조회 중 오류", error);
