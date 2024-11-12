@@ -19,7 +19,6 @@ const loadShopDetail = async (categorySeq, shopSeq) => {
     const data = await fetchShopDetail(categorySeq, shopSeq);
     // 데이터를 shopDetail에 병합
     Object.assign(shopDetail, data);
-
   } catch (error) {
     console.error("매장 상세 정보를 불러오는데 실패했습니다:", error);
   }
@@ -81,8 +80,8 @@ const formatPrice = (price) => {
 }
 
 // 리뷰 목록으로 라우팅
-const routeToReviewList = () => {
-  router.push(`/review`);
+const routeToReviewList = (shopSeq) => {
+  router.push({name: `review`, params: {shopSeq}});
 }
 
 // 예약하기 누를 시 모달
@@ -141,7 +140,7 @@ onMounted(async () => {
     </ShopCard>
 
     <div class="shop_detail_box">
-      <div class="review_box" @click="routeToReviewList()">리뷰 {{ shopDetail.shopReviewCount }}개 ></div>
+      <div class="review_box" @click="routeToReviewList(shopDetail.shopSeq)">리뷰 {{ shopDetail.shopReviewCount }}개 ></div>
       <div class="shop_info_box">
         <div>마감 시간 | -{{ closedTime(shopDetail.productClosedAt) }}</div>
         <div>매장 주소 | {{ shopDetail.shopAddress }}</div>
