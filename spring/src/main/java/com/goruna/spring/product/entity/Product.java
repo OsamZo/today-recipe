@@ -56,18 +56,19 @@ public class Product extends BaseTimeEntity {
 
     public void addProductImg(String productImg) {
         this.productImgUrl = productImg;
-      
+    }
+
     @Builder
     public Product(Long productSeq, Shop shop, String productName, String productDescription, Integer productQty,
-                   Integer productOriginalPrice, Integer productSalePrice, LocalDateTime productClosedAt, String productImgUrl) {
-        this.productSeq = productSeq;
-        this.shop = shop;
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productQty = productQty;
-        this.productOriginalPrice = productOriginalPrice;
-        this.productSalePrice = productSalePrice;
-        this.productClosedAt = productClosedAt;
-        this.productImgUrl = productImgUrl;
+                Integer productOriginalPrice, Integer productSalePrice, LocalDateTime productClosedAt, String productImgUrl) {
+            this.productSeq = productSeq;
+            this.shop = shop;
+            this.productName = productName;
+            this.productDescription = productDescription;
+            this.productQty = productQty;
+            this.productOriginalPrice = productOriginalPrice;
+            this.productSalePrice = productSalePrice;
+            this.productClosedAt = productClosedAt;
+            this.productImgUrl = productImgUrl;
+        }
     }
-}
