@@ -1,0 +1,140 @@
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle'
+        jdk 'openJDK17'
+    }
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_PASSWORD')
+        GITHUB_URL = 'https://github.com/OsamZo/goruna.git'
+        FRONTEND_IMAGE = 'goruna_frontend'
+        BACKEND_IMAGE = 'goruna_backend'
+        MANIFESTS_PATH = 'k8s_manifests'
+        GIT_USERNAME = 'minju0224'
+        GIT_EMAIL = 'kminju0224@gmail.com'
+    }
+
+    stages {
+        stage('Preparation') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'docker --version'
+                    } else {
+                        bat 'docker --version'
+                    }
+                }
+            }
+        }
+        stage('Source Build') {
+            steps {
+                git branch: 'develop', url: "${env.GITHUB_URL}", credentialsId: 'GITHUB_CREDENTIALS'
+
+                script {
+                    dir('frontend') {
+                        if (isUnix()) {
+                            sh 'npm install'
+                            sh 'npm run build'
+                        } else {
+                            bat 'npm install'
+                            bat 'npm run build'
+                        }
+                    }
+
+                    dir('spring') {
+                        configFileProvider([configFile(fileId: 'gorunaenv', targetLocation: '.env')]) {
+                            if (isUnix()) {
+                                sh "chmod +x ./gradlew"
+                                sh "./gradlew clean build -x test"
+                            } else {
+                                bat "gradlew.bat clean build -x test"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Container Build and Push') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+
+                        dir('frontend') {
+                            if (isUnix()) {
+                                sh "docker build -t ${DOCKER_USER}/${FRONTEND_IMAGE}:latest ."
+                                sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                                sh "docker push ${DOCKER_USER}/${FRONTEND_IMAGE}:latest"
+                            } else {
+                                bat "docker build -t ${DOCKER_USER}/${FRONTEND_IMAGE}:latest ."
+                                bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                                bat "docker push ${DOCKER_USER}/${FRONTEND_IMAGE}:latest"
+                            }
+                        }
+
+                        dir('spring') {
+                            configFileProvider([configFile(fileId: 'gorunaenv', targetLocation: '.env')]) {
+                                if (isUnix()) {
+                                    sh "docker build -t ${DOCKER_USER}/${BACKEND_IMAGE}:latest ."
+                                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                                    sh "docker push ${DOCKER_USER}/${BACKEND_IMAGE}:latest"
+                                } else {
+                                    bat "docker build -t ${DOCKER_USER}/${BACKEND_IMAGE}:latest ."
+                                    bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                                    bat "docker push ${DOCKER_USER}/${BACKEND_IMAGE}:latest"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                if (isUnix()) {
+                    sh 'docker logout'
+                } else {
+                    bat 'docker logout'
+                }
+            }
+        }
+        success {
+            echo 'Pipeline succeeded!'
+            withCredentials([string(credentialsId: 'goruna-discord', variable: 'discord')]) {
+                discordSend(
+                    description: """
+                    **빌드 성공!** :tada:
+
+                    **제목**: ${currentBuild.displayName}
+                    **결과**: :white_check_mark: ${currentBuild.currentResult}
+                    **실행 시간**: ${currentBuild.duration / 1000}s
+                    **링크**: [빌드 결과 보기](${env.BUILD_URL})
+                    """,
+                    title: "${env.JOB_NAME} 빌드 성공!",
+                    webhookURL: "$discord"
+                )
+            }
+        }
+        failure {
+            echo 'Pipeline failed!'
+            withCredentials([string(credentialsId: 'goruna-discord', variable: 'discord')]) {
+                discordSend(
+                    description: """
+                    **빌드 실패!** :x:
+
+                    **제목**: ${currentBuild.displayName}
+                    **결과**: :x: ${currentBuild.currentResult}
+                    **실행 시간**: ${currentBuild.duration / 1000}s
+                    **링크**: [빌드 결과 보기](${env.BUILD_URL})
+                    """,
+                    title: "${env.JOB_NAME} 빌드 실패!",
+                    webhookURL: "$discord"
+                )
+            }
+        }
+    }
+}
