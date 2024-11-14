@@ -136,7 +136,7 @@
 </details>
 
 <details>
-<summary><strong> (사장) 매장 수정 </strong></summary>
+<summary><strong>(사장) 매장 수정 </strong></summary>
 
 ![매장](/img/preview/owner/(owner)updateShopData.gif)
 </details>
