@@ -84,6 +84,10 @@
 
 <hr>
 
+## 🥴 Jenkins
+
+![jenkins](/img/jenkins.gif)
+
 ## 📌 주요 기능
 
 ### 회원
