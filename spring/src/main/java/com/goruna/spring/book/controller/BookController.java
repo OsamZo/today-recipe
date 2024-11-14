@@ -20,7 +20,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    // 예약 신청
+    // 예약 신청 하기
     @PostMapping("/product/{productSeq}")
     @Operation(summary = "예약 신청", description = "예약을 신청합니다.")
     public ApiResponse<?> createBook(
